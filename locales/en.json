@@ -1,0 +1,24 @@
+{
+	"Index" : "Index",
+	"Login" : "Login",
+	"Overview" : "Overview",
+	"Multimedia" : "Multimedia",
+	"Settings" : "Settings",
+	"System" : "System state",
+	"Storage" : "Storage overview",
+	"Network" : "Network overview",
+	"OverviewNasName" : "NAS Name",
+	"OverviewNasModel" : "NAS Model",
+	"OverviewNasStatus" : "Status",
+	"NetworkPort1" : "Port 1 (LAN1)",
+	"NetworkPort2" : "Port 2 (LAN2)",
+	"NeworkWiFiState" : "WiFi state",
+	"StorageState" : "Storage state",
+	"StorageSpace" : "Space",
+	
+	"StateOk" : "Ok",
+	"StateConnected" : "Connected",
+	"StateNotConnected" : "Not connected",
+	"StateInstalled" : "Installed",
+	"StateNotInstalled" : "Not installed"
+}

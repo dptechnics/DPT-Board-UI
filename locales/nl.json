@@ -1,0 +1,24 @@
+{
+	"Index" : "Index",
+	"Login" : "Login",
+	"Overview" : "Overzicht",
+	"Multimedia" : "Multimedia",
+	"Settings" : "Instellingen",
+	"System" : "Systeemstatus",
+	"Storage" : "Opslag overzicht",
+	"Network" : "Netwerk overzicht",
+	"OverviewNasName" : "NAS Naam",
+	"OverviewNasModel" : "NAS Model",
+	"OverviewNasStatus" : "Status",
+	"NetworkPort1" : "Poort 1 (LAN1)",
+	"NetworkPort2" : "Poort 2 (LAN2)",
+	"NeworkWiFiState" : "WiFi status",
+	"StorageState" : "Opslagstatus",
+	"StorageSpace" : "Ruimte",
+	
+	"StateOk" : "Ok",
+	"StateConnected" : "Aangesloten",
+	"StateNotConnected" : "Niet aangesloten",
+	"StateInstalled" : "Geïnstalleerd",
+	"StateNotInstalled" : "Niet geïnstalleerd"
+}
