@@ -1,4 +1,4 @@
-WoodBOX-UI
+DPT-Board-UI
 ==========
 
-User interface for the DPTechnics WoodBOX
+User interface for the DPTechnics DPT-Board
