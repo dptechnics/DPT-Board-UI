@@ -51,7 +51,7 @@
 			<h3 class="panel-title">System control</h3>
 		</div>
 		<div class="panel-body">
-			<input type="checkbox" name="gpio-button-0" checked data-size="large" data-on-text="On" data-off-text="Off">
+			<input type="checkbox" name="gpio-button-0" checked data-size="large" data-on-label="On" data-off-label="Off" data-bind="bootstrapSwitchOn: btnGPIO0">
 		</div>
 	</div>
 	
@@ -63,6 +63,7 @@
 <script src="scripts/knockout-3.1.0.js"></script>
 <script src="scripts/bootstrap.min.js"></script>
 <script src="scripts/bootstrap-switch.min.js"></script>
+<script src="scripts/bootstrap-switch-knockout.js"></script>
 <script src="scripts/global.js"></script>
 <script src="scripts/ButtonControlViewModel.js"></script>
 </body>

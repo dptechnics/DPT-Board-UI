@@ -18,6 +18,13 @@ function IndexViewModel() {
 	this.storageTitle = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Storage")}, this);
 	this.neworkTitle = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Network")}, this);
 	
+	// Switch bindings
+	this.btnGPIO0 = ko.observable(true);
+	this.btnGPIO0.subscribe(function(value){
+		alert(value);
+	});
+	
+	
 	/**
 	 * Change the UI locale
 	 * @locale: the new UI locale
@@ -64,9 +71,6 @@ $('document').ready(function(){
 	// Activate knockout framework
 	viewModel = new IndexViewModel();
 	ko.applyBindings(viewModel, document.getElementById("htmldoc"));
-	
-	// Install bootstrap-switch on selected checkboxes
-	 $('input:checkbox').bootstrapSwitch();
 	
 	// Install module button handlers
 	installModuleHandlers();
