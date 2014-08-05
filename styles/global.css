@@ -18,3 +18,43 @@ body {
 .bold {
 	font-weight: bold;
 }
+
+.navspan {
+	position: relative;
+	display: block;
+	padding: 15px;
+	color: #777;
+	line-height: 20px;
+}
+
+.navspan:hover {
+	color: #333;
+	cursor: pointer;
+}
+
+.navspan {
+	position: relative;
+	display: block;
+	padding: 15px;
+	color: #777;
+	line-height: 20px;
+}
+
+.dropdown-menu .navspan {
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	color: #777;
+	line-height: 20px;
+}
+
+.dropdown-menu .navspan:hover {
+	color: #262626;
+	cursor: pointer;
+	background-color: #f5f5f5;
+}
+
+#module {
+	width: 60%;
+	height: 500px;
+}
