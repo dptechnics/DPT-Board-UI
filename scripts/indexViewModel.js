@@ -5,7 +5,7 @@ var viewModel = null;
 function IndexViewModel() {
 	// Global settings
 	this.lang = ko.observable("en");
-	this.app = ko.observable("DPT Module");
+	this.app = ko.observable("DPT Board");
 
 	// i18n bindings
 	this.title = ko.computed(function(){i18n.setLocale(this.lang()); return this.app() + " - " + i18n.__("IndexTitle")}, this);
@@ -174,8 +174,7 @@ function IndexViewModel() {
 
 /* Update the information page with polling */
 function updateInfo() {
-	$.getJSON(AJAX_PREFXIX + '/api/overview', function(data) {
-	
+	dpt_getSystemOverview(function(data) {
 		// Update the view 
 		viewModel.setBoardInfo(data.sysname, data.model);
 		viewModel.setConnectionState(data.eth0_connected, data.eth1_connected, data.ssid);

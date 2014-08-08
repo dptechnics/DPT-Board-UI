@@ -5,7 +5,7 @@ var viewModel = null;
 function IndexViewModel() {
 	// Global settings
 	this.lang = ko.observable("en");
-	this.app = ko.observable("DPT Module");
+	this.app = ko.observable("DPT Board");
 
 	// i18n bindings
 	this.title = ko.computed(function(){i18n.setLocale(this.lang()); return this.app() + " - " + i18n.__("ButtoncontrolTitle")}, this);
@@ -17,13 +17,27 @@ function IndexViewModel() {
 	this.systemTitle = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("System")}, this);
 	this.storageTitle = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Storage")}, this);
 	this.neworkTitle = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Network")}, this);
+
 	
-	// Switch bindings
-	this.btnGPIO0 = ko.observable(true);
-	this.btnGPIO0.subscribe(function(value){
-		alert(value);
-	});
+	// The IO buttons observable array
+	this.buttons = ko.observableArray([]);
 	
+	// Add an IO port button
+	this.addIOButton = function(btnr)
+	{
+		// Fill up the template
+		this.buttons.push({
+				text: 'IO port ' + btnr,
+				iobutton: true,
+				number: btnr
+		});
+		
+		// Attach a handler to button
+		$('#iobutton-' + btnr).bind('switch-change', function(event, data){
+			alert("Message from btn " + btnr + ", new value : " + data.value);
+		});
+		
+	}
 	
 	/**
 	 * Change the UI locale
@@ -35,45 +49,42 @@ function IndexViewModel() {
 	}
 }
 
+/* 
+ * Set the state of a button.
+ * @btnr: the number of the button. 
+ * @state: the new button state.
+ */
+function setIOBtnState(btnr, state)
+{
+		$('#iobutton-' + btnr).bootstrapSwitch('setState', state);
+}
+
+/*
+ * Initialise IO ports
+ */
+function initIOPorts() {
+	dpt_getIOLayout(function(nrports, ports){
+		
+		// Add a button for every port 
+		for(i = 0; i < nrports; ++i) {
+			// Append button to HTML DOM
+			viewModel.addIOButton(ports[i]);
+		}
+	});
+}
+
 /* Update the information page with polling */
 function updateInfo() {
 
 }
 
-/* Toggle an IO pin on the board 
- * @name the name of the io pin, only the number
- */
-function togleIO(name){
-	
-	// Get the current pin state 
-	$.getJSON(AJAX_PREFXIX + '/api/gpio/' + name, function(data) {
-		// Toggle the pin
-		$.ajax({
-			type: "PUT",
-			contentType: "application/json; charset=utf-8",
-			url: AJAX_PREFXIX + '/api/gpio/' + name + '/' + (data.state == 0 ? 1 : 0),
-			dataType: "json"
-		});
-	});
-}
-
-function installModuleHandlers(){
-	$('#io7').click(function(){
-		togleIO("7");
-	});
-	
-	$('#io6').click(function(){
-		togleIO("6");
-	});
-}
-
 $('document').ready(function(){
+	// Initialise buttons 
+	initIOPorts();
+	
 	// Activate knockout framework
 	viewModel = new IndexViewModel();
 	ko.applyBindings(viewModel, document.getElementById("htmldoc"));
-	
-	// Install module button handlers
-	installModuleHandlers();
 	
 	// Start polling
 	updateInfo();

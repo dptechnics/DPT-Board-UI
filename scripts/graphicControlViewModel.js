@@ -5,7 +5,7 @@ var viewModel = null;
 function IndexViewModel() {
 	// Global settings
 	this.lang = ko.observable("en");
-	this.app = ko.observable("DPT Module");
+	this.app = ko.observable("DPT Board");
 
 	// i18n bindings
 	this.title = ko.computed(function(){i18n.setLocale(this.lang()); return this.app() + " - " + i18n.__("GraphcontrolTitle")}, this);
@@ -33,30 +33,13 @@ function updateInfo() {
 
 }
 
-/* Toggle an IO pin on the board 
- * @name the name of the io pin, only the number
- */
-function togleIO(name){
-	
-	// Get the current pin state 
-	$.getJSON(AJAX_PREFXIX + '/api/gpio/' + name, function(data) {
-		// Toggle the pin
-		$.ajax({
-			type: "PUT",
-			contentType: "application/json; charset=utf-8",
-			url: AJAX_PREFXIX + '/api/gpio/' + name + '/' + (data.state == 0 ? 1 : 0),
-			dataType: "json"
-		});
-	});
-}
-
 function installModuleHandlers(){
 	$('#io7').click(function(){
-		togleIO("7");
+		dpt_toggleIO("7");
 	});
 	
 	$('#io6').click(function(){
-		togleIO("6");
+		dpt_toggleIO("6");
 	});
 }
 
