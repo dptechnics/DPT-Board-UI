@@ -31,12 +31,12 @@ function dpt_getIOLayout(callback)
  
 /* 
  * Toggle an IO pin on the board 
- * @name the name of the io pin, only the number
+ * @name the name of the IO pin, only the number
  */
 function dpt_toggleIO(name)
 {
 	// Get the current pin state 
-	$.getJSON(DPT_AJAX_PREFXIX + '/api/gpio/' + name, function(data) {
+	$.getJSON(DPT_AJAX_PREFIX + '/api/gpio/' + name, function(data) {
 		// Toggle the pin
 		$.ajax({
 			type: "PUT",
@@ -44,6 +44,21 @@ function dpt_toggleIO(name)
 			url: AJAX_PREFXIX + '/api/gpio/' + name + '/' + (data.state == 0 ? 1 : 0),
 			dataType: "json"
 		});
+	});
+}
+
+/*
+ * Set an IO pin on the board to a predefined state.
+ * @name the name of the IO pin, only the number.
+ * @state the new state of the IO pin, boolean
+ */
+function dpt_setIO(name, state)
+{
+	$.ajax({
+		type: "PUT",
+		contentType: "application/json; charset=utf-8",
+		url: DPT_AJAX_PREFIX + '/api/gpio/' + name + '/' + (state ? 1 : 0),
+		dataType: "json"
 	});
 }
 

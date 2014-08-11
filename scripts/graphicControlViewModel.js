@@ -30,7 +30,7 @@ function IndexViewModel() {
 
 /* Update the information page with polling */
 function updateInfo() {
-
+	
 }
 
 function installModuleHandlers(){

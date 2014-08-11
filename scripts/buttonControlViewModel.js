@@ -28,13 +28,14 @@ function IndexViewModel() {
 		// Fill up the template
 		this.buttons.push({
 				text: 'IO port ' + btnr,
-				iobutton: true,
+				iobutton: false,
 				number: btnr
 		});
 		
 		// Attach a handler to button
 		$('#iobutton-' + btnr).bind('switch-change', function(event, data){
-			alert("Message from btn " + btnr + ", new value : " + data.value);
+			// Set the IO port on the new state
+			dpt_setIO(btnr, data.value);
 		});
 		
 	}
