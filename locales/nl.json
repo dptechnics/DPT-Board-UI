@@ -1,12 +1,25 @@
 {
 	"IndexTitle" : "Index",
+	
 	"GraphcontrolTitle" : "Grafische bediening",
 	"ButtoncontrolTitle" : "Knopbediening",
+	"RobotcontrolTitle" : "Robotbediening",
+	"KuniocontrolTitle" : "KunIO bedieding",
+	"WiFiSettingsTitle" : "WiFi instellingen",
+	
 	"Login" : "Login",
 	"System" : "Systeem",
 	"Control" : "Bediening",
+	
 	"GraphicControl" : "Graphische bediening",
-	"ButtonControl" : "Knoppbediening",
+	"ButtonControl" : "Knopbediening",
+	"RobotControl" : "Robotbesturing",
+	"KunioControl" : "KunIO bediening",
+	"WiFiSettings" : "WiFi instellingen",
+	"WiFiStatus" : "WiFi status",
+	"WiFiMode" : "WiFi modus",
+	"WiFiSignalStrength" : "Signaalsterkte",
+	
 	"Settings" : "Instellingen",
 	"System" : "Systeemstatus",
 	"Storage" : "Opslag overzicht",
@@ -27,5 +40,10 @@
 	"StateNotConnected" : "Niet aangesloten",
 	"StateInstalledAndMounted" : "Geïnstalleerd en gemount",
 	"StateInstalledNotMounted" : "Geïnstalleerd maar niet gemount",
-	"StateNotInstalled" : "Niet geïnstalleerd"
+	"StateNotInstalled" : "Niet geïnstalleerd",
+	
+	"KunIOOutputPorts" : "KunIO uitgangen",
+	"KunIOInputPorts" : "KunIO ingangen",
+	"KunIOInstalOverview" : "KunIO installatie overzicht",
+	"KunIONumberModules" : "Aantal verbonden modules"
 }

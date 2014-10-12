@@ -1,12 +1,25 @@
 {
 	"IndexTitle" : "Index",
+	
 	"GraphcontrolTitle" : "Graphical control",
 	"ButtoncontrolTitle" : "Button control",
+	"RobotcontrolTitle" : "Robot control",
+	"KuniocontrolTitle" : "KunIO control",
+	"WiFiSettingsTitle" : "WiFi instellingen",
+	
 	"Login" : "Login",
 	"System" : "System",
 	"Control" : "Control",
+	
 	"GraphicControl" : "Graphical control",
 	"ButtonControl" : "Button control",
+	"RobotControl" : "Robot control",
+	"KunioControl" : "KunIO control",
+	"WiFiSettings" : "WiFi settings",
+	"WiFiStatus" : "WiFi status",
+	"WiFiMode" : "WiFi mode",
+	"WiFiSignalStrength" : "Signal Strength",
+	
 	"Settings" : "Settings",
 	"System" : "System state",
 	"Storage" : "Storage overview",
@@ -27,5 +40,10 @@
 	"StateNotConnected" : "Not connected",
 	"StateInstalledAndMounted" : "Installed and mounted",
 	"StateInstalledNotMounted" : "Installed but not mounted",
-	"StateNotInstalled" : "Not installed"
+	"StateNotInstalled" : "Not installed",
+	
+	"KunIOOutputPorts" : "KunIO outputs",
+	"KunIOInputPorts" : "KunIO inputs",
+	"KunIOInstalOverview" : "KunIO installation overview",
+	"KunIONumberModules" : "Number of connected modules"
 }

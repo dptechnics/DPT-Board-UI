@@ -58,3 +58,12 @@ body {
 	width: 60%;
 	height: 500px;
 }
+
+.centertext {
+	text-align: center;
+}
+
+.dpt-arrow-btn {
+	font-size: 40px;
+	margin: 5px;
+}

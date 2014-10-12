@@ -36,14 +36,12 @@
 <div class="container maincontainer">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">Button control</h3>
+			<h3 class="panel-title">Robot control</h3>
 		</div>
-		<div class="panel-body" data-bind="foreach: buttons">
-			<div class="dpt-btn-row" id="dpt-btn-row-' + ports[i] + '">
-				<div class="btn-desc" data-bind="text: text"></div>
-				<input type="checkbox" data-size="large" data-on-label="On" data-off-label="Off" data-bind="bootstrapSwitchOn: iobutton, attr:{'id': 'iobutton-' + number}">
-				<button type="button" class="btn btn-default btn-dpt">Key attached: <span class="label label-default">none</span></button>
-			</div>
+		<div class="panel-body centertext">
+			<button type="button" class="btn btn-default btn-lg dpt-arrow-btn" id="btn-left">Open</button>
+			<button type="button" class="btn btn-default btn-lg dpt-arrow-btn" id="btn-backward">Stop</button>
+			<button type="button" class="btn btn-default btn-lg dpt-arrow-btn" id="btn-right">Close</button>
 		</div>
 	</div>
 	
@@ -59,6 +57,6 @@
 <script src="scripts/dpt-board.js"></script>
 <script src="scripts/global.js"></script>
 <script src="scripts/menu.js"></script>
-<script src="scripts/buttonControlViewModel.js"></script>
+<script src="scripts/gateControlViewModel.js"></script>
 </body>
 </html>
