@@ -1,198 +1,182 @@
-// Page wide variables  
-var viewModel = null;
+/**
+ * The page viewmodel, gvm is auto-instantiated in global.js
+ * @param {Knockout viewmodel} gvm description: the global knockout viewmodel
+ * @returns {void}
+ */
+function pageViewModel(gvm) {
+    // Page title
+    gvm.title = ko.computed(function(){i18n.setLocale(gvm.lang()); return gvm.app() + " - " + i18n.__("IndexTitle");}, gvm);
 
-// View model for the index page
-function ViewModel() {
-	// Global settings
-	this.lang = ko.observable("en");
-	this.app = ko.observable("DPT Board");
-	this.title = ko.computed(function(){i18n.setLocale(this.lang()); return this.app() + " - " + i18n.__("IndexTitle")}, this);
+    // I18N bindings
+    gvm.systemTitle = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("System");}, gvm);
+    gvm.storageTitle = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("Storage");}, gvm);
+    gvm.neworkTitle = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("Network");}, gvm);
+        
+    gvm.overviewSysName = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("OverviewSysName");}, gvm);
+    gvm.overviewBoardModel = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("OverviewBoardModel");}, gvm);
+    gvm.overviewBoardStatus = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("OverviewBoardStatus");}, gvm);
+    gvm.networkPort1 = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("NetworkPort1");}, gvm);
+    gvm.networkPort2 = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("NetworkPort2");}, gvm);
+    gvm.networkWiFiState = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("NeworkWiFiState");}, gvm);
+    gvm.storageState = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("StorageState");}, gvm);
+    gvm.storageSpace = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("StorageSpace");}, gvm);
+    gvm.systemLoadStatus = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("SystemLoad");}, gvm);
+    gvm.ramUsageStatus = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("RamUsage");}, gvm);
 
-	// i18n bindings	
-	this.systemTitle = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("System")}, this);
-	this.storageTitle = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Storage")}, this);
-	this.neworkTitle = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Network")}, this);
-	
-	
-	this.overviewSysName = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("OverviewSysName")}, this);
-	this.overviewBoardModel = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("OverviewBoardModel")}, this);
-	this.overviewBoardStatus = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("OverviewBoardStatus")}, this);
-	this.networkPort1 = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("NetworkPort1")}, this);
-	this.networkPort2 = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("NetworkPort2")}, this);
-	this.networkWiFiState = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("NeworkWiFiState")}, this);
-	this.storageState = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("StorageState")}, this);
-	this.storageSpace = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("StorageSpace")}, this);
-	this.systemLoadStatus = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("SystemLoad")}, this);
-	this.ramUsageStatus = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("RamUsage")}, this);
-	
-	this.stateOk = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("StateOk")}, this);
-	this.stateConnected = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("StateConnected")}, this);
-	this.stateNotConnected = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("StateNotConnected")}, this);
-	this.stateInstalled = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("StateInstalled")}, this);
-	this.stateNotInstalled = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("StateNotInstalled")}, this);
-	
-	// Data bindings observable
-	this.freeStorage = ko.observable(0);
-	this.totalStorage = ko.observable(0);
-	this.dataSysName = ko.observable("");
-	this.dataModelName = ko.observable("");
-	this.dataConnStateOne = ko.observable(false);
-	this.dataConnStateTwo = ko.observable(false);
-	this.dataSSID = ko.observable("");
-	this.dataUSBStor = ko.observable("");
-	this.dataSystemLoad = ko.observable("");
-	this.totalRAM = ko.observable(0);
-	this.freeRAM = ko.observable(0);
-	
-	
-	// Data bindings computed 
-	this.storageMessage = ko.computed(function(){
-		return (this.totalStorage() - this.freeStorage()) + "/" + this.totalStorage() + " Mb";
-	}, this);
-	
-	this.ramMessage = ko.computed(function(){
-		freeRamMiB = Math.round((this.freeRAM()/10.24)/100);
-		totalRamMiB = Math.round((this.totalRAM()/10.24)/100);
-		return (totalRamMiB - freeRamMiB) + "/" + totalRamMiB + " Mb";
-	},this);
-	
-	this.textConnStateOne = ko.computed(function(){
-		i18n.setLocale(this.lang());
-		return this.dataConnStateOne() ? i18n.__("StateConnected") : i18n.__("StateNotConnected");
-	}, this);
-	
-	this.textConnStateTwo = ko.computed(function(){
-		i18n.setLocale(this.lang());
-		return this.dataConnStateTwo() ? i18n.__("StateConnected") : i18n.__("StateNotConnected");
-	}, this);
-	
-	this.textUSBStor = ko.computed(function(){
-		i18n.setLocale(this.lang());
-		switch(this.dataUSBStor()){
-			case "mounted":
-				return i18n.__("StateInstalledAndMounted");
-			case "notmounted":
-				return i18n.__("StateInstalledNotMounted");
-			case "notinstalled":
-				return i18n.__("StateNotInstalled");
-		}
-	}, this);
-	
-	// Style bindings
-	this.style_storageWidth = ko.computed(function(){
-		return ((this.totalStorage() - this.freeStorage())/this.totalStorage())*100;
-	}, this);
-	
-	this.styleConnStateOne = ko.computed(function(){
-		return this.dataConnStateOne() ? "label-success" : "label-default";
-	}, this);
-	
-	this.styleConnStateTwo = ko.computed(function(){
-		return this.dataConnStateTwo() ? "label-success" : "label-default";
-	}, this);
-	
-	this.styleUSBStor = ko.computed(function(){
-		switch(this.dataUSBStor()){
-			case "mounted":
-				return "label-success";
-			case "notmounted":
-				return "label-info";
-			case "notinstalled":
-				return "label-default";
-		}
-	}, this);
-	
-	this.style_ramWidth = ko.computed(function(){
-		return ((this.totalRAM() - this.freeRAM())/this.totalRAM())*100;
-	}, this);
-	
-	/**
-	 * Change the UI locale
-	 * @locale: the new UI locale
-	 */
-	this.setLocale = function(locale) {
-		this.lang(locale);
-		i18n.setLocale(this.lang());
-	}
-	
-	/**
-	 * Set the storage space data
-	 * @free the number of free megabytes
-	 * @total the full available disk space in megabytes
-	 */ 
-	this.setDiskSpace = function(free, total) {
-		this.freeStorage(free);
-		this.totalStorage(total);
-	}
-	
-	/**
-	 * Set the USB disk state
-	 * @state string displaying disk state information
-	 */
-	this.setDiskState = function(state) {
-		this.dataUSBStor(state);
-	}
-	
-	/**
-     * Set the LAN port connection states
-	 * @port the first port state, true when connected
-	 * @port the second port state, true when connected
-	 * @ssid the WiFi network name currently transmitting or connected to
-	 */
-	this.setConnectionState = function(port1, port2, ssid) {
-		this.dataConnStateOne(port1);
-		this.dataConnStateTwo(port2);
-		this.dataSSID(ssid);
-	}
-	
-	/**
-	 * Update board information 
-	 * @name the system name
-	 * @model the board model
-	 */
-	this.setBoardInfo = function(name, model) {
-		this.dataSysName(name);
-		this.dataModelName(model);
-	}
-	
-	/**
-	 * Update system statistics
-	 * @load the average system load
-	 * @totalram the total KiB of RAM installed in the system
-	 * @freeram the total KiB of free RAM installed in the system
-	 */
-	this.setSystemInfo = function(load, totalram, freeram) {
-		this.dataSystemLoad(load);
-		this.totalRAM(totalram);
-		this.freeRAM(freeram);
-	}
+    gvm.stateOk = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("StateOk");}, gvm);
+    gvm.stateConnected = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("StateConnected");}, gvm);
+    gvm.stateNotConnected = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("StateNotConnected");}, gvm);
+    gvm.stateInstalled = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("StateInstalled");}, gvm);
+    gvm.stateNotInstalled = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("StateNotInstalled");}, gvm);
+
+    // Data bindings observable
+    gvm.freeStorage = ko.observable(0);
+    gvm.totalStorage = ko.observable(0);
+    gvm.dataSysName = ko.observable("");
+    gvm.dataModelName = ko.observable("");
+    gvm.dataConnStateOne = ko.observable(false);
+    gvm.dataConnStateTwo = ko.observable(false);
+    gvm.dataSSID = ko.observable("");
+    gvm.dataUSBStor = ko.observable("");
+    gvm.dataSystemLoad = ko.observable("");
+    gvm.totalRAM = ko.observable(0);
+    gvm.freeRAM = ko.observable(0);
+
+    // Data bindings computed 
+    gvm.storageMessage = ko.computed(function(){
+        return (gvm.totalStorage() - gvm.freeStorage()) + "/" + gvm.totalStorage() + " Mb";
+    }, gvm);
+
+    gvm.ramMessage = ko.computed(function(){
+        freeRamMiB = Math.round((gvm.freeRAM()/10.24)/100);
+        totalRamMiB = Math.round((gvm.totalRAM()/10.24)/100);
+        return (totalRamMiB - freeRamMiB) + "/" + totalRamMiB + " Mb";
+    },gvm);
+
+    gvm.textConnStateOne = ko.computed(function(){
+        i18n.setLocale(gvm.lang());
+        return gvm.dataConnStateOne() ? i18n.__("StateConnected") : i18n.__("StateNotConnected");
+    }, gvm);
+
+    gvm.textConnStateTwo = ko.computed(function(){
+        i18n.setLocale(gvm.lang());
+        return gvm.dataConnStateTwo() ? i18n.__("StateConnected") : i18n.__("StateNotConnected");
+    }, gvm);
+
+    gvm.textUSBStor = ko.computed(function(){
+        i18n.setLocale(gvm.lang());
+        switch(gvm.dataUSBStor()){
+            case "mounted":
+                return i18n.__("StateInstalledAndMounted");
+            case "notmounted":
+                return i18n.__("StateInstalledNotMounted");
+            case "notinstalled":
+                return i18n.__("StateNotInstalled");
+        }
+    }, gvm);
+
+    // Style bindings
+    gvm.style_storageWidth = ko.computed(function(){
+        return ((gvm.totalStorage() - gvm.freeStorage())/gvm.totalStorage())*100;
+    }, gvm);
+
+    gvm.styleConnStateOne = ko.computed(function(){
+        return gvm.dataConnStateOne() ? "label-success" : "label-default";
+    }, gvm);
+
+    gvm.styleConnStateTwo = ko.computed(function(){
+        return gvm.dataConnStateTwo() ? "label-success" : "label-default";
+    }, gvm);
+
+    gvm.styleUSBStor = ko.computed(function(){
+        switch(gvm.dataUSBStor()){
+            case "mounted":
+                    return "label-success";
+            case "notmounted":
+                    return "label-info";
+            case "notinstalled":
+                    return "label-default";
+        }
+    }, gvm);
+    
+    gvm.style_ramWidth = ko.computed(function(){
+        return ((gvm.totalRAM() - gvm.freeRAM())/gvm.totalRAM())*100;
+    }, gvm);
+
+    /**
+     * Set the board USB disk space
+     * @param {integer} free - the free disk space
+     * @param {integer} total - the total disk space
+     * @returns {void}
+     */
+    gvm.setDiskSpace = function(free, total) {
+        gvm.freeStorage(free);
+        gvm.totalStorage(total);
+    }
+
+    /**
+     * Set the board disk connection state
+     * @param {string} state - the USB disk connection state
+     * @returns {void}
+     */
+    gvm.setDiskState = function(state) {
+        gvm.dataUSBStor(state);
+    }
+
+    /**
+     * Set the board connection state
+     * @param {boolean} port1 - connection state of port 1
+     * @param {boolean} port2 - connection state of port 2
+     * @param {string} ssid - the current WiFi SSID name
+     * @returns {void}
+     */
+    gvm.setConnectionState = function(port1, port2, ssid) {
+        gvm.dataConnStateOne(port1);
+        gvm.dataConnStateTwo(port2);
+        gvm.dataSSID(ssid);
+    }
+
+    /**
+     * Set board information
+     * @param {string} name - the system name 
+     * @param {string} model - the board model
+     * @returns {void}
+     */
+    gvm.setBoardInfo = function(name, model) {
+        gvm.dataSysName(name);
+        gvm.dataModelName(model);
+    }
+
+    /**
+     * Update system statistics
+     * @param {string} load - the system load
+     * @param {integer} totalram - the total RAM in system
+     * @param {integer} freeram - the free RAM in system
+     * @returns {void}
+     */
+    gvm.setSystemInfo = function(load, totalram, freeram) {
+        gvm.dataSystemLoad(load);
+        gvm.totalRAM(totalram);
+        gvm.freeRAM(freeram);
+    }
 }
 
-/* Update the information page with polling */
+/**
+ * This function is called after system initalisation and will
+ * be called on a regular basis. 
+ * @returns {boolean} - when false is returned polling will stop.
+ */
 function updateInfo() {
-	dpt_getSystemOverview(function(data) {
-		// Update the view 
-		viewModel.setBoardInfo(data.sysname, data.model);
-		viewModel.setConnectionState(data.eth0_connected, data.eth1_connected, data.ssid);
-		viewModel.setDiskState(data.usb_state);
-		viewModel.setDiskSpace(data.usb_free, data.usb_total);
-		viewModel.setSystemInfo(data.system_load, data.ram_total, data.ram_free);
-		
-		// Start polling
-		setTimeout(updateInfo, 1000);
-	});
+    dpt_getSystemOverview(function(data) {
+        // Update the view 
+        viewModel.setBoardInfo(data.sysname, data.model);
+        viewModel.setConnectionState(data.eth0_connected, data.eth1_connected, data.ssid);
+        viewModel.setDiskState(data.usb_state);
+        viewModel.setDiskSpace(data.usb_free, data.usb_total);
+        viewModel.setSystemInfo(data.system_load, data.ram_total, data.ram_free);
+        
+        // Polling success
+        return true;
+    });
+    return false;
 }
-
-$('document').ready(function(){
-	$('#extern-menu').load('menu.html', function(){
-		// Activate knockout framework
-		viewModel = new ViewModel();
-		addMenuBindings(viewModel);
-		ko.applyBindings(viewModel, document.getElementById("htmldoc"));
-		
-		// Start polling
-		updateInfo();
-	});
-});
-
-

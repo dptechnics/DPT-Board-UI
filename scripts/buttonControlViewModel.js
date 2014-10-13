@@ -1,42 +1,36 @@
-// Page wide variables  
-var viewModel = null;
+/**
+ * The page viewmodel, gvm is auto-instantiated in global.js
+ * @param {Knockout viewmodel} gvm description: the global knockout viewmodel
+ * @returns {void}
+ */
+function pageViewModel(gvm) {
+    // Page title
+    gvm.title = ko.computed(function(){i18n.setLocale(gvm.lang()); return gvm.app() + " - " + i18n.__("ButtoncontrolTitle");}, gvm);
 
-// View model for the control page
-function ViewModel() {
-	// Global settings
-	this.lang = ko.observable("en");
-	this.app = ko.observable("DPT Board");
-	this.title = ko.computed(function(){i18n.setLocale(this.lang()); return this.app() + " - " + i18n.__("ButtoncontrolTitle")}, this);
-	
-	// The IO buttons observable array
-	this.buttons = ko.observableArray([]);
-	
-	// Add an IO port button
-	this.addIOButton = function(btnr)
-	{
-		// Fill up the template
-		this.buttons.push({
-				text: 'IO port ' + btnr,
-				iobutton: false,
-				number: btnr
-		});
-		
-		// Attach a handler to button
-		$('#iobutton-' + btnr).bind('switch-change', function(event, data){
-			// Set the IO port on the new state
-			dpt_setIO(btnr, data.value);
-		});
-		
-	}
-	
-	/**
-	 * Change the UI locale
-	 * @locale: the new UI locale
-	 */
-	this.setLocale = function(locale) {
-		this.lang(locale);
-		i18n.setLocale(this.lang());
-	}
+    // The IO buttons observable array
+    gvm.buttons = ko.observableArray([]);
+
+    /**
+     * Add an IO button to the viewmodel
+     * @param {integer} btnr - the number of the button to add. 
+     * @returns {void}
+     */
+    gvm.addIOButton = function(btnr)
+    {
+        // Fill up the template
+        gvm.buttons.push({
+            text: 'IO port ' + btnr,
+            iobutton: false,
+            number: btnr
+        });
+
+        // Attach a handler to button
+        $('#iobutton-' + btnr).bind('switch-change', function(event, data){
+            // Set the IO port on the new state
+            dpt_setIO(btnr, data.value);
+        });
+
+    }
 }
 
 /* 
@@ -46,40 +40,19 @@ function ViewModel() {
  */
 function setIOBtnState(btnr, state)
 {
-		$('#iobutton-' + btnr).bootstrapSwitch('setState', state);
+    $('#iobutton-' + btnr).bootstrapSwitch('setState', state);
 }
 
-/*
- * Initialise IO ports
+/**
+ * Automatically called page initialisation.
+ * @returns {void}
  */
-function initIOPorts() {
-	dpt_getIOLayout(function(nrports, ports){
-		
-		// Add a button for every port 
-		for(i = 0; i < nrports; ++i) {
-			// Append button to HTML DOM
-			viewModel.addIOButton(ports[i]);
-		}
-	});
+function initPage() {
+    dpt_getIOLayout(function(nrports, ports){
+        // Add a button for every port 
+        for(i = 0; i < nrports; ++i) {
+            // Append button to HTML DOM
+            viewModel.addIOButton(ports[i]);
+        }
+    });
 }
-
-/* Update the information page with polling */
-function updateInfo() {
-
-}
-
-$('document').ready(function(){
-	$('#extern-menu').load('menu.html', function(){
-		// Initialise buttons 
-		initIOPorts();
-	
-		// Activate knockout framework
-		viewModel = new ViewModel();
-		addMenuBindings(viewModel);
-		ko.applyBindings(viewModel, document.getElementById("htmldoc"));
-		
-		// Start polling
-		updateInfo();
-	});
-});
-

@@ -1,51 +1,22 @@
 /**
- * The page's viewmodel
+ * The page viewmodel, this is auto-instantiated in global.js
+ * @param {Knockout viewmodel} gvm - the global knockout viewmodel
  * @returns {void}
  */
-function ViewModel() {
-        // Viewmodel language
-        this.lang = ko.observable("en");
-        
-	// Page title
-	this.title = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("AppName") + " - " + i18n.__("WiFiSettingsTitle");}, this);
-	
-	// Page buttons 
-	this.wifiStatusTitle = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("WiFiStatus");}, this);
-	this.wifiMode = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("WiFiMode");}, this);
-	this.signalStrength = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("WiFiSignalStrength");}, this);
-	
-	// Data bindings 
-	this.strengthMessage = ko.observable('0%');
-	
-	// Style bindings
-	this.style_wifiStrength = ko.computed(function(){
-		return 35;
-	}, this);
+function pageViewModel(gvm) {
+    // Page title
+    gvm.title = ko.computed(function(){i18n.setLocale(gvm.lang()); return gvm.app() + " - " + i18n.__("WiFiSettingsTitle");}, gvm);
+
+    // Page buttons 
+    gvm.wifiStatusTitle = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("WiFiStatus");}, gvm);
+    gvm.wifiMode = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("WiFiMode");}, this);
+    gvm.signalStrength = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("WiFiSignalStrength");}, gvm);
+
+    // Data bindings 
+    gvm.strengthMessage = ko.observable('0%');
+
+    // Style bindings
+    gvm.style_wifiStrength = ko.computed(function(){
+        return 35;
+    }, this);
 }
-
-/**
- * This function is called after viewmodel setup to 
- * start a polling operation for page refresh. Timer
- * setup should occur in this function for good
- * error handling. 
- * @returns {void}
- */
-function updateInfo() {
-
-}
-
-/**
- * Page initialisation function
- */
-$('document').ready(function(){
-    $('#extern-menu').load('menu.html', function(){
-        // Activate knockout framework
-        viewModel = new ViewModel();
-        addGobalViewModelParams(viewModel);
-        ko.applyBindings(viewModel, document.getElementById("htmldoc"));
-
-        // Start polling
-        updateInfo();
-    });
-});
-
