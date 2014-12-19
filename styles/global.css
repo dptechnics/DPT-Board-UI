@@ -67,3 +67,16 @@ body {
 	font-size: 40px;
 	margin: 5px;
 }
+
+.table tbody tr td {
+    border-bottom: 1px solid #ddd;
+}
+
+.dpt-row {
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 8px;
+    margin-top: -1px;
+}

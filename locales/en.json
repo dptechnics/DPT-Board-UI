@@ -20,6 +20,7 @@
     "WiFiStatus" : "WiFi status",
     "WiFiMode" : "WiFi mode",
     "WiFiSignalStrength" : "Signal Strength",
+    "wifiAvailableNetworks" : "Available WiFi networks",
 
     "Settings" : "Settings",
     "System" : "System state",

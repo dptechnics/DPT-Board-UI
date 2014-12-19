@@ -11,6 +11,7 @@ function pageViewModel(gvm) {
     gvm.wifiStatusTitle = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("WiFiStatus");}, gvm);
     gvm.wifiMode = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("WiFiMode");}, this);
     gvm.signalStrength = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("WiFiSignalStrength");}, gvm);
+    gvm.wifiAvailableNetworks = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("wifiAvailableNetworks");}, gvm);
 
     // Data bindings 
     gvm.strengthMessage = ko.observable('0%');
