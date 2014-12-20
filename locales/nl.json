@@ -7,10 +7,15 @@
     "RobotcontrolTitle" : "Robotbediening",
     "KuniocontrolTitle" : "KunIO bedieding",
     "WiFiSettingsTitle" : "WiFi instellingen",
+    "CodeEditorTitle" : "Code editor",
 
     "Login" : "Login",
     "System" : "Systeem",
     "Control" : "Bediening",
+    "Develop" : "Ontwikkel",
+    "CodeEditor" : "Code ontwikkeling",
+    "GraphicalEditor" : "Grafische ontwikkeling",
+    
 
     "GraphicControl" : "Graphische bediening",
     "ButtonControl" : "Knopbediening",

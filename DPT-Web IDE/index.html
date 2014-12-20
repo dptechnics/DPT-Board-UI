@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html id="htmldoc">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title data-bind="text: title">Breakout board</title>
+        <link rel="stylesheet" type="text/css" href="styles/editor.css">
+        <link rel="stylesheet" type="text/css" href="fonts/css/dpt-web-ide.css">
+        <link rel="stylesheet" type="text/css" href="styles/jquery.splitter.css">
+    </head>
+    <body>
+        <div id="editor-menu" class="menu-bar">
+            <ul>
+                <li class="menu">
+                    <span class="menu-title">File</span>
+                    <ul class="menu-body">
+                        <li><span class="menu-icon"><i class="icon-box"></i></span><span class="menu-item-title">New project</span><span class="menu-hotkey"></span></li>
+                        <li><span class="menu-icon"><i class="icon-doc-inv"></i></span><span class="menu-item-title">New file</span><span class="menu-hotkey">Ctrl + O</span></li>
+                        <li class="menu-separator"></li>
+                        <li><span class="menu-icon"><i class="icon-folder-open"></i></span><span class="menu-item-title">Open project</span><span class="menu-hotkey"></span></li>
+                        <li><span class="menu-icon"><i class="icon-floppy"></i></span><span class="menu-item-title">Save</span><span class="menu-hotkey"></span></li>
+                        <li><span class="menu-icon"></span><span class="menu-item-title">Save as...</span><span class="menu-hotkey"></span></li>
+                        <li><span class="menu-icon"></span><span class="menu-item-title">Save all</span><span class="menu-hotkey"></span></li>
+                        <li class="menu-separator"></li>
+                        <li><span class="menu-icon"></span><span class="menu-item-title">Exit</span><span class="menu-hotkey"></span></li>
+                    </ul>
+                </li>
+                <li class="menu">
+                    <span class="menu-title">Edit</span>
+                    <ul class="menu-body">
+                        <li><span class="menu-icon"><i class="icon-reply"></i></span><span class="menu-item-title">Undo</span><span class="menu-hotkey">Ctrl + Z</span></li>
+                        <li><span class="menu-icon"><i class="icon-forward"></i></span><span class="menu-item-title">Redo</span><span class="menu-hotkey">Ctrl + Y</span></li>
+                        <li class="menu-separator"></li>
+                        <li><span class="menu-icon"><i class="icon-scissors"></i> </span><span class="menu-item-title">Cut</span><span class="menu-hotkey">Ctrl + X</span></li>
+                        <li><span class="menu-icon"><i class="icon-docs"></i></span><span class="menu-item-title">Copy</span><span class="menu-hotkey">Ctrl + C</span></li>
+                        <li><span class="menu-icon"><i class="icon-paste"></i></span><span class="menu-item-title">Paste</span><span class="menu-hotkey">Ctrl + V</span></li>
+                        <li><span class="menu-icon"></span><span class="menu-item-title">Select all</span><span class="menu-hotkey">Ctrl + A</span></li>
+                        <li class="menu-separator"></li>
+                        <li><span class="menu-icon"></span><span class="menu-item-title">Search</span><span class="menu-hotkey">Ctrl + F</span></li>
+                        <li><span class="menu-icon"></span><span class="menu-item-title">Replace</span><span class="menu-hotkey">Ctrl + Shift + F</span></li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="menu-title">Help</span>
+                    <ul class="menu-body">
+                        <li><span class="menu-icon"></span><span class="menu-item-title">Tutorials</span><span class="menu-hotkey"></span></li>
+                        <li><span class="menu-icon"></span><span class="menu-item-title">Help index</span><span class="menu-hotkey"></span></li>
+                        <li class="menu-separator"></li>
+                        <li><span class="menu-icon"></span><span class="menu-item-title">Check updates</span><span class="menu-hotkey"></span></li>
+                        <li><span class="menu-icon"></span><span class="menu-item-title">About</span><span class="menu-hotkey"></span></li>
+                    </ul>
+                </li>
+                
+                <li class="menu-right">
+                    <span class="menu-title">Language</span>
+                    <ul class="menu-body">
+                        <li>EN</li>
+                        <li>NL</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <div id="editor-buttons" class="menu-bar">
+            <ul>
+                <li class="menu-btn" id="btn-new-file"><i class="icon-doc-inv"></i></li>
+                <li class="menu-btn" id="btn-new-project"><i class="icon-box"></i></li>
+                <li class="menu-btn" id="btn-save-all"><i class="icon-floppy"></i></li>
+                <li class="menu-btn-separator">&nbsp;</li>
+                <li class="menu-btn" id="btn-undo"><i class="icon-reply"></i></li>
+                <li class="menu-btn" id="btn-redo"><i class="icon-forward"></i></li>
+                <li class="menu-btn-separator">&nbsp;</li>
+                <li class="menu-btn" id="btn-play"><i class="icon-play"></i></li>
+                <li class="menu-btn" id="btn-halt"><i class="icon-stop"></i></li>
+            </ul>
+        </div>
+        
+        <div id="menu-field-separator"></div>
+        
+        <div id="splitpane">
+            <div id="project-explorer" class="pane">
+                <div class="panel-title-bar">
+                    Project explorer
+                    <i class="icon-minus-squared panel-title-btn"></i>
+                </div>
+            </div>
+            <div id="horizontal-splitpane">
+                <div id="tabbed-filepane">
+                    <div id="editor-tabs">
+                        <ul>
+                            <li class="active">my_robot.js<i class="icon-cancel panel-title-btn"></i></li>
+                            <li>interface.html<i class="icon-cancel panel-title-btn"></i></li>
+                            <li>style.css<i class="icon-cancel panel-title-btn"></i></li>
+                        </ul>
+                    </div>
+                    <div id="language-editor"></div>
+                </div>
+                <div id="error-list" class="pane">
+                    <div class="panel-title-bar">
+                        Error list
+                        <i class="icon-minus-squared panel-title-btn"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="statusbar">
+            <span>Ready to run</span>
+            <ul class="statusbar-right">
+                <li>DPTechnics</li>
+                <li class="statusbar-separator">&nbsp;</li>
+                <li>INS</li>
+            </ul>
+        </div>
+        
+        <script src="scripts/sprintf.min.js"></script>
+        <script src="scripts/i18n.js"></script>
+        <script src="scripts/jquery-1.11.0.min.js"></script>
+        <script src="scripts/knockout-3.1.0.js"></script>
+        <script src="scripts/viewmodel.js"></script>
+        <script src="scripts/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="scripts/src-min-noconflict/ext-language_tools.js"></script>
+        <script src="scripts/jquery.splitter-0.14.0.js"></script>
+    </body>
+</html>

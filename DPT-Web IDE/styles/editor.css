@@ -1,0 +1,299 @@
+/*
+
+Copyright 2014 DPTechnics, Daan Pape.
+
+This work is licensed under the Creative Commons 
+Attribution-NonCommercial 4.0 International 
+License. To view a copy of this license, 
+visit http://creativecommons.org/licenses/by-nc/4.0/.
+*/
+/* 
+    Created on : 20-Dec-2014, 09:59:03
+    Author     : DPTechnics, Daan Pape
+*/
+
+@font-face {
+    font-family: 'open_sansregular';
+    src: url('../fonts/opensans-regular-webfont.eot');
+    src: url('../fonts/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/opensans-regular-webfont.woff') format('woff'),
+         url('../fonts/opensans-regular-webfont.ttf') format('truetype'),
+         url('../fonts/opensans-regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body,html {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    font-family: 'open_sansregular';
+    overflow: hidden;
+}
+
+#splitpane {
+    position: absolute;
+    margin: 0px;
+    top: 70px;
+    bottom: 25px;
+    left: 0px;
+    right: 0px;
+}
+
+#statusbar {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 24px;
+    background-color: #142F14;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #EEE;
+    font-size: 13px;
+    line-height: 25px;
+    border-top: 1px solid #444;
+}
+
+.pane {
+    background-color: #141414;
+}
+
+#editor-tabs {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 29px;
+    border-bottom: 1px solid #444; 
+    background-color: #1A1A1A;
+}
+
+#editor-tabs ul {
+    margin: 0px;
+    padding: 0px;
+    margin-left: -1px;
+}
+
+#editor-tabs li {
+    list-style-type: none;
+    display: inline-block;
+    border: 1px solid #444;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: #EEE;
+    height: 30px;
+    line-height: 26px;
+    font-size: 14px;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: -1px;
+    float: left;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+#editor-tabs li i {
+    margin-left: 10px;
+}
+
+#editor-tabs .active {
+    background-color: #333;
+}
+
+#language-editor {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 30px;
+    bottom: 0px;
+}
+
+#editor-menu {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px; 
+}
+
+#editor-buttons {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 30px;   
+    padding-left: 5px;
+}
+
+#menu-field-separator {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 60px; 
+    height: 10px;
+    background-color: #1A1A1A;
+}
+
+.menu-bar{
+    height: 30px;
+    background-color: #1A1A1A;
+    color: #EEE;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+.menu-bar ul {
+    padding: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+}
+
+.menu-bar li {
+    list-style-type: none;
+    display: inline-block;
+    height: 29px;
+    line-height: 29px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 15px;
+}
+
+.menu-bar li:hover {
+    background-color: #333;
+    cursor: default;
+    color: #FFF;
+}
+
+.menu-body {
+    display: none;
+}
+
+.menu-body-visible {
+    display: block;
+    position: absolute;
+    z-index: 9999;
+    background-color: #111;
+    border: 1px solid #333;
+    margin-left: -10px;
+}
+
+.menu-body-visible li {
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    font-size: 15px;
+    color: #EEE;
+}
+
+.menu-body-visible li:hover {
+    background-color: #555;
+    color: #FFF;
+    cursor: default;
+}
+
+.menu-item-title {
+    display: inline-block;
+    min-width: 100px;
+    margin-right: 30px;
+}
+
+.menu-icon {
+    display: inline-block;
+    min-width: 30px;
+}
+
+.menu-hotkey {
+    color: #777;
+}
+
+.menu-separator {
+    height: 0px !important;
+    border-bottom: 1px solid #333;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.menu-right {
+    float: right;
+}
+
+.menu-btn {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+}
+
+.menu-btn-separator {
+    width: 0px;
+    padding-left: 3px !important;
+    padding-right: 2px !important;
+    border-right: 1px solid #333;
+}
+
+.panel-title-bar {
+    color: #DDD;
+    height: 29px;
+    line-height: 26px;
+    background-color: #1A1A1A;
+    font-size: 14px;
+    padding-left: 10px;
+    border-bottom: 1px solid #444;
+    border-top: 1px solid #444;
+    padding-right: 10px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+.panel-title-btn {
+    font-size: 15px;
+    float: right;
+    color: #AAA;
+}
+
+.panel-title-btn:hover {
+    color: #FFF;
+}
+
+.statusbar-right {
+    float: right;
+    margin: 0px;
+}
+
+.statusbar-right li {
+    list-style-type: none;
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.statusbar-separator {
+    width: 0px;
+    padding-left: 3px !important;
+    padding-right: 2px !important;
+    border-right: 1px solid #444;
+}
+
+#statusbar {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}

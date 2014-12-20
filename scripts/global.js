@@ -35,6 +35,9 @@ function GlobalViewModel()
     // I18N bindings
     this.systemBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("System");}, this);
     this.controlBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Control");}, this);
+    this.developBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Develop");}, this);
+    this.codeEditorBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("CodeEditor");}, this);
+    this.graphicalEditorBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("GraphicalEditor");}, this);
     this.graphicControlBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("GraphicControl");}, this);
     this.buttonControlBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("ButtonControl");}, this);
     this.robotControlBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("RobotControl");}, this);
@@ -87,5 +90,12 @@ $('document').ready(function(){
         
         // Call the polling function
         pollingFunc();
+        
+        // Attach application openers
+        $('#code-edit-app').click(function(e){
+            e.stopPropagation(); 
+            window.open("DPT-Web%20IDE/index.html", "_blank", "toolbar=no, scrollbars=no, resizable=yes, location=no, directories=no, status=no, top=0, left=0, width=800, height=600");
+            return false;
+        });
     });
 });
