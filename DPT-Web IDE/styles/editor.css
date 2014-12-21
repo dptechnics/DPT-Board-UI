@@ -16,9 +16,9 @@ visit http://creativecommons.org/licenses/by-nc/4.0/.
     font-family: 'open_sansregular';
     src: url('../fonts/opensans-regular-webfont.eot');
     src: url('../fonts/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/opensans-regular-webfont.woff') format('woff'),
-         url('../fonts/opensans-regular-webfont.ttf') format('truetype'),
-         url('../fonts/opensans-regular-webfont.svg#open_sansregular') format('svg');
+        url('../fonts/opensans-regular-webfont.woff') format('woff'),
+        url('../fonts/opensans-regular-webfont.ttf') format('truetype'),
+        url('../fonts/opensans-regular-webfont.svg#open_sansregular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -101,6 +101,12 @@ body,html {
 
 #editor-tabs li i {
     margin-left: 10px;
+}
+
+#editor-tabs li:hover {
+    background-color: #333;
+    cursor: default;
+    color: #FFF;
 }
 
 #editor-tabs .active {
@@ -259,6 +265,14 @@ body,html {
     cursor: default;
 }
 
+.panel-body {
+    position: absolute;
+    top: 30px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
 .panel-title-btn {
     font-size: 15px;
     float: right;
@@ -296,4 +310,130 @@ body,html {
     -ms-user-select: none;
     user-select: none;
     cursor: default;
+}
+
+
+
+#error-list {
+    color: #EEE;
+    font-size: 14px;
+    border-collapse: collapse;
+}
+
+#error-list thead {
+    background-color: #333;
+}
+
+#error-list td {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#error-list .err-icon {
+    width: 30px;
+    padding-left: 5px;
+}
+
+.scrolltable {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    display: block;
+}
+
+.scrolltable thead, .scrolltable tbody {
+    float: left;
+    width: 100%;
+}
+.scrolltable tbody {
+    overflow: auto;
+    position: absolute;
+    top: 22px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+.scrolltable tr {
+    width: 100%;
+    display: table;
+    text-align: left;
+}
+
+#error-list .description {
+    width: 70%;
+}
+
+#error-list .filename {
+    width: 10%;
+}
+
+#error-list .line-nr {
+    width: 5%;
+}
+
+.warning {
+    color: #FFE72D; 
+}
+.warning:before { 
+    font-family: "dpt-web-ide";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    margin-left: .2em;
+    content: '\e80c'; 
+}
+
+.error {
+    color: #E54121;
+}
+.error:before { 
+    font-family: "dpt-web-ide";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    margin-left: .2em;
+    content: '\e80f'; 
+}
+
+.info {
+    color: #2F668A
+}
+.info:before {
+    font-family: "dpt-web-ide";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    margin-left: .2em;
+    content: '\e810';
 }

@@ -223,20 +223,20 @@
                     splitter.refresh();
                 });
             });
-            $(document.documentElement).bind('mousedown.splitter', function(e) {
+            $(document.documentElement).bind('mousedown.splitter touchstart.splitter', function(e) {
                 if (splitter_id !== null && e.which == 1) {
                     current_splitter = splitters[splitter_id];
                     $('<div class="splitterMask"></div>').css('cursor', splitter.css('cursor')).insertAfter(current_splitter);
                     current_splitter.settings.onDragStart(e);
                     return false;
                 }
-            }).bind('mouseup.splitter', function(e) {
+            }).bind('mouseup.splitter touchend.splitter', function(e) {
                 if (current_splitter) {
                     $('.splitterMask').remove();
                     current_splitter.settings.onDragEnd(e);
                     current_splitter = null;
                 }
-            }).bind('mousemove.splitter', function(e) {
+            }).bind('mousemove.splitter touchmove.splitter', function(e) {
                 if (current_splitter !== null) {
                     var limit = current_splitter.limit;
                     var offset = current_splitter.offset();
@@ -270,6 +270,11 @@
                         }
                     }
                     current_splitter.settings.onDrag(e);
+                    
+                    // update editor if any 
+                    if(editor != null) {
+                        editor.resize();
+                    }
                 }
             });
         }

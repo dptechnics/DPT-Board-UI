@@ -28,8 +28,8 @@
                 <li class="menu">
                     <span class="menu-title">Edit</span>
                     <ul class="menu-body">
-                        <li><span class="menu-icon"><i class="icon-reply"></i></span><span class="menu-item-title">Undo</span><span class="menu-hotkey">Ctrl + Z</span></li>
-                        <li><span class="menu-icon"><i class="icon-forward"></i></span><span class="menu-item-title">Redo</span><span class="menu-hotkey">Ctrl + Y</span></li>
+                        <li class="btn-undo"><span class="menu-icon"><i class="icon-reply"></i></span><span class="menu-item-title">Undo</span><span class="menu-hotkey">Ctrl + Z</span></li>
+                        <li class="btn-redo"><span class="menu-icon"><i class="icon-forward"></i></span><span class="menu-item-title">Redo</span><span class="menu-hotkey">Ctrl + Y</span></li>
                         <li class="menu-separator"></li>
                         <li><span class="menu-icon"><i class="icon-scissors"></i> </span><span class="menu-item-title">Cut</span><span class="menu-hotkey">Ctrl + X</span></li>
                         <li><span class="menu-icon"><i class="icon-docs"></i></span><span class="menu-item-title">Copy</span><span class="menu-hotkey">Ctrl + C</span></li>
@@ -51,6 +51,7 @@
                     </ul>
                 </li>
                 
+                
                 <li class="menu-right">
                     <span class="menu-title">Language</span>
                     <ul class="menu-body">
@@ -58,20 +59,23 @@
                         <li>NL</li>
                     </ul>
                 </li>
+                <li class="menu-right">
+                    <span class="menu-title btn-fullscreen">Toggle fullscreen</span>
+                </li>
             </ul>
         </div>
         
         <div id="editor-buttons" class="menu-bar">
             <ul>
-                <li class="menu-btn" id="btn-new-file"><i class="icon-doc-inv"></i></li>
-                <li class="menu-btn" id="btn-new-project"><i class="icon-box"></i></li>
-                <li class="menu-btn" id="btn-save-all"><i class="icon-floppy"></i></li>
+                <li class="menu-btn btn-new-file"><i class="icon-doc-inv"></i></li>
+                <li class="menu-btn btn-new-project"><i class="icon-box"></i></li>
+                <li class="menu-btn btn-save-all"><i class="icon-floppy"></i></li>
                 <li class="menu-btn-separator">&nbsp;</li>
-                <li class="menu-btn" id="btn-undo"><i class="icon-reply"></i></li>
-                <li class="menu-btn" id="btn-redo"><i class="icon-forward"></i></li>
+                <li class="menu-btn btn-undo"><i class="icon-reply"></i></li>
+                <li class="menu-btn btn-redo"><i class="icon-forward"></i></li>
                 <li class="menu-btn-separator">&nbsp;</li>
-                <li class="menu-btn" id="btn-play"><i class="icon-play"></i></li>
-                <li class="menu-btn" id="btn-halt"><i class="icon-stop"></i></li>
+                <li class="menu-btn btn-play"><i class="icon-play"></i></li>
+                <li class="menu-btn btn-halt"><i class="icon-stop"></i></li>
             </ul>
         </div>
         
@@ -99,6 +103,28 @@
                     <div class="panel-title-bar">
                         Error list
                         <i class="icon-minus-squared panel-title-btn"></i>
+                    </div>
+                    <div class="panel-body">
+                    <table id="error-list" class="scrolltable">
+                        <thead>
+                            <tr>
+                                <td class="err-icon"></td>
+                                <td class="description">Description</td>
+                                <td class="filename">File</td>
+                                <td class="line-nr">Line</td>
+                                <td class="col-nr">Column</td>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: codeAnnotations">
+                            <tr>
+                                <td class="err-icon"><i data-bind="css: type"></i></td>
+                                <td class="description" data-bind="text: text"></td>
+                                <td class="filename">my_robot.js</td>
+                                <td class="line-nr" data-bind="text: row"></td>
+                                <td class="col-nr" data-bind="text: column"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>
