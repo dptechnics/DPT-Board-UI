@@ -163,10 +163,11 @@ function pageViewModel(gvm) {
 
 /**
  * This function is called after system initalisation and will
- * be called on a regular basis. 
- * @returns {boolean} - when false is returned polling will stop.
+ * be called on a regular basis.
+ * @callback {function} call with true or false, on false polling will stop
+ * @returns {void}
  */
-function updateInfo() {
+function updateInfo(callback) {
     dpt_getSystemOverview(function(data) {
         // Update the view 
         viewModel.setBoardInfo(data.sysname, data.model);
@@ -176,7 +177,9 @@ function updateInfo() {
         viewModel.setSystemInfo(data.system_load, data.ram_total, data.ram_free);
         
         // Polling success
-        return true;
-    });
-    return false;
+        callback(true);
+    }, function(error) {
+		callback(false);
+	});
+
 }

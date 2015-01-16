@@ -7,59 +7,83 @@
  */
  
 /* Ajax prefix, mostly used for development */
-var DPT_AJAX_PREFIX = "http://192.168.1.1:8080";
+var DPT_AJAX_PREFIX = "http://192.168.1.1:8080/";
 
-/*
- * Get an overview of the current system state. 
- * #callback function that accepts data from the board
+/**
+ * Get general system information.
+ * @param {function} callback function to call when data is ready.
+ * @param {function} errorhandler function to call when an error occurs.
+ * @returns {undefined}
  */
-function dpt_getSystemOverview(callback)
+function dpt_getSystemOverview(callback, errorhandler)
 {
-	$.getJSON(DPT_AJAX_PREFIX + '/api/overview', callback);
+    $.getJSON(DPT_AJAX_PREFIX + 'api/overview', callback).error(errorhandler);
 }
 
-/*
- * Get the currently available IO ports in the system. 
+/**
+ * Get the currently available IO ports in the system.
+ * @param {function} callback function to call when data is ready.
+ * @param {function} errorhandler function to call when an error occurs.
+ * @returns {undefined}
  */
-function dpt_getIOLayout(callback)
+function dpt_getIOLayout(callback, errorhandler)
 {
-	$.getJSON(DPT_AJAX_PREFIX + '/api/gpiolayout', function(data){
-		// call the function with the number of ports and portlist
-		callback(data.ioports.length, data.ioports);
-	});
+    $.getJSON(DPT_AJAX_PREFIX + 'api/gpiolayout', function(data){
+        // call the function with the number of ports and portlist
+        callback(data.ioports.length, data.ioports);
+    }).error(errorhandler);
 }
- 
-/* 
+
+/**
  * Toggle an IO pin on the board 
- * @name the name of the IO pin, only the number
+ * @param {integer} name the name of the IO pin, only the number.
+ * @param {function} errorhandler function to call when an error occurs.
+ * @returns {undefined}
  */
-function dpt_toggleIO(name)
+function dpt_toggleIO(name, errorhandler)
 {
-	// Get the current pin state 
-	$.getJSON(DPT_AJAX_PREFIX + '/api/gpio/' + name, function(data) {
-		// Toggle the pin
-		$.ajax({
-			type: "PUT",
-			contentType: "application/json; charset=utf-8",
-			url: AJAX_PREFXIX + '/api/gpio/' + name + '/' + (data.state == 0 ? 1 : 0),
-			dataType: "json"
-		});
-	});
+    // Get the current pin state 
+    $.getJSON(DPT_AJAX_PREFIX + 'api/gpio/' + name, function(data) {
+        // Toggle the pin
+        $.ajax({
+            type: "PUT",
+            contentType: "application/json; charset=utf-8",
+            url: AJAX_PREFXIX + 'api/gpio/' + name + '/' + (data.state === 0 ? 1 : 0),
+            dataType: "json",
+            error: errorhandler
+        });
+    }).error(errorhandler);
 }
 
-/*
+/**
  * Set an IO pin on the board to a predefined state.
- * @name the name of the IO pin, only the number.
- * @state the new state of the IO pin, boolean
+ * @param {integer} name the name of the IO pin, only the number.
+ * @param {boolean} state the new state of the IO pin, boolean.
+ * @param {function} errorhandler function to call when an error occurs.
+ * @returns {undefined} 
  */
-function dpt_setIO(name, state)
+function dpt_setIO(name, state, errorhandler)
 {
-	$.ajax({
-		type: "PUT",
-		contentType: "application/json; charset=utf-8",
-		url: DPT_AJAX_PREFIX + '/api/gpio/' + name + '/' + (state ? 1 : 0),
-		dataType: "json"
-	});
+    $.ajax({
+        type: "PUT",
+        contentType: "application/json; charset=utf-8",
+        url: DPT_AJAX_PREFIX + 'api/gpio/' + name + '/' + (state ? 1 : 0),
+        dataType: "json",
+        error: errorhandler
+    });
+}
+
+/**
+ * Scan for available WiFi networks and get information on the encryption and strength.
+ * @param {function} callback function to call when data is ready.
+ * @param {function} errorhandler function to call when an error occurs.
+ * @returns {undefined} 
+ */
+function dpt_getWifiScan(callback, errorhandler)
+{
+    $.getJSON(DPT_AJAX_PREFIX + 'api/wifiscan', function(data) {
+        callback(data);
+    }).error(errorhandler);
 }
 
 /*

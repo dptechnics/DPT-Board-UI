@@ -20,12 +20,12 @@
     "GraphicControl" : "Graphische bediening",
     "ButtonControl" : "Knopbediening",
     "RobotControl" : "Robotbesturing",
-    "KunioControl" : "KunIO bediening",
     "WiFiSettings" : "WiFi instellingen",
     "WiFiStatus" : "WiFi status",
     "WiFiMode" : "WiFi modus",
     "WiFiSignalStrength" : "Signaalsterkte",
     "wifiAvailableNetworks" : "Beschikbare WiFi netwerken",
+    "WiFiSecurity" : "Beveiliging",
 
     "Settings" : "Instellingen",
     "System" : "Systeemstatus",
@@ -52,5 +52,8 @@
     "KunIOOutputPorts" : "KunIO uitgangen",
     "KunIOInputPorts" : "KunIO ingangen",
     "KunIOInstalOverview" : "KunIO installatie overzicht",
-    "KunIONumberModules" : "Aantal verbonden modules"
+    "KunIONumberModules" : "Aantal verbonden modules",
+    
+    "ModalWiFiTitle" : "Verbindt met",
+    "ModalWiFiIntroPass" : "Geef het wachtwoord voor het WiFi netwerk en en druk op verbindt om verbinding te maken met het geselecteerde netwerk."
 }

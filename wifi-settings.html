@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <html id="htmldoc">
     <head>
@@ -8,7 +9,6 @@
         <link rel="stylesheet" type="text/css" href="styles/global.css">
         
         <style>
-
             .dpt-row:hover {
                 border: 1px solid #9ecaed !important;
                 box-shadow:0 0 10px #9ecaed  !important;
@@ -99,34 +99,14 @@
                 <div class="panel-heading">
                     <h3 class="panel-title" data-bind="text: wifiAvailableNetworks">Available WiFi networks</h3>
                 </div>
-                <div class="panel-body">
-                    <div class="row dpt-row">
+                <div class="panel-body" data-bind="foreach: wifiNeworks">
+                    <div class="row dpt-row" data-bind="attr:{'id' : 'wifi-' + index}">
                         <div class="col-xs-11">
-                            <div class="wifi-ssid-name">HowestWireless</div>
-                            <div class="wifi-ssid-info">WPA beveiligd</div>
+                            <div class="wifi-ssid-name" data-bind="text: ssid"></div>
+                            <div class="wifi-ssid-info"><span data-bind="text: wifiSecurity"></span> : <span data-bind="text: enc_info"></span></div>
                         </div>
                         <div class="col-xs-1">
-                            <img class="wifi-strength-low" src="images/transparent.png" alt="signal-strength">
-                        </div>
-                    </div>
-                    
-                    <div class="row dpt-row">
-                        <div class="col-xs-11">
-                            <div class="wifi-ssid-name">HowestWireless</div>
-                            <div class="wifi-ssid-info">WPA beveiligd</div>
-                        </div>
-                        <div class="col-xs-1">
-                            <img class="wifi-strength-medhigh" src="images/transparent.png" alt="signal-strength">
-                        </div>
-                    </div>
-                    
-                    <div class="row dpt-row">
-                        <div class="col-xs-11">
-                            <div class="wifi-ssid-name">HowestWireless</div>
-                            <div class="wifi-ssid-info">WPA beveiligd</div>
-                        </div>
-                        <div class="col-xs-1">
-                            <img class="wifi-strength-medlow" src="images/transparent.png" alt="signal-strength">
+                            <img data-bind="attr:{'class' : iconclass}" src="images/transparent.png" alt="signal-strength">
                         </div>
                     </div>
                 </div>
@@ -140,6 +120,7 @@
         <script src="scripts/bootstrap.min.js"></script>
         <script src="scripts/dpt-board.js"></script>
         <script src="scripts/global.js"></script>
+        <script src="scripts/dpt-modal.js"></script>
         <script src="scripts/wifiSettingsControlViewModel.js"></script>
     </body>
 </html>

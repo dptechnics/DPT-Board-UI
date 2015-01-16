@@ -164,7 +164,6 @@ $('document').ready(function () {
         
         for (var key in annot) {
             if (annot.hasOwnProperty(key))
-                console.log(annot[key]);
                 viewModel.addError(annot[key]);
         }
     });
