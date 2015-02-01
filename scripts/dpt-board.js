@@ -7,7 +7,7 @@
  */
  
 /* Ajax prefix, mostly used for development */
-var DPT_AJAX_PREFIX = "http://192.168.1.1:8080/";
+var DPT_AJAX_PREFIX = "http://192.168.0.243/";
 
 /**
  * Get general system information.
@@ -83,6 +83,33 @@ function dpt_getWifiScan(callback, errorhandler)
 {
     $.getJSON(DPT_AJAX_PREFIX + 'api/wifiscan', function(data) {
         callback(data);
+    }).error(errorhandler);
+}
+
+/**
+ * Get information about the current board firmware status
+ * @param {function} callback function to call when data is ready.
+ * @param {function} errorhandler function to call when an error occurs.
+ * @returns {undefined}
+ */
+function dpt_getFirmwareInfo(callback, errorhandler)
+{
+    $.getJSON(DPT_AJAX_PREFIX + 'api/firmware/info', function(data) {
+        callback(data);
+    }).error(errorhandler);
+}
+
+/**
+ * Get information about the current board firmware status but only
+ * after check with the dptechnics servers. 
+ * @param {function} callback function to call when data is ready.
+ * @param {function} errorhandler function to call when an error occurs.
+ * @returns {undefined}
+ */
+function dpt_checkFirmwareUpgrade(callback, errorhandler)
+{
+    $.getJSON(DPT_AJAX_PREFIX + 'api/firmware/info', function(data) {
+        dpt_getFirmwareInfo(callback, errorhandler)
     }).error(errorhandler);
 }
 

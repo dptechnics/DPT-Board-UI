@@ -7,6 +7,7 @@
     "RobotcontrolTitle" : "Robotbediening",
     "KuniocontrolTitle" : "KunIO bedieding",
     "WiFiSettingsTitle" : "WiFi instellingen",
+    "FirmwareSettingsTitle" : "Firmware instellingen",
     "CodeEditorTitle" : "Code editor",
 
     "Login" : "Login",
@@ -26,6 +27,19 @@
     "WiFiSignalStrength" : "Signaalsterkte",
     "wifiAvailableNetworks" : "Beschikbare WiFi netwerken",
     "WiFiSecurity" : "Beveiliging",
+    
+    "FirmwareSettings" : "Firmware instellingen",
+    "FirmwareStatus" : "Firmware status",
+    "FirmwareCheckBtn" : "Controleer op upgrades",
+    "FirmwareDownloadBtn" : "Download firmware",
+    "FirmwareApplyBtn" : "Installeer gedownloade firmware",
+    
+    "FirmwareUpToDate" : "Up-to-date",
+    "FirmwareVersion" : "Versie",
+    "FirmwareRelease" : "Release datum",
+    "FirmwareChangelog" : "Changelog",
+    "FirmwareNoNewVersion" : "U gebruikt de nieuwste firmware",
+    "FirmwareNewVersion" : "Er is een update beschikbaar",
 
     "Settings" : "Instellingen",
     "System" : "Systeemstatus",

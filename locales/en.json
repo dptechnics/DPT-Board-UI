@@ -6,7 +6,8 @@
     "ButtoncontrolTitle" : "Button control",
     "RobotcontrolTitle" : "Robot control",
     "KuniocontrolTitle" : "KunIO control",
-    "WiFiSettingsTitle" : "WiFi instellingen",
+    "WiFiSettingsTitle" : "WiFi settings",
+    "FirmwareSettingsTitle" : "Firmware settings",
     "CodeEditorTitle" : "Code editor",
     "WiFiSecurity" : "Security",
 
@@ -25,6 +26,18 @@
     "WiFiMode" : "WiFi mode",
     "WiFiSignalStrength" : "Signal Strength",
     "wifiAvailableNetworks" : "Available WiFi networks",
+    
+    "FirmwareSettings" : "Firmware settings",
+    "FirmwareStatus" : "Firmware status",
+    "FirmwareCheckBtn" : "Check for updates",
+    "FirmwareDownloadBtn" : "Download firmware",
+    "FirmwareApplyBtn" : "Install downloaded firmware",
+    "FirmwareUpToDate" : "Up-to-date",
+    "FirmwareVersion" : "Version",
+    "FirmwareRelease" : "Release date",
+    "FirmwareChangelog" : "Changelog",
+    "FirmwareNoNewVersion" : "You use the newest firmware",
+    "FirmwareNewVersion" : "There is a new update available",
 
     "Settings" : "Settings",
     "System" : "System state",

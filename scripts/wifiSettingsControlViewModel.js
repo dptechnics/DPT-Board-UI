@@ -27,16 +27,21 @@ function pageViewModel(gvm) {
      * Update the location dropdown list
      */
     gvm.updateWiFiNetworks = function(data) {
+        // Show best quality WiFi networks first
+        sortJsonResult(data, 'quality', false);
+        
         $.each(data, function(i, item){
+            var sec = item.secured ? '-sec' : '';
+            
             // Get wifi strength class from quality 
             if(item.quality >= 75) {
-                item.iconclass = 'wifi-strength-high';
+                item.iconclass = 'wifi-strength' + sec + '-high';
             } else if (item.quality >= 50) {
-                item.iconclass = 'wifi-strength-medhigh';
+                item.iconclass = 'wifi-strength' + sec + '-medhigh';
             } else if (item.quality >= 25) {
-                item.iconclass = 'wifi-strength-medlow';
+                item.iconclass = 'wifi-strength' + sec + '-medlow';
             } else {
-                item.iconclass = 'wifi-strength-low';
+                item.iconclass = 'wifi-strength' + sec + '-low';
             }
             
             // Add index
@@ -62,9 +67,24 @@ function initPage() {
 }
 
 /**
- * 
- * @param {type} networkdata
+ * Sorting function based on: http://stackoverflow.com/questions/881510/jquery-sorting-json-by-values
+ * @param {type} json the json array of json objects to sort
+ * @param {type} fieldname the fieldname in the object you want to sort.
+ * @param {type} asc true for ascending
  * @returns {undefined}
+ */
+function sortJsonResult(json, fieldname, asc) {
+    json = json.sort(function(a, b){
+        if (asc) 
+            return (a[fieldname] > b[fieldname]);
+        else 
+            return (b[fieldname] > a[fieldname]);
+    });
+}
+
+/**
+ * Show a modal where the user can enter WiFi information and connect to the network. 
+ * @param {type} networkdata WiFi network information.
  */
 function showConnectionModal(networkdata) {
     BootstrapDialog.show({
@@ -73,7 +93,7 @@ function showConnectionModal(networkdata) {
         buttons: [{
             label: 'Cancel',
             action: function(dialog) {
-                dialog.setTitle('Title 1');
+                dialog.close();
             }
         }, {
             label: 'Connect',

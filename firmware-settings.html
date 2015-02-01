@@ -1,0 +1,77 @@
+
+<!DOCTYPE HTML>
+<html id="htmldoc">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title data-bind="text: title">Breakout board</title>
+        <link rel="stylesheet" type="text/css" href="styles/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="styles/global.css">
+        
+        <style>
+            .correct-margin {
+                margin-top: -5px;
+            }
+            
+            .inline {
+                display: inline;
+            }
+            
+            .ul-no-padding {
+                padding-left: 0px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div id="extern-menu"></div>
+
+        <div class="container maincontainer">
+            <!-- Status overview -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title inline" data-bind="text: firmwareStatusTitle">Firmware status</h3>
+                    <button type="button" class="btn btn-primary btn-sm pull-right correct-margin" data-bind="text: firmwareCheckBtn">Check for updates</button>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <colgroup>
+                                <col class="col-xs-1">
+                                <col class="col-xs-7">
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td class="bold" data-bind="text: firmwareStatus">Status</td>
+                                    <td ><span class="label" data-bind="text: firmwareStatusLabel, css: firmwareStatusStyle"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="bold" data-bind="text: firmwareRelease">Release date</td>
+                                    <td data-bind="text: releasedate"></td>
+                                </tr>
+                                <tr>
+                                    <td class="bold" data-bind="text: firmwareVersion">Version</td>
+                                    <td data-bind="text: version"></td>
+                                </tr>
+                                <tr>
+                                    <td class="bold" data-bind="text: firmwareChangelog">Changelog</td>
+                                    <td ><li><ul class="ul-no-padding">Test</ul><ul></ul></li></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="scripts/sprintf.min.js"></script>
+        <script src="scripts/i18n.js"></script>
+        <script src="scripts/jquery-1.11.0.min.js"></script>
+        <script src="scripts/knockout-3.1.0.js"></script>
+        <script src="scripts/bootstrap.min.js"></script>
+        <script src="scripts/dpt-board.js"></script>
+        <script src="scripts/global.js"></script>
+        <script src="scripts/dpt-modal.js"></script>
+        <script src="scripts/firmwareSettingsControlViewModel.js"></script>
+    </body>
+</html>

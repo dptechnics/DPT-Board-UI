@@ -1,6 +1,9 @@
 // Page wide variables  
 var viewModel = null;
 
+/* Global key value keys */
+var KV_LOCALE = "KV_LOCALE";
+
 // Instantiate localisation 
 var i18n = new I18n({
     directory: "locales",
@@ -43,6 +46,7 @@ function GlobalViewModel()
     this.robotControlBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("RobotControl");}, this);	
     this.settingsBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Settings");}, this);
     this.wifiSettingsBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("WiFiSettings");}, this);
+    this.firmwareSettingsBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("FirmwareSettings");}, this);
 
     /**
      * Change the UI locale
@@ -51,6 +55,7 @@ function GlobalViewModel()
     this.setLocale = function(locale) {
         this.lang(locale);
         i18n.setLocale(this.lang());
+        lStorageSet(KV_LOCALE, locale);
     };
     
     // Instantiate page viewmodel
@@ -75,6 +80,35 @@ function pollingFunc() {
     }
 }
 
+
+/**
+ * Store in a persistent way, data is kept
+ * between different sessions. 
+ * @param {type} key key the key to point to the value
+ * @param {type} value the value to save
+ * @returns {bool} true on success
+ */
+function lStorageSet(key, value) {
+    if(typeof(Storage) !== "undefined") {
+        localStorage.setItem(key, value);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Retreive a value 
+ * @param {type} key the key to point to the value
+ * @returns {undefined} the value stored with the key
+ */
+function lStorageLoad(key) {
+    if(typeof(Storage) !== "undefined") {
+        return localStorage.getItem(key);
+    }
+}
+
+
 /**
  * Page initialisation function
  */
@@ -83,6 +117,12 @@ $('document').ready(function(){
         // Activate knockout framework
         viewModel = new GlobalViewModel();
         ko.applyBindings(viewModel, document.getElementById("htmldoc"));
+        
+        // Load language from keyvalue if any
+        var locale = lStorageLoad(KV_LOCALE);
+        if(locale !== ""){
+            viewModel.setLocale(locale);
+        }
         
         // Execute page specific initialisation if present
         if(typeof initPage == 'function'){
