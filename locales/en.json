@@ -45,7 +45,7 @@
     "FirmwareDownloaded" : "Download status",
     "FirmwareDownloadedYes" : "Firmware updated is downloaded",
     "FirmwareDownloadedNo" : "Click on 'Download' to download the upgrade",
-    "FirmwareInstallStartInfo" : "The firmware is now installing, please wait a few moments and refresh the page.",
+    "FirmwareInstallStartInfo" : "The firmware will now install. Within a few minutes the green light will blink. When te light is steady again after blinking the firmware upgrade is ready. Please do not remove power while upgrading.",
 
     "Settings" : "Settings",
     "System" : "System state",
