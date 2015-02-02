@@ -28,7 +28,7 @@
         var panel_1;
         var panel_2;
         var settings = $.extend({
-            limit: 100,
+            limit: 0,
             orientation: 'horizontal',
             position: '50%',
             invisible: false,

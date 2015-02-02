@@ -16,3 +16,6 @@
 .icon-cancel:before { content: '\e80e'; } /* '' */
 .icon-cancel-squared:before { content: '\e80f'; } /* '' */
 .icon-info-circled:before { content: '\e810'; } /* '' */
+.icon-design-mode:before { content: '\e812'; } /* '' */
+.icon-splitview-mode:before { content: '\e813'; } /* '' */
+.icon-text-mode:before { content: '\e814'; } /* '' */

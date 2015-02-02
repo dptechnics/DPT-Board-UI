@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg">
-<metadata>Copyright (C) 2014 by original authors @ fontello.com</metadata>
+<metadata>Copyright (C) 2015 by original authors @ fontello.com</metadata>
 <defs>
 <font id="dpt-web-ide" horiz-adv-x="1000" >
 <font-face font-family="dpt-web-ide" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
@@ -23,6 +23,9 @@
 <glyph glyph-name="cancel" unicode="&#xe80e;" d="m724 112q0-22-15-38l-76-76q-16-15-38-15t-38 15l-164 165-164-165q-16-15-38-15t-38 15l-76 76q-16 16-16 38t16 38l164 164-164 164q-16 16-16 38t16 38l76 76q16 16 38 16t38-16l164-164 164 164q16 16 38 16t38-16l76-76q15-15 15-38t-15-38l-164-164 164-164q15-15 15-38z" horiz-adv-x="785.7" />
 <glyph glyph-name="cancel-squared" unicode="&#xe80f;" d="m700 750q42 0 71-29t29-71l0-600q0-40-29-70t-71-30l-600 0q-40 0-70 30t-30 70l0 600q0 42 30 71t70 29l600 0z m-146-638l86 86-154 152 154 154-86 86-154-152-152 152-88-86 154-154-154-152 88-86 152 152z" horiz-adv-x="800" />
 <glyph glyph-name="info-circled" unicode="&#xe810;" d="m454 810q190 2 326-130t140-322q2-190-131-327t-323-141q-190-2-327 131t-139 323q-4 190 130 327t324 139z m52-152q-42 0-65-24t-23-50q-2-28 15-44t49-16q38 0 61 22t23 54q0 58-60 58z m-120-594q30 0 84 26t106 78l-18 24q-48-36-72-36-14 0-4 38l42 160q26 96-22 96-30 0-89-29t-115-75l16-26q52 34 74 34 12 0 0-34l-36-152q-26-104 34-104z" horiz-adv-x="920" />
+<glyph glyph-name="design-mode" unicode="&#xe812;" d="m1000 850v-440h-440v440h440z m-320-320h200v200h-200v-200z m-240 320v-440h-440v440h440z m-320-320h200v200h-200v-200z m880-240v-440h-440v440h440z m-320-320h200v200h-200v-200z m-240 320v-440h-440v440h440z m-320-320h200v200h-200v-200z" horiz-adv-x="1000" />
+<glyph glyph-name="splitview-mode" unicode="&#xe813;" d="m1000 850v-160h-440v160h440z m0-280v-160h-440v160h440z m0-280v-160h-440v160h440z m-560 560v-440h-440v440h440z m-320-320h200v200h-200v-200z m880-520v-160h-440v160h440z m-560 280v-440h-440v440h440z m-320-320h200v200h-200v-200z" horiz-adv-x="1000" />
+<glyph glyph-name="text-mode" unicode="&#xe814;" d="m1000 850v-160h-1000v160h1000z m0-280v-160h-1000v160h1000z m0-280v-160h-1000v160h1000z m0-280v-160h-1000v160h1000z" horiz-adv-x="1000" />
 </font>
 </defs>
 </svg>

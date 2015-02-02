@@ -41,6 +41,13 @@
                     </ul>
                 </li>
                 <li>
+                    <span class="menu-title">View</span>
+                    <ul class="menu-body">
+                        <li class="open-project-explorer"><span class="menu-icon"></span><span class="menu-item-title">Project Explorer</span><span class="menu-hotkey"></span></li>
+                        <li class="open-error-list"><span class="menu-icon"></span><span class="menu-item-title">Error List</span><span class="menu-hotkey"></span></li>
+                    </ul>
+                </li>
+                <li>
                     <span class="menu-title">Help</span>
                     <ul class="menu-body">
                         <li><span class="menu-icon"></span><span class="menu-item-title">Tutorials</span><span class="menu-hotkey"></span></li>
@@ -85,7 +92,7 @@
             <div id="project-explorer" class="pane">
                 <div class="panel-title-bar">
                     Project explorer
-                    <i class="icon-minus-squared panel-title-btn"></i>
+                    <i class="icon-minus-squared panel-title-btn close-project-explorer"></i>
                 </div>
             </div>
             <div id="horizontal-splitpane">
@@ -97,12 +104,32 @@
                             <li>style.css<i class="icon-cancel panel-title-btn"></i></li>
                         </ul>
                     </div>
-                    <div id="language-editor"></div>
+                    <div id="editor-develop-mode">
+                        <ul>
+                            <li class="menu-btn btn-text-mode"><i class="icon-text-mode"></i></li>
+                            <li class="menu-btn btn-design-mode"><i class="icon-design-mode"></i></li>
+                            <li class="menu-btn btn-splitview-mode active"><i class="icon-splitview-mode"></i></li>
+                        </ul>
+                    </div>
+                    <div id="develop-split-pane">
+                        <div id="language-editor"></div>
+                        <div id="blockly-editor">
+                               <xml id="toolbox" style="display: none">
+                                <block type="controls_if"></block>
+                                <block type="controls_repeat_ext"></block>
+                                <block type="logic_compare"></block>
+                                <block type="math_number"></block>
+                                <block type="math_arithmetic"></block>
+                                <block type="text"></block>
+                                <block type="text_print"></block>
+                              </xml>                 
+                        </div>
+                    </div>                    
                 </div>
                 <div id="error-list" class="pane">
                     <div class="panel-title-bar">
                         Error list
-                        <i class="icon-minus-squared panel-title-btn"></i>
+                        <i class="icon-minus-squared panel-title-btn close-error-list"></i>
                     </div>
                     <div class="panel-body">
                     <table id="error-list" class="scrolltable">
@@ -146,6 +173,11 @@
         <script src="scripts/viewmodel.js"></script>
         <script src="scripts/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
         <script src="scripts/src-min-noconflict/ext-language_tools.js"></script>
-        <script src="scripts/jquery.splitter-0.14.0.js"></script>
+        <script src="scripts/jquery.splitter-0.14.0.js"></script>      
+        
+        <script src="scripts/blockly_compressed.js"></script>
+        <script src="scripts/blocks_compressed.js"></script>
+        <script src="scripts/msg/js/en.js"></script>
+        <script src="scripts/javascript_compressed.js"></script>
     </body>
 </html>
