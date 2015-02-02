@@ -1,7 +1,16 @@
+/**
+ * 
+ * Authors: Matthieu Calie, Daan Pape
+ */
+
 // Page wide variables  
 var viewModel = null;
 var menuBarClicked = false;
 var editor = null;
+var rootPane;
+var rightPane;
+var developPane;
+
 
 // Instantiate localisation 
 var i18n = new I18n({
@@ -76,15 +85,22 @@ $('document').ready(function () {
     //$('#splitpane').splitter();
 
     // Activate splitter layout
-    $('#splitpane').split({
+    rootPane = $('#splitpane').split({
         orientation: 'vertical',
-        position: '0%'
+        limit: 0,
+        position: '15%'
     });
 
-    $('#horizontal-splitpane').split({
+    rightPane = $('#horizontal-splitpane').split({
         orientation: 'horizontal',
-        limit: 54,
+        limit: 0,
         position: '80%'
+    });
+    
+    developPane = $('#develop-split-pane').split({
+        orientation: 'vertical',
+        limit: 0,
+        position: '50%'
     });
 
     // Instantiate ace editor
@@ -123,7 +139,25 @@ $('document').ready(function () {
         hideMenu();
         menuBarClicked = false;
     });
-
+    
+    /* ----------------------------- Menu Handlers ------------------------------------- */
+    $('.open-project-explorer').click(function () {
+        $('#project-explorer').css('min-width', '150px');
+        rootPane.position ('15%');
+    });
+    
+    $('.close-project-explorer').click(function () {
+        $('#project-explorer').css('min-width', '0px');
+        rootPane.position ('0%');
+    });
+    
+    $('.open-error-list').click(function () {
+        rightPane.position ('80%');
+    });
+    
+    $('.close-error-list').click(function () {
+        rightPane.position ('100%');
+    });
 
     /* ----------------------------- BUTTON HANDLERS ------------------------------------- */
     $('.btn-fullscreen').click(function () {
@@ -171,6 +205,8 @@ $('document').ready(function () {
         changeDevelopMode(this, 2);
     });
     
+    
+    
     /* ---------------------------------- Editor events ---------------------------------- */
     editor.getSession().on("changeAnnotation", function () {
         var annot = editor.getSession().getAnnotations();
@@ -182,6 +218,16 @@ $('document').ready(function () {
                 viewModel.addError(annot[key]);
         }
     });
+    
+    /* ---------------------------------- Blockly Events ---------------------------------- */
+    Blockly.inject(document.getElementById('blockly-editor'),
+        {toolbox: document.getElementById('toolbox')});
+                
+    function myUpdateFunction() {
+        var code = Blockly.JavaScript.workspaceToCode();
+        editor.setValue(code);
+    }
+    Blockly.addChangeListener(myUpdateFunction);
 });
 
 function showMenu(menu) {
@@ -203,20 +249,14 @@ function changeDevelopMode(button, mode) {
     $(button).addClass('active'); 
     
     if(mode === 0) {
-        $('#blockly-editor').css('display', 'none');
-        $('#language-editor').css('display', 'inline-block');
-        $('#develop-split-pane').split().destroy();
+        developPane.position('100%');
     } else if (mode === 1) {
-        $('#blockly-editor').css('display', 'inline-block');
-        $('#language-editor').css('display', 'none');
-        $('#develop-split-pane').split().destroy();
-    } else {
-        $('#blockly-editor').css('display', 'inline-block');
-        $('#language-editor').css('display', 'inline-block');
-                
-        $('#develop-split-pane').split({
-            orientation: 'vertical',
-            position: '50%'
-        });
+        developPane.position('0%');
+    } else {  
+        developPane.position('50%');
     }
 }
+window.onresize = function(event) {
+    Blockly.fireUiEvent(window, 'resize');
+};
+

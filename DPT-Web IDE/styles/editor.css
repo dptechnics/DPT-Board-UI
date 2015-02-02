@@ -31,6 +31,10 @@ body,html {
     overflow: hidden;
 }
 
+#project-explorer {
+    min-width: 150px;
+}
+
 #splitpane {
     position: absolute;
     margin: 0px;
@@ -175,7 +179,13 @@ body,html {
 #blockly-editor {
     position: absolute;    
     background-color: white;
-    display: none;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#tabbed-filepane {
+    overflow: hidden;
 }
 
 #editor-menu {
