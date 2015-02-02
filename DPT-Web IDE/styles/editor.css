@@ -40,6 +40,15 @@ body,html {
     right: 0px;
 }
 
+#develop-split-pane {
+    position: absolute;
+    margin: 0px;
+    top: 30px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
 #statusbar {
     position: absolute;
     bottom: 0px;
@@ -63,7 +72,7 @@ body,html {
     position: absolute;
     top: 0px;
     left: 0px;
-    right: 0px;
+    right: 90px;
     height: 29px;
     border-bottom: 1px solid #444; 
     background-color: #1A1A1A;
@@ -113,12 +122,60 @@ body,html {
     background-color: #333;
 }
 
+#editor-develop-mode {
+    float: right;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    width: 90px;;
+    height: 29px;
+    border-bottom: 1px solid #444;
+    background-color: #1A1A1A;
+}
+
+#editor-develop-mode ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+#editor-develop-mode li {
+    list-style-type: none;
+    display: inline-block;
+    border: 1px solid #333;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: #EEE;
+    height: 30px;
+    line-height: 26px;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: -1px;
+    float: left;
+}
+
+#editor-develop-mode li:hover {
+    background-color: #333;
+    cursor: default;
+    color: #FFF;
+}
+
+#editor-develop-mode .active {
+    background-color: #333;
+}
+
 #language-editor {
     position: absolute;
     left: 0px;
     right: 0px;
-    top: 30px;
+    top: 0px;
     bottom: 0px;
+}
+
+#blockly-editor {
+    position: absolute;    
+    background-color: white;
+    display: none;
 }
 
 #editor-menu {
@@ -312,8 +369,6 @@ body,html {
     cursor: default;
 }
 
-
-
 #error-list {
     color: #EEE;
     font-size: 14px;
@@ -349,6 +404,7 @@ body,html {
     float: left;
     width: 100%;
 }
+
 .scrolltable tbody {
     overflow: auto;
     position: absolute;
@@ -357,6 +413,7 @@ body,html {
     left: 0px;
     right: 0px;
 }
+
 .scrolltable tr {
     width: 100%;
     display: table;
@@ -378,6 +435,7 @@ body,html {
 .warning {
     color: #FFE72D; 
 }
+
 .warning:before { 
     font-family: "dpt-web-ide";
     font-style: normal;
@@ -399,6 +457,7 @@ body,html {
 .error {
     color: #E54121;
 }
+
 .error:before { 
     font-family: "dpt-web-ide";
     font-style: normal;
@@ -420,6 +479,7 @@ body,html {
 .info {
     color: #2F668A
 }
+
 .info:before {
     font-family: "dpt-web-ide";
     font-style: normal;

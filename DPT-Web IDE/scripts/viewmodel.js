@@ -73,14 +73,17 @@ $('document').ready(function () {
     viewModel = new ViewModel();
     ko.applyBindings(viewModel, document.getElementById("htmldoc"));
 
+    //$('#splitpane').splitter();
+
     // Activate splitter layout
     $('#splitpane').split({
         orientation: 'vertical',
-        position: '20%'
+        position: '0%'
     });
 
     $('#horizontal-splitpane').split({
         orientation: 'horizontal',
+        limit: 54,
         position: '80%'
     });
 
@@ -155,7 +158,19 @@ $('document').ready(function () {
     $('.btn-play').click(function () {
         runCode();
     });
-
+    
+    $('.btn-text-mode').click(function () {
+        changeDevelopMode(this, 0);
+    });
+    
+    $('.btn-design-mode').click(function () {
+        changeDevelopMode(this, 1);
+    });
+    
+    $('.btn-splitview-mode').click(function () {
+        changeDevelopMode(this, 2);
+    });
+    
     /* ---------------------------------- Editor events ---------------------------------- */
     editor.getSession().on("changeAnnotation", function () {
         var annot = editor.getSession().getAnnotations();
@@ -181,4 +196,27 @@ function hideMenu() {
 function runCode() {
     console.log('running code: ' + editor.getValue());
     eval(editor.getValue());
+}
+
+function changeDevelopMode(button, mode) {
+    $(button).parent().find('li.active').removeClass('active');
+    $(button).addClass('active'); 
+    
+    if(mode === 0) {
+        $('#blockly-editor').css('display', 'none');
+        $('#language-editor').css('display', 'inline-block');
+        $('#develop-split-pane').split().destroy();
+    } else if (mode === 1) {
+        $('#blockly-editor').css('display', 'inline-block');
+        $('#language-editor').css('display', 'none');
+        $('#develop-split-pane').split().destroy();
+    } else {
+        $('#blockly-editor').css('display', 'inline-block');
+        $('#language-editor').css('display', 'inline-block');
+                
+        $('#develop-split-pane').split({
+            orientation: 'vertical',
+            position: '50%'
+        });
+    }
 }
