@@ -108,9 +108,45 @@ function dpt_getFirmwareInfo(callback, errorhandler)
  */
 function dpt_checkFirmwareUpgrade(callback, errorhandler)
 {
-    $.getJSON(DPT_AJAX_PREFIX + 'api/firmware/info', function(data) {
-        dpt_getFirmwareInfo(callback, errorhandler)
+    $.getJSON(DPT_AJAX_PREFIX + 'api/firmware/check', function(data) {
+        dpt_getFirmwareInfo(callback, errorhandler);
     }).error(errorhandler);
+}
+
+/**
+ * Download the latest available firmware file to disk.
+ * @param {type} callback called on success.
+ * @param {type} errorhandler called on error.
+ */
+function dpt_downloadFirmware(callback, errorhandler)
+{
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: DPT_AJAX_PREFIX + 'api/firmware/download',
+        dataType: "json",
+        success: callback,
+        error: errorhandler
+    });
+}
+
+/**
+ * Install the downloaded firmware file on the board.
+ * @param {boolean} keepSettings when true user settings will be saved.
+ * @param {type} callback called on success.
+ * @param {type} errorhandler called on error.
+ */
+function dpt_installFirmware(keepSettings, callback, errorhandler)
+{
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: DPT_AJAX_PREFIX + 'api/firmware/install',
+        data: JSON.stringify({keep_settings : keepSettings}),
+        dataType: "json",
+        success: callback,
+        error: errorhandler
+    });
 }
 
 /*

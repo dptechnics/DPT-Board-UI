@@ -71,12 +71,12 @@ function GlobalViewModel()
 function pollingFunc() {
     // Start polling if this function is present 
     if(typeof updateInfo == 'function'){
-		updateInfo(function(result) {
-			if(result){
-				// Start polling
-				setTimeout(pollingFunc, 1000);    
-			}
-		});
+    updateInfo(function(result) {
+        if(result){
+            // Start polling
+            setTimeout(pollingFunc, 1000);    
+        }
+    });
     }
 }
 
@@ -108,7 +108,6 @@ function lStorageLoad(key) {
     }
 }
 
-
 /**
  * Page initialisation function
  */
@@ -120,8 +119,10 @@ $('document').ready(function(){
         
         // Load language from keyvalue if any
         var locale = lStorageLoad(KV_LOCALE);
-        if(locale !== ""){
+        if(locale !== null){
             viewModel.setLocale(locale);
+        } else {
+            viewModel.setLocale("en");
         }
         
         // Execute page specific initialisation if present
