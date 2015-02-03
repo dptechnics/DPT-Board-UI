@@ -203,9 +203,7 @@ $('document').ready(function () {
     
     $('.btn-splitview-mode').click(function () {
         changeDevelopMode(this, 2);
-    });
-    
-    
+    });    
     
     /* ---------------------------------- Editor events ---------------------------------- */
     editor.getSession().on("changeAnnotation", function () {

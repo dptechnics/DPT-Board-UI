@@ -114,15 +114,27 @@
                     <div id="develop-split-pane">
                         <div id="language-editor"></div>
                         <div id="blockly-editor">
-                               <xml id="toolbox" style="display: none">
-                                <block type="controls_if"></block>
-                                <block type="controls_repeat_ext"></block>
-                                <block type="logic_compare"></block>
-                                <block type="math_number"></block>
-                                <block type="math_arithmetic"></block>
-                                <block type="text"></block>
-                                <block type="text_print"></block>
-                              </xml>                 
+                            <xml id="toolbox" style="display: none">
+                                <category name="Controls">
+                                    <block type="controls_if"></block>
+                                    <block type="controls_whileUntil"></block>
+                                    <block type="controls_repeat_ext"></block>
+                                </category>
+                                <category name="Logic">
+                                    <block type="logic_compare"></block>
+                                </category>
+                                <category name="Math">
+                                    <block type="math_number"></block>
+                                    <block type="math_arithmetic"></block>                                            
+                                </category>
+                                <category name="Text">
+                                    <block type="text"></block>
+                                    <block type="text_print"></block>
+                                </category>
+                                <category name="Robot-Control">
+                                    <block type="robot_move"></block>
+                                </category>
+                            </xml>                 
                         </div>
                     </div>                    
                 </div>
@@ -177,6 +189,7 @@
         
         <script src="scripts/blockly_compressed.js"></script>
         <script src="scripts/blocks_compressed.js"></script>
+        <script src="scripts/custom_blocks.js"></script>
         <script src="scripts/msg/js/en.js"></script>
         <script src="scripts/javascript_compressed.js"></script>
     </body>

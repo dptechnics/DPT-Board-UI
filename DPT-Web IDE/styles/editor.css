@@ -178,7 +178,6 @@ body,html {
 
 #blockly-editor {
     position: absolute;    
-    background-color: white;
     height: 100%;
     width: 100%;
     overflow: hidden;
