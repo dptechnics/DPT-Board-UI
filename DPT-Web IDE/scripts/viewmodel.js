@@ -142,7 +142,9 @@ $('document').ready(function () {
     
     /* ----------------------------- Menu Handlers ------------------------------------- */
     $('.menu-new-project').click(function() {
-        
+        /*var dialog = document.getElementById('new-project');
+        dialog.showModal();
+        dialog.draggable();*/
     });
     
     $('.menu-new-file').click(function() {

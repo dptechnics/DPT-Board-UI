@@ -5,7 +5,7 @@
 
 /*
  * Custom Block 1 : Robot forward moving
- * http://blockly-demo.appsot.com/static/demos/blockfactory/index.html#kzx67n
+ * https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#56vngq
  */
 Blockly.Blocks['robot_move'] = {
   init: function() {
@@ -46,6 +46,7 @@ Blockly.JavaScript['robot_move'] = function(block) {
       default:
           code = "waiting for input";          
   }
+  code += "\n"
   return code;
 };
 
