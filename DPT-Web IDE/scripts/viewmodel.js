@@ -141,21 +141,7 @@ $('document').ready(function () {
         menuBarClicked = false;
     });
     
-    /* ----------------------------- Menu Handlers ------------------------------------- */
-    $('.menu-new-project').click(function() {
-        /*var dialog = document.getElementById('new-project');
-        dialog.showModal();
-        dialog.draggable();*/
-    });
-    
-    $('.menu-new-file').click(function() {
-        
-    });
-    
-    $('.menu-open-project').click(function() {
-        
-    });
-    
+    /* ----------------------------- Menu Handlers ------------------------------------- */        
     $('.menu-save').click(function() {
         
     });
@@ -322,7 +308,7 @@ function changeDevelopMode(button, mode) {
     }
 }
 window.onresize = function(event) {
-    Blockly.fireUiEvent(window, 'resize');
+    Blockly.fireUiEvent(window, 'resize');    
 };
 
 function changeFontSize(size) {
