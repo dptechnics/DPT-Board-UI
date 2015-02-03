@@ -14,7 +14,7 @@
                 <li class="menu">
                     <span class="menu-title">File</span>
                     <ul class="menu-body">
-                        <li class="menu-new-project"><span class="menu-icon"><i class="icon-box"></i></span><span class="menu-item-title"><a href="#new-project-dlg" class="">New project</a></span><span class="menu-hotkey"></span></li>
+                        <a href="#new-project-dlg"><li class="menu-new-project"><span class="menu-icon"><i class="icon-box"></i></span><span class="menu-item-title">New project</span><span class="menu-hotkey"></span></li></a>
                         <li class="menu-new-file"><span class="menu-icon"><i class="icon-doc-inv"></i></span><span class="menu-item-title">New file</span><span class="menu-hotkey">Ctrl + O</span></li>
                         <li class="menu-separator"></li>
                         <li class="menu-open-project"><span class="menu-icon"><i class="icon-folder-open"></i></span><span class="menu-item-title">Open project</span><span class="menu-hotkey"></span></li>
@@ -22,7 +22,7 @@
                         <li class="menu-save-as"><span class="menu-icon"></span><span class="menu-item-title">Save as...</span><span class="menu-hotkey"></span></li>
                         <li class="menu-save-all"><span class="menu-icon"></span><span class="menu-item-title">Save all</span><span class="menu-hotkey"></span></li>
                         <li class="menu-separator"></li>
-                        <li class="menu-settings"><span class="menu-icon"><i class="icon-settings"></i></span><span class="menu-item-title"><a href="#settings-dlg">Setting</a></span><span class="menu-hotkey"></span></li>
+                        <a href="#settings-dlg"><li class="menu-settings"><span class="menu-icon"><i class="icon-settings"></i></span><span class="menu-item-title">Setting</span><span class="menu-hotkey"></span></li></a>
                         <li class="menu-separator"></li>
                         <li class="menu-exit"><span class="menu-icon"></span><span class="menu-item-title">Exit</span><span class="menu-hotkey"></span></li>
                     </ul>
@@ -120,21 +120,188 @@
                                 <category name="Controls">
                                     <block type="controls_if"></block>
                                     <block type="controls_whileUntil"></block>
-                                    <block type="controls_repeat_ext"></block>
+                                    <block type="controls_repeat"></block>
+                                    <block type="controls_repeat_ext">
+                                        <value name="TIMES">
+                                            <block type="math_number">
+                                                <field name="NUM">10</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="controls_for">
+                                        <value name="FROM">
+                                            <block type="math_number">
+                                                <field name="NUM">1</field>
+                                            </block>
+                                        </value>
+                                        <value name="TO">
+                                            <block type="math_number">
+                                                <field name="NUM">10</field>
+                                            </block>
+                                        </value>
+                                        <value name="BY">
+                                            <block type="math_number">
+                                                <field name="NUM">1</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="controls_forEach"></block>
+                                    <block type="controls_flow_statements"></block>
                                 </category>
                                 <category name="Logic">
                                     <block type="logic_compare"></block>
+                                    <block type="logic_operation"></block>
+                                    <block type="logic_negate"></block>
+                                    <block type="logic_null"></block>
+                                    <block type="logic_boolean"></block>
+                                    <block type="logic_ternary"></block>
                                 </category>
                                 <category name="Math">
-                                    <block type="math_number"></block>
-                                    <block type="math_arithmetic"></block>                                            
+                                    <block type="math_number">
+                                        <field name="NUM">10</field>
+                                    </block>                                    
+                                    <block type="math_arithmetic"></block>
+                                    <block type="math_single"></block>
+                                    <block type="math_constant"></block>
+                                    <block type="math_number_property"></block>
+                                    <block type="math_change">
+                                        <value name="DELTA">
+                                            <block type="math_number">
+                                                <field name="NUM">1</field>
+                                            </block>
+                                        </value>                                        
+                                    </block>
+                                    <block type="math_round"></block>
+                                    <block type="math_trig"></block>
+                                    <block type="math_on_list"></block>
+                                    <block type="math_modulo"></block>
+                                    <block type="math_constrain">
+                                        <value name="LOW">
+                                            <block type="math_number">
+                                                <field name="NUM">1</field>
+                                            </block>
+                                        </value>
+                                        <value name="HIGH">
+                                            <block type="math_number">
+                                                <field name="NUM">100</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="math_random_int">
+                                        <value name="FROM">
+                                            <block type="math_number">
+                                                <field name="NUM">1</field>
+                                            </block>
+                                        </value>
+                                        <value name="TO">
+                                            <block type="math_number">
+                                                <field name="NUM">100</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="math_random_float"></block>
                                 </category>
                                 <category name="Text">
                                     <block type="text"></block>
+                                    <block type="text_join"></block>
+                                    <block type="text_append">
+                                        <value name="TEXT">
+                                            <block type="text"></block>
+                                        </value>
+                                    </block>
+                                    <block type="text_length"></block>
+                                    <block type="text_isEmpty"></block>
+                                    <block type="text_indexOf">
+                                        <value name="VALUE">
+                                            <block type="variables_get">
+                                                <field name="VAR">text</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="text_charAt">
+                                        <value name="VALUE">
+                                            <block type="variables_get">
+                                                <field name="VAR">text</field>
+                                            </block>
+                                        </value>      
+                                    </block>
+                                    <block type="text_getSubstring">
+                                        <value name="STRING">
+                                            <block type="variables_get">
+                                                <field name="VAR">text</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="text_changeCase"></block>
+                                    <block type="text_trim"></block>
+                                    <block type="text_prompt"></block>
+                                    <block type="text_prompt_ext">
+                                        <value name="TEXT">
+                                            <block type="text"></block>
+                                        </value>
+                                    </block>
                                     <block type="text_print"></block>
                                 </category>
+                                <category name="Lists">
+                                    <block type="lists_create_empty"></block>
+                                    <block type="lists_create_with"></block>
+                                    <block type="lists_repeat">
+                                        <value name="NUM">
+                                            <block type="math_number">
+                                                <field name="NUM">5</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="lists_length"></block>
+                                    <block type="lists_isEmpty"></block>
+                                    <block type="lists_indexOf">
+                                        <value name="VALUE">
+                                            <block type="variables_get">
+                                                <field name="VAR">list</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="lists_getIndex">
+                                        <value name="VALUE">
+                                            <block type="variables_get">
+                                                <field name="VAR">list</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="lists_setIndex">
+                                        <value name="LIST">
+                                            <block type="variables_get">
+                                                <field name="VAR">list</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="lists_getSublist">
+                                        <value name="LIST">
+                                            <block type="variables_get">
+                                                <field name="VAR">list</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                    <block type="lists_split">
+                                        <value name="DELIM">
+                                            <block type="text">
+                                                <field name="TEXT">,</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                </category>
+                                <sep></sep>
+                                <category name="Variables" custom="VARIABLE"></category>
+                                <category name="Functions" custom="PROCEDURE"></category>
+                                <sep></sep>
                                 <category name="Robot-Control">
-                                    <block type="robot_move"></block>
+                                    <block type="robot_move">
+                                        <value name="MOVE">
+                                            <block type="math_number">
+                                                <field name="NUM">5</field>
+                                            </block>
+                                        </value>
+                                    </block>
                                 </category>
                             </xml>                 
                         </div>
@@ -180,7 +347,7 @@
             </ul>
         </div>        
         
-        <!-- **************************************************** Dialog Section ****************************************************************************** -->
+        <!-- **************************************************** Dialog Section *********************************************************************** -->
         
         <div id="new-project-dlg" class="modalDialog">
             <div>
@@ -212,7 +379,8 @@
                     <a href="#close" title="Close" class="close">X</a>
                 </div>
                 <div class="modal-body">
-                    <h2 class="modal-title">Edit Settings</h2>
+                    <h2 class="modal-title">Editor</h2>
+                    <p>Text-size: </p>
                     <select class="changeFontSize">
                         <option value="8">8</option>
                         <option value="9">9</option>
@@ -231,7 +399,7 @@
                         <option value="48">48</option>
                         <option value="72">72</option>
                     </select>
-                    <p>Pts</p>
+                    <p> Pts</p>
                 </div>
             </div>
         </div>
