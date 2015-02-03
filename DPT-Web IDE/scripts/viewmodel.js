@@ -113,7 +113,8 @@ $('document').ready(function () {
     editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: true,
-        enableLiveAutocompletion: false
+        enableLiveAutocompletion: false,
+        fontSize: "14pt"
     });
 
     // Menu structure initialisation
@@ -268,6 +269,10 @@ $('document').ready(function () {
     });    
     
     /* ---------------------------------- Editor events ---------------------------------- */
+    $('.changeFontSize').click(function() {
+        changeFontSize($('.changeFontSize').val());
+    });
+    
     editor.getSession().on("changeAnnotation", function () {
         var annot = editor.getSession().getAnnotations();
         
@@ -319,3 +324,9 @@ function changeDevelopMode(button, mode) {
 window.onresize = function(event) {
     Blockly.fireUiEvent(window, 'resize');
 };
+
+function changeFontSize(size) {
+    editor.setOptions({
+        fontSize: size + "pt"
+    });
+}

@@ -125,6 +125,12 @@
       "css": "text-mode",
       "code": 59412,
       "src": "websymbols"
+    },
+    {
+      "uid": "26aba7edd46944209b4961670675a813",
+      "css": "settings",
+      "code": 59409,
+      "src": "websymbols"
     }
   ]
 }

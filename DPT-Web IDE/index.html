@@ -22,6 +22,8 @@
                         <li class="menu-save-as"><span class="menu-icon"></span><span class="menu-item-title">Save as...</span><span class="menu-hotkey"></span></li>
                         <li class="menu-save-all"><span class="menu-icon"></span><span class="menu-item-title">Save all</span><span class="menu-hotkey"></span></li>
                         <li class="menu-separator"></li>
+                        <li class="menu-settings"><span class="menu-icon"><i class="icon-settings"></i></span><span class="menu-item-title"><a href="#settings-dlg">Setting</a></span><span class="menu-hotkey"></span></li>
+                        <li class="menu-separator"></li>
                         <li class="menu-exit"><span class="menu-icon"></span><span class="menu-item-title">Exit</span><span class="menu-hotkey"></span></li>
                     </ul>
                 </li>
@@ -189,7 +191,7 @@
                 <div class="modal-body">
                     <h2 class="modal-title">Create a new project</h2>
                     <form action="" class="modal-form">
-                        <div class="new-project-radio">
+                        <div class="modal-radio">
                             <input id="new-robot" type="radio" name="category" value="robot" checked><label for="new-robot">Robot-Project</label>
                             <input id="new-iot" type="radio" name="category" value="iot"><label for="new-iot">IOT-Project</label>
                             <input id="new-web" type="radio" name="category" value="web"><label for="new-web">Web-Project</label>
@@ -197,13 +199,43 @@
                         <p>There are 3 types of project available:<br>  - A robot-project is a visual editor with functionalities to move the DPT-Robot. <br>  - The second option is to build an internet of things application. <br>  - A webbased project is meant to create simple web-applications.</p>
                         
                     </form>  
-                    <a href="#close"><button type="submit" value="create">Ok</button></a>
-                    <a href="#close"><button type="submit" value="create">Cancel</button></a>                    
+                    <a href="#close"><button class="custom-button" type="submit" value="create">Ok</button></a>
+                    <a href="#close"><button class="custom-button" type="submit" value="create">Cancel</button></a>                    
                 </div>
             </div>
         </div>
         
-        
+        <div id="settings-dlg" class="modalDialog">
+            <div>
+                <div class="topstrip">
+                    <p>Settings</p>
+                    <a href="#close" title="Close" class="close">X</a>
+                </div>
+                <div class="modal-body">
+                    <h2 class="modal-title">Edit Settings</h2>
+                    <select class="changeFontSize">
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="14" selected>14</option>
+                        <option value="16">16</option>
+                        <option value="18">18</option>
+                        <option value="20">20</option>
+                        <option value="22">22</option>
+                        <option value="24">24</option>
+                        <option value="26">26</option>
+                        <option value="28">28</option>
+                        <option value="36">36</option>
+                        <option value="48">48</option>
+                        <option value="72">72</option>
+                    </select>
+                    <p>Pts</p>
+                </div>
+            </div>
+        </div>
+                
         <script src="scripts/sprintf.min.js"></script>
         <script src="scripts/i18n.js"></script>
         <script src="scripts/jquery-1.11.0.min.js"></script>
