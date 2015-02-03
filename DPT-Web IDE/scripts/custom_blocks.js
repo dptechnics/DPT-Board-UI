@@ -19,6 +19,8 @@ Blockly.Blocks['robot_move'] = {
     this.appendDummyInput()
         .appendField("steps");
     this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
     this.setTooltip('');
   }
 };
@@ -27,7 +29,23 @@ Blockly.JavaScript['robot_move'] = function(block) {
   var value_move = Blockly.JavaScript.valueToCode(block, 'MOVE', Blockly.JavaScript.ORDER_ATOMIC);
   var dropdown_direction = block.getFieldValue('DIRECTION');
   // TODO: Assemble JavaScript into code variable.
-  var code = '...';
+  var code;
+  switch (dropdown_direction) {
+      case "UP":
+          code = "moveup(" + value_move + ");";
+          break;
+      case "DOWN":
+          code = "movedown(" + value_move + ");";
+          break;
+      case "LEFT":
+          code = "moveleft(" + value_move + ");";
+          break;
+      case "RIGHT":
+          code = "moveright(" + value_move + ");";
+          break;
+      default:
+          code = "waiting for input";          
+  }
   return code;
 };
 

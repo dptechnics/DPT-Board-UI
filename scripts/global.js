@@ -136,7 +136,7 @@ $('document').ready(function(){
         // Attach application openers
         $('#code-edit-app').click(function(e){
             e.stopPropagation(); 
-            window.open("DPT-Web%20IDE/index.html", "_blank", "toolbar=no, scrollbars=no, resizable=yes, location=no, directories=no, status=no, top=0, left=0, width=800, height=600");
+            window.open("DPT-Web%20IDE/index.html", "_blank", "toolbar=no, scrollbars=no, resizable=yes, location=no, directories=no, status=no, top=0, left=0, width=1200, height=600");
             return false;
         });
     });

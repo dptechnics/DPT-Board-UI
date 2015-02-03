@@ -141,6 +141,66 @@ $('document').ready(function () {
     });
     
     /* ----------------------------- Menu Handlers ------------------------------------- */
+    $('.menu-new-project').click(function() {
+        
+    });
+    
+    $('.menu-new-file').click(function() {
+        
+    });
+    
+    $('.menu-open-project').click(function() {
+        
+    });
+    
+    $('.menu-save').click(function() {
+        
+    });
+    
+    $('.menu-save-as').click(function() {
+        
+    });
+    
+    $('.menu-save-all').click(function() {
+        
+    });
+    
+    $('.menu-exit').click(function() {
+        window.close();
+    });
+    
+    $('.menu-cut').click(function() {
+        
+    });
+    
+    $('.menu-copy').click(function() {
+        
+    });
+    
+    $('.menu-paste').click(function() {
+        
+    });
+    
+    $('.menu-select-all').click(function() {
+        
+    });
+    
+    $('.menu-tutorials').click(function() {
+        
+    });
+    
+    $('.menu-help-index').click(function() {
+        
+    });
+    
+    $('.menu-check-updates').click(function() {
+        
+    });
+    
+    $('.menu-about').click(function() {
+        
+    });
+    
     $('.open-project-explorer').click(function () {
         $('#project-explorer').css('min-width', '150px');
         rootPane.position ('15%');
@@ -257,4 +317,3 @@ function changeDevelopMode(button, mode) {
 window.onresize = function(event) {
     Blockly.fireUiEvent(window, 'resize');
 };
-
