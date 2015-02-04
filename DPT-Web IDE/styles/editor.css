@@ -553,19 +553,19 @@ body,html {
 }
 
 .close {
-	background: #C75050;
-	color: #FFFFFF;
-	line-height: 25px;
-	position: absolute;
-	right: 0px;
-	text-align: center;
-	top: 0px;
-	width: 24px;
-	text-decoration: none;
-	font-weight: bold;
-	-moz-box-shadow: 1px 1px 3px #000;
-	-webkit-box-shadow: 1px 1px 3px #000;
-	box-shadow: 1px 1px 3px #000;
+    background: #C75050;
+    color: #FFFFFF;
+    line-height: 25px;
+    position: absolute;
+    right: 0px;
+    text-align: center;
+    top: 0px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
 }
 
 .close:hover { background: #E04343; }
@@ -602,6 +602,7 @@ body,html {
     margin-right: 15px;
     font-size: 20px;
 }
+
 .modal-radio > label:before {
     border-radius: 8px;
     content: "";
@@ -651,7 +652,6 @@ body,html {
 }
 
 /*csslint outline-none:false*/
-
 .custom-button {
     font-family: inherit;
     font-size: 100%;
@@ -685,7 +685,7 @@ body,html {
     display: none;
 }
 
-/* Firefox: Get rid of the inner focus border */
+/* Firefox: no inner focus */
 .custom-button::-moz-focus-inner{
     padding: 0;
     border: 0;
