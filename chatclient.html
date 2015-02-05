@@ -42,7 +42,15 @@
                     ws.send($("#m").val());
                     $("#m").val('');
                 }
-            })
+            });
+            $("#m").keypress(function(e) {
+                var key = e.which;
+                if(key == 13) {
+                    ws.send($("#m").val());
+                    $("#m").val('');
+                }
+            });
+            
 	</script>
   </body>
 </html>

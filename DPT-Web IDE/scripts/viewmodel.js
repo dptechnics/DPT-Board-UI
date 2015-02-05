@@ -11,6 +11,150 @@ var rootPane;
 var rightPane;
 var developPane;
 
+var exampleJSON = [
+    {
+        "name": "Robotproject1",
+        "type": {
+            "basetype": "PROJECT",
+            "subtype": "ROBOT"
+        },
+        "uri": "/Robotproject1",
+        "children": [
+            {
+                "name": "public",
+                "type": {
+                    "basetype": "FOLDER",
+                    "subtype": "folder"
+                },
+                "uri": "/Robotproject1/public",
+                "children": [
+                    {
+                        "name": "javascript.js",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "js"
+                        },
+                        "uri": "/Robotproject1/public/javascript.js",
+                        "children": []
+                    },
+                    {
+                        "name": "stylesheet.css",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "css"
+                        },
+                        "uri": "/Robotproject1/public/stylesheet.css",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "name": "index.html",
+                "type": {
+                    "basetype": "FILE",
+                    "subtype": "html"
+                },
+                "uri": "/Robotproject1/index.html",
+                "children": []
+            }
+        ]
+    },
+    {
+        "name": "IoTproject1",
+        "type": {
+            "basetype": "PROJECT",
+            "subtype": "IOT"
+        },
+        "uri": "/IoTproject1",
+        "children": [
+            {
+                "name": "public",
+                "type": {
+                    "basetype": "FOLDER",
+                    "subtype": "folder"
+                },
+                "uri": "/IoTproject1/public",
+                "children": [
+                    {
+                        "name": "javascript.js",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "js"
+                        },
+                        "uri": "/IoTproject1/public/javascript.js",
+                        "children": []
+                    },
+                    {
+                        "name": "stylesheet.css",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "css"
+                        },
+                        "uri": "/IoTproject1/public/stylesheet.css",
+                        "children": []
+                    }
+                ]  
+            },
+            {
+                "name": "index.html",
+                "type": {
+                    "basetype": "FILE",
+                    "subtype": "html"
+                },
+                "uri": "/IoTproject1/index.html",
+                "children": []
+            }
+        ]
+    },
+    {
+        "name": "webproject",
+        "type": {
+            "basetype": "PROJECT",
+            "subtype": "WEB"
+        },
+        "uri": "/webproject",
+        "children": [
+            {
+                "name": "public",
+                "type": {
+                    "basetype": "FOLDER",
+                    "subtype": "folder"
+                },
+                "uri": "/webproject/public",
+                "children": [
+                    {
+                        "name": "javascript.js",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "js"
+                        },
+                        "uri": "/webproject/public/javascript.js",
+                        "children": []
+                    },
+                    {
+                        "name": "stylesheet.css",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "css"
+                        },
+                        "uri": "/webproject/public/stylesheet.css",
+                        "children": []
+                    }
+                ]  
+            },
+            {
+                "name": "index.html",
+                "type": {
+                    "basetype": "FILE",
+                    "subtype": "html"
+                },
+                "uri": "/webproject/index.html",
+                "children": []
+            }
+        ]
+    }
+];    
+
 
 // Instantiate localisation 
 var i18n = new I18n({
@@ -254,6 +398,15 @@ $('document').ready(function () {
         changeDevelopMode(this, 2);
     });    
     
+    $('.btn-error-list').click(function () {
+        $('.error-list-pnl').removeClass('hidden');
+        $('.console-pnl').addClass('hidden');
+    });
+    $('.btn-console').click(function () {
+        $('.error-list-pnl').addClass('hidden');
+        $('.console-pnl').removeClass('hidden');
+    });
+    
     /* ---------------------------------- Editor events ---------------------------------- */
     $('.changeFontSize').click(function() {
         changeFontSize($('.changeFontSize').val());
@@ -274,7 +427,7 @@ $('document').ready(function () {
     Blockly.inject(document.getElementById('blockly-editor'),
         {toolbox: document.getElementById('toolbox')});
                 
-    function myUpdateFunction() {
+    function myUpdateFunction() {        
         var code = Blockly.JavaScript.workspaceToCode();
         editor.setValue(code);
     }
@@ -290,9 +443,23 @@ function hideMenu() {
     $('.menu-body').removeClass('menu-body-visible');
 }
 
+function loadScripts(callback) {
+    //loading robotfiles
+    $.getScript("../scripts/dpt-board.js", function() {
+        $.getScript("../scripts/dpt-robot.js", function() { 
+            callback();
+        });
+    });
+}
+
 function runCode() {
-    console.log('running code: ' + editor.getValue());
-    eval(editor.getValue());
+    loadScripts(function(){
+        DPT_AJAX_PREFIX = "/";    
+        var editorcode = editor.getValue()
+        eval(editorcode);
+    });
+    
+    
 }
 
 function changeDevelopMode(button, mode) {
@@ -316,3 +483,76 @@ function changeFontSize(size) {
         fontSize: size + "pt"
     });
 }
+
+function fillProjectExplorer(data) {
+    var tnc = 0;
+    $.each(exampleJSON, function (i, item) {
+        $('.tree').append('<li class="treenode"></li>').append('<label for="' + item.name + '"');
+    });
+}
+
+function fillChildren(data) {
+    
+}
+
+
+/* robotmovement */
+function moveForward(time) {
+    console.log('Robot moving forward for: ' + (time * 100) + 'ms');
+    dptr_moveForward();
+    sleep(100 * time);
+    dptr_stopMotor();
+}
+
+function moveBackward(time) {
+    console.log('Robot moving backward for: ' + time * 100 + 'ms');
+    dptr_moveBackward();
+    sleep(100 * time);
+    dptr_stopMotor();
+}
+
+function moveLeft(time) {
+    console.log('Robot moving left for: ' + time * 100 + 'ms');
+    dptr_moveLeft();
+    sleep(100 * time);
+    dptr_stopMotor();
+}
+
+function moveRight(time) {
+    console.log('Robot moving right for: ' + time * 100 + 'ms');
+    dptr_moveRight();
+    sleep(100 * time);
+    dptr_stopMotor();
+}
+
+function spinRight() {
+    console.log('Robot spinning right');
+    dptr_spinRight();
+    sleep(200);
+    dptr_stopMotor();
+}
+
+function spinLeft() {
+    console.log('Robot spinning left');
+    dptr_spinLeft();
+    sleep(200);
+    dptr_stopMotor();
+}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
+/* console feature */
+(function(){
+    var oldLog = console.log;
+    console.log = function (message) {
+        $("#console-pnl").append(message + '</br>');
+        oldLog.apply(console, arguments);
+    };
+})();

@@ -96,6 +96,74 @@
                     Project explorer
                     <i class="icon-minus-squared panel-title-btn close-project-explorer"></i>
                 </div>
+                <ol class="tree">
+		<li class="treenode">
+			<label for="folder1">Folder 1</label> <input type="checkbox"  id="folder1" /> 
+			<ol>
+				<li class="file"><a href="">File 1</a></li>
+				<li class="treenode">
+					<label for="subfolder1">Subfolder 1</label> <input type="checkbox" id="subfolder1" /> 
+					<ol>
+						<li class="file"><a href="">Filey 1</a></li>
+						<li class="treenode">
+							<label for="subsubfolder1">Subfolder 1</label> <input type="checkbox" id="subsubfolder1" /> 
+							<ol>
+								<li class="file"><a href="">File 1</a></li>
+								<li class="treenode">
+									<label for="subsubfolder2">Subfolder 1</label> <input type="checkbox" id="subsubfolder2" /> 
+									<ol>
+										<li class="file"><a href="">Subfile 1</a></li>
+										<li class="file"><a href="">Subfile 2</a></li>
+										<li class="file"><a href="">Subfile 3</a></li>
+										<li class="file"><a href="">Subfile 4</a></li>
+										<li class="file"><a href="">Subfile 5</a></li>
+										<li class="file"><a href="">Subfile 6</a></li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+						<li class="file"><a href="">File 3</a></li>
+						<li class="file"><a href="">File 4</a></li>
+						<li class="file"><a href="">File 5</a></li>
+						<li class="file"><a href="">File 6</a></li>
+					</ol>
+				</li>
+			</ol>
+                </li>
+                <li class="treenode">
+			<label for="folder1">Folder 1</label> <input type="checkbox"  id="folder1" /> 
+			<ol>
+				<li class="file"><a href="">File 1</a></li>
+				<li class="treenode">
+					<label for="subfolder1">Subfolder 1</label> <input type="checkbox" id="subfolder1" /> 
+					<ol>
+						<li class="file"><a href="">Filey 1</a></li>
+						<li class="treenode">
+							<label for="subsubfolder1">Subfolder 1</label> <input type="checkbox" id="subsubfolder1" /> 
+							<ol>
+								<li class="file"><a href="">File 1</a></li>
+								<li class="treenode">
+									<label for="subsubfolder2">Subfolder 1</label> <input type="checkbox" id="subsubfolder2" /> 
+									<ol>
+										<li class="file"><a href="">Subfile 1</a></li>
+										<li class="file"><a href="">Subfile 2</a></li>
+										<li class="file"><a href="">Subfile 3</a></li>
+										<li class="file"><a href="">Subfile 4</a></li>
+										<li class="file"><a href="">Subfile 5</a></li>
+										<li class="file"><a href="">Subfile 6</a></li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+						<li class="file"><a href="">File 3</a></li>
+						<li class="file"><a href="">File 4</a></li>
+						<li class="file"><a href="">File 5</a></li>
+						<li class="file"><a href="">File 6</a></li>
+					</ol>
+				</li>
+			</ol>
+                </li>
+                </ol>
             </div>
             <div id="horizontal-splitpane">
                 <div id="tabbed-filepane">
@@ -309,30 +377,35 @@
                 </div>
                 <div id="error-list" class="pane">
                     <div class="panel-title-bar">
-                        Error list
+                        <span class="btn-error-list">Error list</span> | <span class="btn-console">Console</span>
                         <i class="icon-minus-squared panel-title-btn close-error-list"></i>
                     </div>
                     <div class="panel-body">
-                    <table id="error-list" class="scrolltable">
-                        <thead>
-                            <tr>
-                                <td class="err-icon"></td>
-                                <td class="description">Description</td>
-                                <td class="filename">File</td>
-                                <td class="line-nr">Line</td>
-                                <td class="col-nr">Column</td>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: codeAnnotations">
-                            <tr>
-                                <td class="err-icon"><i data-bind="css: type"></i></td>
-                                <td class="description" data-bind="text: text"></td>
-                                <td class="filename">my_robot.js</td>
-                                <td class="line-nr" data-bind="text: row"></td>
-                                <td class="col-nr" data-bind="text: column"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <div class="error-list-pnl">
+                            <table id="error-list" class="scrolltable">
+                            <thead>
+                                <tr>
+                                    <td class="err-icon"></td>
+                                    <td class="description">Description</td>
+                                    <td class="filename">File</td>
+                                    <td class="line-nr">Line</td>
+                                    <td class="col-nr">Column</td>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: codeAnnotations">
+                                <tr>
+                                    <td class="err-icon"><i data-bind="css: type"></i></td>
+                                    <td class="description" data-bind="text: text"></td>
+                                    <td class="filename">my_robot.js</td>
+                                    <td class="line-nr" data-bind="text: row"></td>
+                                    <td class="col-nr" data-bind="text: column"></td>
+                                </tr>
+                            </tbody> 
+                            </table>
+                        </div>
+                        <div id="console-pnl" class="console-pnl hidden">
+                            
+                        </div>
                     </div>
                 </div>
             </div>

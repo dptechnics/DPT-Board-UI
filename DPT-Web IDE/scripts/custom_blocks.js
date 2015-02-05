@@ -5,7 +5,7 @@
 
 /*
  * Custom Block 1 : Robot forward moving
- * https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#56vngq
+ * https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#vao53d
  */
 Blockly.Blocks['robot_move'] = {
   init: function() {
@@ -14,10 +14,10 @@ Blockly.Blocks['robot_move'] = {
     this.appendValueInput("MOVE")
         .setCheck("Number")
         .appendField("Move robot")
-        .appendField(new Blockly.FieldDropdown([["Up", "UP"], ["Down", "DOWN"], ["Left", "LEFT"], ["Right", "RIGHT"]]), "DIRECTION")
+        .appendField(new Blockly.FieldDropdown([["Forward", "UP"], ["Backward", "DOWN"], ["Left", "LEFT"], ["Right", "RIGHT"]]), "DIRECTION")
         .appendField("For");
     this.appendDummyInput()
-        .appendField("steps");
+        .appendField(" * 100 ms");
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -32,16 +32,16 @@ Blockly.JavaScript['robot_move'] = function(block) {
   var code;
   switch (dropdown_direction) {
       case "UP":
-          code = "moveup(" + value_move + ");";
+          code = "moveForward(" + value_move + ");";
           break;
       case "DOWN":
-          code = "movedown(" + value_move + ");";
+          code = "moveBackward(" + value_move + ");";
           break;
       case "LEFT":
-          code = "moveleft(" + value_move + ");";
+          code = "moveLeft(" + value_move + ");";
           break;
       case "RIGHT":
-          code = "moveright(" + value_move + ");";
+          code = "moveRight(" + value_move + ");";
           break;
       default:
           code = "waiting for input";          
@@ -49,4 +49,12 @@ Blockly.JavaScript['robot_move'] = function(block) {
   code += "\n"
   return code;
 };
+
+Blockly.JavaScript['text_print'] = function(block) {
+  // Print statement.
+  var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  return 'console.log(' + argument0 + ');\n';
+};
+
 
