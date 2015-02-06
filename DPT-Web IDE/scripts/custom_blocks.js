@@ -122,6 +122,26 @@ Blockly.Blocks['function_thread'] = {
     this.setTooltip('');
   }
 };
+/*
+ * Custom block : wait
+ * https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#5j7jvr
+ */
+Blockly.Blocks['function_wait'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(120);
+    this.appendDummyInput()
+        .appendField("Wait");
+    this.appendValueInput("TIME")
+        .setCheck("Number");
+    this.appendDummyInput()
+        .appendField("ms");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('');
+  }
+};
 
 Blockly.JavaScript['robot_move'] = function(block) {
   var value_move = Blockly.JavaScript.valueToCode(block, 'MOVE', Blockly.JavaScript.ORDER_ATOMIC);
@@ -208,6 +228,13 @@ Blockly.JavaScript['controls_settimeout'] = function(block) {
 Blockly.JavaScript['function_thread'] = function(block) {
   var statements_thread = Blockly.JavaScript.statementToCode(block, 'THREAD');
   var code = 'setTimeout(function() {\n' + statements_thread + '}, 0);\n';
+  return code;
+};
+
+Blockly.JavaScript['function_wait'] = function(block) {
+  var value_time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_ATOMIC);
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'hold(' + value_time + ')\n';
   return code;
 };
 
