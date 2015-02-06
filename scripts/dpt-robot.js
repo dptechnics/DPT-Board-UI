@@ -62,16 +62,6 @@ function dptr_stopMotor()
 	dpt_setIO(24, false);
 }
 
-function dptr_lightOn()
-{
-        dpt_setIO(6, true);
-}
-
-function dptr_lightOff()
-{
-        dpt_setIO(6, false);
-}
-
 /*
  * Listen to document keydown events to provide action attaching. 
  */

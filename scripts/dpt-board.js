@@ -48,7 +48,7 @@ function dpt_toggleIO(name, errorhandler)
         $.ajax({
             type: "PUT",
             contentType: "application/json; charset=utf-8",
-            url: AJAX_PREFXIX + 'api/gpio/' + name + '/' + (data.state === 0 ? 1 : 0),
+            url: DPT_AJAX_PREFIX + 'api/gpio/' + name + '/' + (data.state === 0 ? 1 : 0),
             dataType: "json",
             error: errorhandler
         });

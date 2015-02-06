@@ -11,6 +11,8 @@ var rootPane;
 var rightPane;
 var developPane;
 
+var tasks = [];
+
 var exampleJSON = [
     {
         "name": "Robotproject1",
@@ -222,6 +224,8 @@ function ViewModel()
  * Page initialisation
  */
 $('document').ready(function () {
+    DPT_AJAX_PREFIX = "/";  
+    
     // Activate knockout framework
     viewModel = new ViewModel();
     ko.applyBindings(viewModel, document.getElementById("htmldoc"));
@@ -382,9 +386,9 @@ $('document').ready(function () {
         editor.redo();
     });
 
-    $('.btn-play').click(function () {
+    /*$('.btn-play').click(function () {
         runCode();
-    });
+    });*/
     
     $('.btn-text-mode').click(function () {
         changeDevelopMode(this, 0);
@@ -443,24 +447,10 @@ function hideMenu() {
     $('.menu-body').removeClass('menu-body-visible');
 }
 
-function loadScripts(callback) {
-    //loading robotfiles
-    $.getScript("../scripts/dpt-board.js", function() {
-        $.getScript("../scripts/dpt-robot.js", function() { 
-            callback();
-        });
-    });
-}
-
-function runCode() {
-    loadScripts(function(){
-        DPT_AJAX_PREFIX = "/";    
-        var editorcode = editor.getValue()
-        eval(editorcode);
-    });
-    
-    
-}
+/*function runCode() {
+    var editorcode = editor.getValue();
+    eval(editorcode);  
+}*/
 
 function changeDevelopMode(button, mode) {
     $(button).parent().find('li.active').removeClass('active');
@@ -497,7 +487,7 @@ function fillChildren(data) {
 
 
 /* robotmovement */
-function moveForward(time) {
+/*function moveForward(time) {
     console.log('Robot moving forward for: ' + (time * 100) + 'ms');
     dptr_moveForward();
     sleep(100 * time);
@@ -537,6 +527,26 @@ function spinLeft() {
     dptr_spinLeft();
     sleep(200);
     dptr_stopMotor();
+}*/
+
+/* dpt IO functions */
+function enablePin(pin) {
+    console.log("Enabling pin " + pin);
+    dpt_setIO(pin, true);
+}
+
+function disablePin(pin) {
+    console.log("Disabling pin " + pin)
+    dpt_setIO(pin, false);
+}
+
+function togglePin(pin) {
+    console.log("Toggle pin " + pin);
+    dpt_toggleIO(pin);
+}
+
+function newTask(f) {
+    tasks.push(f);
 }
 
 function sleep(milliseconds) {
