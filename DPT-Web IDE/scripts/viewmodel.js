@@ -10,153 +10,8 @@ var editor = null;
 var rootPane;
 var rightPane;
 var developPane;
-
+var currentProject = null;
 var tasks = [];
-
-var exampleJSON = [
-    {
-        "name": "Robotproject1",
-        "type": {
-            "basetype": "PROJECT",
-            "subtype": "ROBOT"
-        },
-        "uri": "/Robotproject1",
-        "children": [
-            {
-                "name": "public",
-                "type": {
-                    "basetype": "FOLDER",
-                    "subtype": "folder"
-                },
-                "uri": "/Robotproject1/public",
-                "children": [
-                    {
-                        "name": "javascript.js",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "js"
-                        },
-                        "uri": "/Robotproject1/public/javascript.js",
-                        "children": []
-                    },
-                    {
-                        "name": "stylesheet.css",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "css"
-                        },
-                        "uri": "/Robotproject1/public/stylesheet.css",
-                        "children": []
-                    }
-                ]
-            },
-            {
-                "name": "index.html",
-                "type": {
-                    "basetype": "FILE",
-                    "subtype": "html"
-                },
-                "uri": "/Robotproject1/index.html",
-                "children": []
-            }
-        ]
-    },
-    {
-        "name": "IoTproject1",
-        "type": {
-            "basetype": "PROJECT",
-            "subtype": "IOT"
-        },
-        "uri": "/IoTproject1",
-        "children": [
-            {
-                "name": "public",
-                "type": {
-                    "basetype": "FOLDER",
-                    "subtype": "folder"
-                },
-                "uri": "/IoTproject1/public",
-                "children": [
-                    {
-                        "name": "javascript.js",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "js"
-                        },
-                        "uri": "/IoTproject1/public/javascript.js",
-                        "children": []
-                    },
-                    {
-                        "name": "stylesheet.css",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "css"
-                        },
-                        "uri": "/IoTproject1/public/stylesheet.css",
-                        "children": []
-                    }
-                ]  
-            },
-            {
-                "name": "index.html",
-                "type": {
-                    "basetype": "FILE",
-                    "subtype": "html"
-                },
-                "uri": "/IoTproject1/index.html",
-                "children": []
-            }
-        ]
-    },
-    {
-        "name": "webproject",
-        "type": {
-            "basetype": "PROJECT",
-            "subtype": "WEB"
-        },
-        "uri": "/webproject",
-        "children": [
-            {
-                "name": "public",
-                "type": {
-                    "basetype": "FOLDER",
-                    "subtype": "folder"
-                },
-                "uri": "/webproject/public",
-                "children": [
-                    {
-                        "name": "javascript.js",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "js"
-                        },
-                        "uri": "/webproject/public/javascript.js",
-                        "children": []
-                    },
-                    {
-                        "name": "stylesheet.css",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "css"
-                        },
-                        "uri": "/webproject/public/stylesheet.css",
-                        "children": []
-                    }
-                ]  
-            },
-            {
-                "name": "index.html",
-                "type": {
-                    "basetype": "FILE",
-                    "subtype": "html"
-                },
-                "uri": "/webproject/index.html",
-                "children": []
-            }
-        ]
-    }
-];    
-
 
 // Instantiate localisation 
 var i18n = new I18n({
@@ -179,6 +34,71 @@ function setLang(locale) {
     return false;
 }
 
+/* ------------------------------------ File structure management ------------------------------ */
+
+/**
+ * Content of a tabpane
+ * @param {string} editorcontent the content of the ace editor
+ * @param {xml} blocklycontent
+ * @param {string} acemode the ace modus (html/css/js/...)
+ * @param {boolean} active if this is the active tab pane
+ * @param {string} filename the name of the tab
+ * @returns {TabPaneContext.viewmodelAnonym$1}
+ */
+function TabPaneContext(editorcontent, blocklycontent, acemode, active, filename) {
+    return {
+        editor: editorcontent,
+        blockly: blocklycontent,
+        acemode: acemode,
+        active: active,
+        filename: filename
+    };    
+};
+
+/**
+ * Prototype 
+ * @param {type} name
+ * @returns {undefined}
+ */
+function IdeProject(name) {
+    return {
+        name: name,         /* The project name */
+        tabs: [],           /* The open tabs */
+        filestructure: null /* The filestructure */
+    };
+};
+
+/**
+ * Create a new empty project
+ * @param {string} type the type of project
+ */
+function createNewProject(type) {
+    currentProject = new IdeProject("New project");
+    var newTab = new TabPaneContext("", "", "ace/mode/javascript", true, "new.js");
+    currentProject.tabs.push(newTab);
+}
+
+/**
+ * Save the current tabpane in a TabPaneContext object
+ * @returns {TabPaneContext} the tabpane context
+ */
+function getCurrentTab() {
+    var blockly = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var aceContent = editor.getSession().getValue();
+    var acemode = editor.getSession().getMode().$id;
+    return new TabPaneContext(aceContent, blockly, acemode);
+}
+
+/**
+ * Restore a saved TabPaneContext and show it
+ * @param {TabPaneContext} context the
+ */
+function loadTab(context) {
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, context.blockly);
+    editor.setValue(context.editor);
+    editor.setMode(context.acemode);
+}
+
 /**
  * The system global viewmodel
  * @returns {GlobalViewModel}
@@ -198,7 +118,6 @@ function ViewModel()
 
     // I18N bindings
 
-
     // Code annotations
     this.codeAnnotations = ko.observableArray();
     
@@ -217,6 +136,36 @@ function ViewModel()
     this.setLocale = function (locale) {
         this.lang(locale);
         i18n.setLocale(this.lang());
+    };
+    
+    /* UI File management */
+    this.opentabs = ko.observableArray([]);
+    
+    /**
+     * Add a tabpane
+     * @param {TabPaneContext} tabpane add a tabpane
+     */
+    this.addTab = function(tabpane) {
+        this.opentabs.push(tabpane);
+    };
+    
+    /**
+     * Clear the workspace to make place for a new project
+     */
+    this.clearForNewProject = function() {
+        this.opentabs.removeAll();
+    };
+    
+    /**
+     * Display a new project in the IDE
+     * @param {IdeProject} project the IDE project to display
+     */
+    this.displayNewProject = function(project) {
+        this.clearForNewProject();
+        
+        project.tabs.forEach(function(tab){
+            this.addTab(tab);
+        });
     };
 }
 
@@ -385,10 +334,6 @@ $('document').ready(function () {
     $('.btn-redo').click(function () {
         editor.redo();
     });
-
-    /*$('.btn-play').click(function () {
-        runCode();
-    });*/
     
     $('.btn-text-mode').click(function () {
         changeDevelopMode(this, 0);
@@ -403,10 +348,14 @@ $('document').ready(function () {
     });    
     
     $('.btn-error-list').click(function () {
+        $('.btn-console').removeClass('active');
+        $('.btn-error-list').addClass('active');
         $('.error-list-pnl').removeClass('hidden');
         $('.console-pnl').addClass('hidden');
     });
     $('.btn-console').click(function () {
+        $('.btn-console').addClass('active');
+        $('.btn-error-list').removeClass('active');
         $('.error-list-pnl').addClass('hidden');
         $('.console-pnl').removeClass('hidden');
     });
@@ -436,6 +385,12 @@ $('document').ready(function () {
         editor.setValue(code);
     }
     Blockly.addChangeListener(myUpdateFunction);
+    
+    
+    /* ------------------------------------- PROJECT INITIALIZATION ---------------------------------- */
+    if(currentProject == null) {
+        createNewProject();
+    }
 });
 
 function showMenu(menu) {
@@ -446,11 +401,6 @@ function showMenu(menu) {
 function hideMenu() {
     $('.menu-body').removeClass('menu-body-visible');
 }
-
-/*function runCode() {
-    var editorcode = editor.getValue();
-    eval(editorcode);  
-}*/
 
 function changeDevelopMode(button, mode) {
     $(button).parent().find('li.active').removeClass('active');
@@ -474,60 +424,162 @@ function changeFontSize(size) {
     });
 }
 
+var exampleJSON = [
+    {
+        "name": "Robotproject1",
+        "type": {
+            "basetype": "PROJECT",
+            "subtype": "ROBOT"
+        },
+        "uri": "/Robotproject1",
+        "children": [
+            {
+                "name": "public",
+                "type": {
+                    "basetype": "FOLDER",
+                    "subtype": "folder"
+                },
+                "uri": "/Robotproject1/public",
+                "children": [
+                    {
+                        "name": "javascript.js",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "js"
+                        },
+                        "uri": "/Robotproject1/public/javascript.js",
+                        "children": []
+                    },
+                    {
+                        "name": "stylesheet.css",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "css"
+                        },
+                        "uri": "/Robotproject1/public/stylesheet.css",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "name": "index.html",
+                "type": {
+                    "basetype": "FILE",
+                    "subtype": "html"
+                },
+                "uri": "/Robotproject1/index.html",
+                "children": []
+            }
+        ]
+    },
+    {
+        "name": "IoTproject1",
+        "type": {
+            "basetype": "PROJECT",
+            "subtype": "IOT"
+        },
+        "uri": "/IoTproject1",
+        "children": [
+            {
+                "name": "public",
+                "type": {
+                    "basetype": "FOLDER",
+                    "subtype": "folder"
+                },
+                "uri": "/IoTproject1/public",
+                "children": [
+                    {
+                        "name": "javascript.js",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "js"
+                        },
+                        "uri": "/IoTproject1/public/javascript.js",
+                        "children": []
+                    },
+                    {
+                        "name": "stylesheet.css",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "css"
+                        },
+                        "uri": "/IoTproject1/public/stylesheet.css",
+                        "children": []
+                    }
+                ]  
+            },
+            {
+                "name": "index.html",
+                "type": {
+                    "basetype": "FILE",
+                    "subtype": "html"
+                },
+                "uri": "/IoTproject1/index.html",
+                "children": []
+            }
+        ]
+    },
+    {
+        "name": "webproject",
+        "type": {
+            "basetype": "PROJECT",
+            "subtype": "WEB"
+        },
+        "uri": "/webproject",
+        "children": [
+            {
+                "name": "public",
+                "type": {
+                    "basetype": "FOLDER",
+                    "subtype": "folder"
+                },
+                "uri": "/webproject/public",
+                "children": [
+                    {
+                        "name": "javascript.js",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "js"
+                        },
+                        "uri": "/webproject/public/javascript.js",
+                        "children": []
+                    },
+                    {
+                        "name": "stylesheet.css",
+                        "type": {
+                            "basetype": "FILE",
+                            "subtype": "css"
+                        },
+                        "uri": "/webproject/public/stylesheet.css",
+                        "children": []
+                    }
+                ]  
+            },
+            {
+                "name": "index.html",
+                "type": {
+                    "basetype": "FILE",
+                    "subtype": "html"
+                },
+                "uri": "/webproject/index.html",
+                "children": []
+            }
+        ]
+    }
+];    
+
+
+
 function fillProjectExplorer(data) {
     var tnc = 0;
     $.each(exampleJSON, function (i, item) {
-        $('.tree').append('<li class="treenode"></li>').append('<label for="' + item.name + '"');
+        $('#project-explorer-tree').append('<li class="treenode"></li>').append('<label for="' + item.name + '"');
     });
 }
 
 function fillChildren(data) {
     
 }
-
-
-/* robotmovement */
-/*function moveForward(time) {
-    console.log('Robot moving forward for: ' + (time * 100) + 'ms');
-    dptr_moveForward();
-    sleep(100 * time);
-    dptr_stopMotor();
-}
-
-function moveBackward(time) {
-    console.log('Robot moving backward for: ' + time * 100 + 'ms');
-    dptr_moveBackward();
-    sleep(100 * time);
-    dptr_stopMotor();
-}
-
-function moveLeft(time) {
-    console.log('Robot moving left for: ' + time * 100 + 'ms');
-    dptr_moveLeft();
-    sleep(100 * time);
-    dptr_stopMotor();
-}
-
-function moveRight(time) {
-    console.log('Robot moving right for: ' + time * 100 + 'ms');
-    dptr_moveRight();
-    sleep(100 * time);
-    dptr_stopMotor();
-}
-
-function spinRight() {
-    console.log('Robot spinning right');
-    dptr_spinRight();
-    sleep(200);
-    dptr_stopMotor();
-}
-
-function spinLeft() {
-    console.log('Robot spinning left');
-    dptr_spinLeft();
-    sleep(200);
-    dptr_stopMotor();
-}*/
 
 /* dpt IO functions */
 function enablePin(pin) {
@@ -536,7 +588,7 @@ function enablePin(pin) {
 }
 
 function disablePin(pin) {
-    console.log("Disabling pin " + pin)
+    console.log("Disabling pin " + pin);
     dpt_setIO(pin, false);
 }
 
