@@ -1,17 +1,26 @@
 /**
+ * DPTechnics Web IDE
+ * 
+ * Description: javascript backend for the DPTechnics WEB IDE. An 
+ * educational and tincker IDE for the DPT-Board. 
  * 
  * Authors: Matthieu Calie, Daan Pape
+ * Company: DPTechnics
  */
 
-// Page wide variables  
-var viewModel = null;
-var menuBarClicked = false;
-var editor = null;
-var rootPane;
-var rightPane;
-var developPane;
-var currentProject = null;
-var tasks = [];
+/* ----------------------------------------------- GLOBAL VARIABLES ------------------------------------- */
+
+var viewModel = null;                       /* KnockoutJS viewmodel */
+var menuBarClicked = false;                 /* True if the menu bar is active */
+var editor = null;                          /* The ACE text editor */
+var rootPane;                               /* The root pane */
+var rightPane;                              /* Pane containing project structure */
+var developPane;                            /* Pane containg output and console */
+var currentProject = new IdeProject("");    /* The currently selected project */
+var tasks = [];                             /* Task queue */
+
+
+/* --------------------------------------------- INTERNATIONALISATION ----------------------------------- */
 
 // Instantiate localisation 
 var i18n = new I18n({
@@ -34,16 +43,15 @@ function setLang(locale) {
     return false;
 }
 
-/* ------------------------------------ File structure management ------------------------------ */
+/* --------------------------------------- PROJECT STRUCTURE AND MANAGEMENT ------------------------------- */
 
 /**
- * Content of a tabpane
+ * Represents a root tabpane content. 
  * @param {string} editorcontent the content of the ace editor
  * @param {xml} blocklycontent
  * @param {string} acemode the ace modus (html/css/js/...)
  * @param {boolean} active if this is the active tab pane
  * @param {string} filename the name of the tab
- * @returns {TabPaneContext.viewmodelAnonym$1}
  */
 function TabPaneContext(editorcontent, blocklycontent, acemode, active, filename) {
     return {
@@ -56,9 +64,8 @@ function TabPaneContext(editorcontent, blocklycontent, acemode, active, filename
 };
 
 /**
- * Prototype 
- * @param {type} name
- * @returns {undefined}
+ * Represents an IDE project. 
+ * @param {string} name the project name 
  */
 function IdeProject(name) {
     return {
@@ -99,62 +106,36 @@ function loadTab(context) {
     editor.setMode(context.acemode);
 }
 
+/* --------------------------------------- VISUALISATION CODE ------------------------------- */
+
 /**
  * The system global viewmodel
  * @returns {GlobalViewModel}
  */
 function ViewModel()
 {
-    // Application settings
-    this.lang = ko.observable("en");
-    this.app = ko.computed(function () {
-        i18n.setLocale(this.lang());
-        return i18n.__("AppName");
-    }, this);
-    this.project = ko.observable(i18n.__("NewProject"));
-    this.title = ko.computed(function () {
-        return this.project() + " - " + this.app();
-    }, this);
-
-    // I18N bindings
-
-    // Code annotations
+    /* -------------------------------- CODE ASSISTANCE -------------------------------- */
     this.codeAnnotations = ko.observableArray();
     
+    /**
+     * Removes all currently visible assistance messages
+     */
     this.resetErrors = function() {
         this.codeAnnotations.removeAll();
     };
     
+    /**
+     * Add a code assistance object 
+     * @param {type} obj the ACE code assistance object
+     */
     this.addError = function(obj) {
         this.codeAnnotations.push(obj);
     };
 
-    /**
-     * Change the UI locale
-     * @param {string} locale - the new UI locale
-     */
-    this.setLocale = function (locale) {
-        this.lang(locale);
-        i18n.setLocale(this.lang());
-    };
-    
-    /* UI File management */
-    this.opentabs = ko.observableArray([]);
-    
-    /**
-     * Add a tabpane
-     * @param {TabPaneContext} tabpane add a tabpane
-     */
-    this.addTab = function(tabpane) {
-        this.opentabs.push(tabpane);
-    };
-    
-    /**
-     * Clear the workspace to make place for a new project
-     */
-    this.clearForNewProject = function() {
-        this.opentabs.removeAll();
-    };
+    /* -------------------------------- PROJECT STRUCTURE -------------------------------- */
+
+    this.projectTitle = ko.observable(currentProject.name);     /* The title of the current project project */
+    this.opentabs = ko.observableArray(currentProject.tabs);    /* Open file tabs */
     
     /**
      * Display a new project in the IDE
@@ -167,21 +148,46 @@ function ViewModel()
             this.addTab(tab);
         });
     };
+    
+    /**
+     * Update the UI to show changes 
+     */
+    this.updateView = function() {
+        // Update project title
+        this.projectTitle(currentProject.name);
+        
+        // Update tabs
+        this.opentabs.removeAll();
+        currentProject.tabs.forEach(function(tab){
+            this.opentabs.push(tab);
+        });
+    };
+    
+    /* ----------------------------- I18N AND APP SETTINGS ----------------------------- */
+    this.lang = ko.observable("en");
+    this.app = ko.computed(function () {i18n.setLocale(this.lang()); return i18n.__("AppName");}, this);
+    this.title = ko.computed(function () {return this.projectTitle() + " - " + this.app();}, this);
+    
+    /**
+     * Change the UI locale
+     * @param {string} locale - the new UI locale
+     */
+    this.setLocale = function (locale) {
+        this.lang(locale);
+        i18n.setLocale(this.lang());
+    };
 }
 
-/**
- * Page initialisation
- */
+/* --------------------------------------- INITIALISATION AND HANDLERS ------------------------------- */
+
 $('document').ready(function () {
     DPT_AJAX_PREFIX = "/";  
     
-    // Activate knockout framework
+    /* -------------------------- Knockout GUI initialisaton ---------------------------- */
     viewModel = new ViewModel();
     ko.applyBindings(viewModel, document.getElementById("htmldoc"));
 
-    //$('#splitpane').splitter();
-
-    // Activate splitter layout
+    /* -------------------------- Split panes initialisation ----------------------------- */
     rootPane = $('#splitpane').split({
         orientation: 'vertical',
         limit: 0,
@@ -200,13 +206,14 @@ $('document').ready(function () {
         position: '50%'
     });
 
-    // Instantiate ace editor
+    /* -------------------------- Ace editor initialisation ------------------------------- */
     ace.require("ace/ext/language_tools");
     editor = ace.edit("language-editor");
     editor.session.setMode("ace/mode/javascript");
     editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/javascript");
-    // enable autocompletion and snippets
+    
+    // Enable autocompletion and snippets
     editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: true,
@@ -214,8 +221,9 @@ $('document').ready(function () {
         fontSize: "14pt"
     });
 
-    // Menu structure initialisation
+    /* ------------------------ Menu structure initialisation ----------------------------- */
     $('.menu-title').click(function (e) {
+        e.stopPropagation();
         if (menuBarClicked) {
             hideMenu();
             menuBarClicked = false;
@@ -223,8 +231,6 @@ $('document').ready(function () {
             showMenu($(this).parent('li').children('.menu-body'));
             menuBarClicked = true;
         }
-
-        e.stopPropagation();
     });
 
     $('.menu-title').mouseenter(function () {
@@ -307,8 +313,7 @@ $('document').ready(function () {
 
     /* ----------------------------- BUTTON HANDLERS ------------------------------------- */
     $('.btn-fullscreen').click(function () {
-        if ((document.fullScreenElement && document.fullScreenElement !== null) || // alternative standard method
-                (!document.mozFullScreen && !document.webkitIsFullScreen)) {               // current working methods
+        if ((document.fullScreenElement && document.fullScreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {               
             if (document.documentElement.requestFullScreen) {
                 document.documentElement.requestFullScreen();
             } else if (document.documentElement.mozRequestFullScreen) {
@@ -360,14 +365,14 @@ $('document').ready(function () {
         $('.console-pnl').removeClass('hidden');
     });
     
-    /* ---------------------------------- Editor events ---------------------------------- */
+    /* ---------------------------------- ACE EDITOR EVENTS ---------------------------------- */
     $('.changeFontSize').click(function() {
         changeFontSize($('.changeFontSize').val());
     });
     
+    // Update the code assistance values in the viewmodel
     editor.getSession().on("changeAnnotation", function () {
-        var annot = editor.getSession().getAnnotations();
-        
+        var annot = editor.getSession().getAnnotations();   
         viewModel.resetErrors();
         
         for (var key in annot) {
@@ -376,32 +381,52 @@ $('document').ready(function () {
         }
     });
     
-    /* ---------------------------------- Blockly Events ---------------------------------- */
+    /* ---------------------------------- BLOCKLY GUI EDITOR ---------------------------------- */
     Blockly.inject(document.getElementById('blockly-editor'),
         {toolbox: document.getElementById('toolbox')});
-                
-    function myUpdateFunction() {        
+    
+    // Listen to blockly internal changes
+    function blocklyUpdateHandler() {        
         var code = Blockly.JavaScript.workspaceToCode();
         editor.setValue(code);
     }
-    Blockly.addChangeListener(myUpdateFunction);
+    Blockly.addChangeListener(blocklyUpdateHandler);
+    
+    // Update blockly window size on browser window resize
+    window.onresize = function(event) {
+        Blockly.fireUiEvent(window, 'resize');    
+    };
     
     
     /* ------------------------------------- PROJECT INITIALIZATION ---------------------------------- */
-    if(currentProject == null) {
+    if(currentProject === null) {
         createNewProject();
     }
 });
 
+/* --------------------------------------- DPT IDE SPECIFIC FUNCTIONS ------------------------------- */
+
+/**
+ * Show a specific menu
+ * @param {DOM element} menu the menu to be displayed.
+ */
 function showMenu(menu) {
     $('.menu-body').removeClass('menu-body-visible');
     $(menu).addClass('menu-body-visible');
 }
 
+/**
+ * Hide all menus.
+ */
 function hideMenu() {
     $('.menu-body').removeClass('menu-body-visible');
 }
 
+/**
+ * Switch from develop mode between full code view, full blockly view or split code/blockly view. 
+ * @param {DOM element} button the button to set as active. 
+ * @param {int} mode the mode to switch to (0 = fullcode, 1 = split code/blockly, 2 = fullblockly)
+ */
 function changeDevelopMode(button, mode) {
     $(button).parent().find('li.active').removeClass('active');
     $(button).addClass('active'); 
@@ -414,161 +439,12 @@ function changeDevelopMode(button, mode) {
         developPane.position('50%');
     }
 }
-window.onresize = function(event) {
-    Blockly.fireUiEvent(window, 'resize');    
-};
 
 function changeFontSize(size) {
     editor.setOptions({
         fontSize: size + "pt"
     });
 }
-
-var exampleJSON = [
-    {
-        "name": "Robotproject1",
-        "type": {
-            "basetype": "PROJECT",
-            "subtype": "ROBOT"
-        },
-        "uri": "/Robotproject1",
-        "children": [
-            {
-                "name": "public",
-                "type": {
-                    "basetype": "FOLDER",
-                    "subtype": "folder"
-                },
-                "uri": "/Robotproject1/public",
-                "children": [
-                    {
-                        "name": "javascript.js",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "js"
-                        },
-                        "uri": "/Robotproject1/public/javascript.js",
-                        "children": []
-                    },
-                    {
-                        "name": "stylesheet.css",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "css"
-                        },
-                        "uri": "/Robotproject1/public/stylesheet.css",
-                        "children": []
-                    }
-                ]
-            },
-            {
-                "name": "index.html",
-                "type": {
-                    "basetype": "FILE",
-                    "subtype": "html"
-                },
-                "uri": "/Robotproject1/index.html",
-                "children": []
-            }
-        ]
-    },
-    {
-        "name": "IoTproject1",
-        "type": {
-            "basetype": "PROJECT",
-            "subtype": "IOT"
-        },
-        "uri": "/IoTproject1",
-        "children": [
-            {
-                "name": "public",
-                "type": {
-                    "basetype": "FOLDER",
-                    "subtype": "folder"
-                },
-                "uri": "/IoTproject1/public",
-                "children": [
-                    {
-                        "name": "javascript.js",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "js"
-                        },
-                        "uri": "/IoTproject1/public/javascript.js",
-                        "children": []
-                    },
-                    {
-                        "name": "stylesheet.css",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "css"
-                        },
-                        "uri": "/IoTproject1/public/stylesheet.css",
-                        "children": []
-                    }
-                ]  
-            },
-            {
-                "name": "index.html",
-                "type": {
-                    "basetype": "FILE",
-                    "subtype": "html"
-                },
-                "uri": "/IoTproject1/index.html",
-                "children": []
-            }
-        ]
-    },
-    {
-        "name": "webproject",
-        "type": {
-            "basetype": "PROJECT",
-            "subtype": "WEB"
-        },
-        "uri": "/webproject",
-        "children": [
-            {
-                "name": "public",
-                "type": {
-                    "basetype": "FOLDER",
-                    "subtype": "folder"
-                },
-                "uri": "/webproject/public",
-                "children": [
-                    {
-                        "name": "javascript.js",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "js"
-                        },
-                        "uri": "/webproject/public/javascript.js",
-                        "children": []
-                    },
-                    {
-                        "name": "stylesheet.css",
-                        "type": {
-                            "basetype": "FILE",
-                            "subtype": "css"
-                        },
-                        "uri": "/webproject/public/stylesheet.css",
-                        "children": []
-                    }
-                ]  
-            },
-            {
-                "name": "index.html",
-                "type": {
-                    "basetype": "FILE",
-                    "subtype": "html"
-                },
-                "uri": "/webproject/index.html",
-                "children": []
-            }
-        ]
-    }
-];    
-
-
 
 function fillProjectExplorer(data) {
     var tnc = 0;

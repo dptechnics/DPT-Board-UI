@@ -24,17 +24,17 @@ function dptr_moveBackward()
 
 function dptr_moveLeft()
 {
-	dpt_setIO(22, true);
+	dpt_setIO(21, true);
 	dpt_setIO(24, false);
-	dpt_setIO(21, false);
+	dpt_setIO(22, false);
 	dpt_setIO(18, false);
 }
 
 function dptr_moveRight()
 {
-	dpt_setIO(21, true);
+	dpt_setIO(22, true);
 	dpt_setIO(24, false);
-	dpt_setIO(22, false);
+	dpt_setIO(21, false);
 	dpt_setIO(18, false);
 }
 
@@ -60,6 +60,16 @@ function dptr_stopMotor()
 	dpt_setIO(21, false);
 	dpt_setIO(22, false);
 	dpt_setIO(24, false);
+}
+
+function dptr_lightOn()
+{
+        dpt_setIO(6, true);
+}
+
+function dptr_lightOff()
+{
+        dpt_setIO(6, false);
 }
 
 /*
