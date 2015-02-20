@@ -440,24 +440,27 @@ function changeDevelopMode(button, mode) {
     }
 }
 
+/**
+ * Set the font size of the ACE editor
+ * @param {integer} size the size in points of the editor font
+ */
 function changeFontSize(size) {
-    editor.setOptions({
-        fontSize: size + "pt"
-    });
+    editor.setOptions({fontSize: size + "pt"});
 }
 
-function fillProjectExplorer(data) {
-    var tnc = 0;
-    $.each(exampleJSON, function (i, item) {
-        $('#project-explorer-tree').append('<li class="treenode"></li>').append('<label for="' + item.name + '"');
-    });
-}
+/**
+ * Enable console logging into the IDE console field
+ */
+(function(){
+    var oldLog = console.log;
+    console.log = function (message) {
+        $("#console-pnl").append(message + '</br>');
+        oldLog.apply(console, arguments);
+    };
+})();
 
-function fillChildren(data) {
-    
-}
 
-/* dpt IO functions */
+/* --------------------------------------- DPT-BOARD LANGUAGE CONSTRUCTS ------------------------------- */
 function enablePin(pin) {
     console.log("Enabling pin " + pin);
     dpt_setIO(pin, true);
@@ -476,21 +479,3 @@ function togglePin(pin) {
 function newTask(f) {
     tasks.push(f);
 }
-
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-}
-
-/* console feature */
-(function(){
-    var oldLog = console.log;
-    console.log = function (message) {
-        $("#console-pnl").append(message + '</br>');
-        oldLog.apply(console, arguments);
-    };
-})();
