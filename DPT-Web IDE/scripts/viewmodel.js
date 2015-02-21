@@ -19,27 +19,27 @@ var developPane;                        /* Pane containg output and console */
 var workspace = new IdeWorkspace();     /* All projects currently loaded in the IDE */
 var tasks = [];                         /* Task queue */
 
-/* ---------------------------------------------- STATIC VARIABLES ------------------------------------- */ 
+/* ---------------------------------------------- STATIC VARIABLES ------------------------------------- */
 
 // Maps language names onto default file extensions 
 var EXTENSIONS = {
-    "javascript" : "js",
-    "html" : "html",
-    "css" : "css"
+    "javascript": "js",
+    "html": "html",
+    "css": "css"
 };
 
 // Maps language names onto ACE code assistance options
 var ACEMODES = {
-    "javascript" : "ace/mode/javascript",
-    "html" : "ace/mode/html",
-    "css" : "ace/mode/css"
+    "javascript": "ace/mode/javascript",
+    "html": "ace/mode/html",
+    "css": "ace/mode/css"
 };
 
 // The type of a file in the projects file structure 
 var FILECAT = {
-    "directory" : 0,        /* File directory */
-    "file" : 1,             /* Normal file */
-    "dependency" : 2        /* Dependency directory */
+    "directory": 0, /* File directory */
+    "file": 1, /* Normal file */
+    "dependency": 2        /* Dependency directory */
 };
 
 /* --------------------------------------------- INTERNATIONALISATION ----------------------------------- */
@@ -72,40 +72,44 @@ function setLang(locale) {
  */
 function IdeFile() {
     return {
-        filename: filename,         /* The name of the file */
-        filetype: filetype,         /* The type of the file */
-        filecat: filecat,           /* The file category (directory, file, ...) */
-        editor: editorcontent,      /* The file content itself */    
-        blockly: blocklycontent,    /* The blockly content if any */
-        blocklyvisible: true,       /* True if blockly was visible */
-        acemode: acemode,           /* The mode of the ACE editor for this file */
-        active: false,              /* True if this file is in the active tab */
-        display: false,             /* True if this file is in the open tabs */             
-        parent : null               /* The parent of the file */
-    };    
-};
+        filename: "",           /* The name of the file */
+        filetype: "",           /* The type of the file */
+        filecat: "",            /* The file category (directory, file, ...) */
+        editor: "",             /* The file content itself */
+        blockly: "<xml></xml>", /* The blockly content if any */
+        blocklyvisible: true,   /* True if blockly was visible */
+        acemode: "",            /* The mode of the ACE editor for this file */
+        active: false,          /* True if this file is in the active tab */
+        display: false,         /* True if this file is in the open tabs */
+        parent: null            /* The parent of the file */
+    };
+}
+;
 
 /**
  * Represents an IDE project.
  */
 function IdeProject() {
     return {
-        name: "",           /* The project name */
-        type: "",           /* The project type (robot, iot, html, ...) */         
+        name: "", /* The project name */
+        type: "", /* The project type (robot, iot, html, ...) */
         files: []           /* The files in the project */
     };
-};
+}
+;
 
 /**
  * Represensts an IDE workspace
  */
 function IdeWorkspace() {
     return {
-        name: "",           /* The workspace name */
-        opentab: null,      /* The file currently open in editor */
-        projects: []        /* The projects in this workspace */
+        name: "", /* The workspace name */
+        opentab: null, /* The file currently open in editor */
+        projects: [], /* The projects in this workspace */
+        files: []           /* Files in the workspace not belonging to a project */
     };
-};
+}
+;
 
 /**
  * Save the current tabpane in an IdeFile object
@@ -124,10 +128,73 @@ function getCurrentTab() {
  * @param {IdeFile} file the file to display in the editor
  */
 function displayFile(file) {
+    console.log(file);
     //TODO: restore editor pane visibility
-    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, context.blockly);
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, Blockly.Xml.textToDom(file.blockly));
     editor.setValue(file.editor);
-    editor.setMode(file.acemode);
+    editor.session.setMode(file.acemode);
+}
+
+/**
+ * Add a file to the current workspace.
+ * @param {IdeFile} file the file to add
+ * @param {IdeProject} project the file is added to a project if given. 
+ */
+function addFileToWorkspace(file, project) {
+    if (!project) {
+        workspace.files.push(file);
+    } else {
+        project.files.push(file);
+    }
+
+    viewModel.updateView();
+}
+
+/**
+ * Set a specific file active in the editor
+ * @param {IdeFile} file the file to set active
+ */
+function setFileActive(file) {
+    workspace.projects.forEach(function (project) {
+        project.files.forEach(function (a_file) {
+            if(JSON.stringify(file) === JSON.stringify(a_file)) {
+                a_file.active = true;
+            } else {
+                a_file.active = false;
+            }
+        });
+    });
+
+    workspace.files.forEach(function (a_file) {
+        if(JSON.stringify(file) === JSON.stringify(a_file)) {
+            a_file.active = true;
+            console.log("Found active file" + file);
+        } else {
+            a_file.active = false;
+            console.log("Found unactive file" + file);
+        }
+    });
+    
+    viewModel.updateView();
+}
+
+/**
+ * Serialize the complete workspace. 
+ * @return {string} the complete workspace in JSON format
+ */
+function saveCompleteWorkspace() {
+    return JSON.stringify(workspace);
+}
+
+/**
+ * Restore a complete Ide workspace given a workspace file. 
+ * @param {string} saved the serialized workspace
+ */
+function restoreCompleteWorkspace(saved) {
+    workspace = JSON.parse(saved);
+
+    /* Update view */
+    viewModel.updateView();
 }
 
 /* --------------------------------------- VISUALISATION CODE ------------------------------- */
@@ -140,56 +207,70 @@ function ViewModel()
 {
     /* -------------------------------- CODE ASSISTANCE -------------------------------- */
     this.codeAnnotations = ko.observableArray();
-    
+
     /**
      * Removes all currently visible assistance messages
      */
-    this.resetErrors = function() {
+    this.resetErrors = function () {
         this.codeAnnotations.removeAll();
     };
-    
+
     /**
      * Add a code assistance object 
      * @param {type} obj the ACE code assistance object
      */
-    this.addError = function(obj) {
+    this.addError = function (obj) {
         this.codeAnnotations.push(obj);
     };
 
     /* -------------------------------- PROJECT STRUCTURE -------------------------------- */
-    
+
     /* Open file tabs in the ide */
-    this.opentabs = ko.observableArray([]);    
-    
+    this.opentabs = ko.observableArray([]);
+
     /**
      * The UI based on the current workspace
      */
-    this.updateView = function() {
+    this.updateView = function () {
         // Array containing the new tab configuration
         var newTabContext = [];
-        
+
         // Search for all tabs in the workspace
-        workspace.projects.forEach(function(project){
-            project.files.forEach(function(file){
-               //TODO: check if this file is in an open tab, and if it is active
-               if(file.display) {
-                   newTabContext.push(file);
-                   
-                   if(file.active) {
-                       workspace.opentab = file;
-                   }
-               } 
+        workspace.projects.forEach(function (project) {
+            project.files.forEach(function (file) {
+                if (file.display) {
+                    newTabContext.push(file);
+
+                    if (file.active) {
+                        workspace.opentab = file;
+                    }
+                }
             });
         });
-        
-        // Replace the values in the observable array
+
+        workspace.files.forEach(function (file) {
+            if (file.display) {
+                newTabContext.push(file);
+
+                if (file.active) {
+                    workspace.opentab = file;
+                }
+            }
+        });
+
+        // Visualize
+        this.opentabs.removeAll();
         this.opentabs(newTabContext);
+        displayFile(workspace.opentab);
     };
-    
+
     /* ----------------------------- I18N AND APP SETTINGS ----------------------------- */
     this.lang = ko.observable("en");
-    this.title = ko.computed(function () {i18n.setLocale(this.lang()); return i18n.__("AppName");}, this);
-    
+    this.title = ko.computed(function () {
+        i18n.setLocale(this.lang());
+        return i18n.__("AppName");
+    }, this);
+
     /**
      * Change the UI locale
      * @param {string} locale - the new UI locale
@@ -203,8 +284,8 @@ function ViewModel()
 /* --------------------------------------- INITIALISATION AND HANDLERS ------------------------------- */
 
 $('document').ready(function () {
-    DPT_AJAX_PREFIX = "/";  
-    
+    DPT_AJAX_PREFIX = "/";
+
     /* -------------------------- Knockout GUI initialisaton ---------------------------- */
     viewModel = new ViewModel();
     ko.applyBindings(viewModel, document.getElementById("htmldoc"));
@@ -221,7 +302,7 @@ $('document').ready(function () {
         limit: 0,
         position: '80%'
     });
-    
+
     developPane = $('#develop-split-pane').split({
         orientation: 'vertical',
         limit: 0,
@@ -233,7 +314,7 @@ $('document').ready(function () {
     editor = ace.edit("language-editor");
     editor.session.setMode("ace/mode/javascript");
     editor.setTheme("ace/theme/twilight");
-    
+
     // Enable autocompletion and snippets
     editor.setOptions({
         enableBasicAutocompletion: true,
@@ -264,77 +345,77 @@ $('document').ready(function () {
         hideMenu();
         menuBarClicked = false;
     });
-    
-    /* ----------------------------- Menu Handlers ------------------------------------- */        
-    $('.menu-save').click(function() {
-        
+
+    /* ----------------------------- Menu Handlers ------------------------------------- */
+    $('.menu-save').click(function () {
+
     });
-    
-    $('.menu-save-as').click(function() {
-        
+
+    $('.menu-save-as').click(function () {
+
     });
-    
-    $('.menu-save-all').click(function() {
-        
+
+    $('.menu-save-all').click(function () {
+
     });
-    
-    $('.menu-exit').click(function() {
+
+    $('.menu-exit').click(function () {
         window.close();
     });
-    
-    $('.menu-cut').click(function() {
-        
+
+    $('.menu-cut').click(function () {
+
     });
-    
-    $('.menu-copy').click(function() {
-        
+
+    $('.menu-copy').click(function () {
+
     });
-    
-    $('.menu-paste').click(function() {
-        
+
+    $('.menu-paste').click(function () {
+
     });
-    
-    $('.menu-select-all').click(function() {
-        
+
+    $('.menu-select-all').click(function () {
+
     });
-    
-    $('.menu-tutorials').click(function() {
-        
+
+    $('.menu-tutorials').click(function () {
+
     });
-    
-    $('.menu-help-index').click(function() {
-        
+
+    $('.menu-help-index').click(function () {
+
     });
-    
-    $('.menu-check-updates').click(function() {
-        
+
+    $('.menu-check-updates').click(function () {
+
     });
-    
-    $('.menu-about').click(function() {
-        
+
+    $('.menu-about').click(function () {
+
     });
-    
+
     $('.open-project-explorer').click(function () {
         $('#project-explorer').css('min-width', '150px');
-        rootPane.position ('15%');
+        rootPane.position('15%');
     });
-    
+
     $('.close-project-explorer').click(function () {
         $('#project-explorer').css('min-width', '0px');
-        rootPane.position ('0%');
+        rootPane.position('0%');
     });
-    
+
     $('.open-error-list').click(function () {
-        rightPane.position ('80%');
+        rightPane.position('80%');
     });
-    
+
     $('.close-error-list').click(function () {
-        rightPane.position ('100%');
+        rightPane.position('100%');
     });
 
     /* ----------------------------- BUTTON HANDLERS ------------------------------------- */
     $('.btn-fullscreen').click(function () {
-        if ((document.fullScreenElement && document.fullScreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {               
+        if ((document.fullScreenElement && document.fullScreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
             if (document.documentElement.requestFullScreen) {
                 document.documentElement.requestFullScreen();
             } else if (document.documentElement.mozRequestFullScreen) {
@@ -360,19 +441,19 @@ $('document').ready(function () {
     $('.btn-redo').click(function () {
         editor.redo();
     });
-    
+
     $('.btn-text-mode').click(function () {
         changeDevelopMode(this, 0);
     });
-    
+
     $('.btn-design-mode').click(function () {
         changeDevelopMode(this, 1);
     });
-    
+
     $('.btn-splitview-mode').click(function () {
         changeDevelopMode(this, 2);
-    });    
-    
+    });
+
     $('.btn-error-list').click(function () {
         $('.btn-console').removeClass('active');
         $('.btn-error-list').addClass('active');
@@ -385,50 +466,69 @@ $('document').ready(function () {
         $('.error-list-pnl').addClass('hidden');
         $('.console-pnl').removeClass('hidden');
     });
-    
+
     /* ---------------------------------- DIALOG BUTTON HANDLERS ---------------------------------- */
-    $('#new-file-dlg-create-btn').click(function(){
-        //TODO: create new project first
+    $('#new-file-dlg-create-btn').click(function () {
+        //TODO: ask to add to existing project
         var name = $('#new-file-dlg form').find('input[name="filename"]').val();
         var lang = $('#new-file-dlg form').find('select[name="filetype"]').val();
-        
+
         // Add extension to name 
+        console.log(lang);
+        console.log(EXTENSIONS[lang]);
         name = name + "." + EXTENSIONS[lang];
+
+        // Construct the file
+        var file = new IdeFile();
+        file.filename = name;
+        file.filetype = lang;
+        file.filecat = FILECAT.file;
+        file.acemode = ACEMODES[lang];
+
+        // New files are opened in editor by default
+        file.active = true;
+        file.display = true;
         
-        var filetab = new IdeFile("", "", ACEMODES[lang], name);
+        // Add file to correct project
+        workspace.files.push(file);
         
+        // Set file active and update view
+        setFileActive(file);
+        
+        // Close dialog
+        window.location.hash = "#close";
     });
-    
+
     /* ---------------------------------- ACE EDITOR EVENTS ---------------------------------- */
-    $('.changeFontSize').click(function() {
+    $('.changeFontSize').click(function () {
         changeFontSize($('.changeFontSize').val());
     });
-    
+
     // Update the code assistance values in the viewmodel
     editor.getSession().on("changeAnnotation", function () {
-        var annot = editor.getSession().getAnnotations();   
+        var annot = editor.getSession().getAnnotations();
         viewModel.resetErrors();
-        
+
         for (var key in annot) {
             if (annot.hasOwnProperty(key))
                 viewModel.addError(annot[key]);
         }
     });
-    
+
     /* ---------------------------------- BLOCKLY GUI EDITOR ---------------------------------- */
     Blockly.inject(document.getElementById('blockly-editor'),
-        {toolbox: document.getElementById('toolbox')});
-    
+            {toolbox: document.getElementById('toolbox')});
+
     // Listen to blockly internal changes
-    function blocklyUpdateHandler() {        
+    function blocklyUpdateHandler() {
         var code = Blockly.JavaScript.workspaceToCode();
         editor.setValue(code);
     }
     Blockly.addChangeListener(blocklyUpdateHandler);
-    
+
     // Update blockly window size on browser window resize
-    window.onresize = function(event) {
-        Blockly.fireUiEvent(window, 'resize');    
+    window.onresize = function (event) {
+        Blockly.fireUiEvent(window, 'resize');
     };
 });
 
@@ -457,13 +557,13 @@ function hideMenu() {
  */
 function changeDevelopMode(button, mode) {
     $(button).parent().find('li.active').removeClass('active');
-    $(button).addClass('active'); 
-    
-    if(mode === 0) {
+    $(button).addClass('active');
+
+    if (mode === 0) {
         developPane.position('100%');
     } else if (mode === 1) {
         developPane.position('0%');
-    } else {  
+    } else {
         developPane.position('50%');
     }
 }
@@ -479,7 +579,7 @@ function changeFontSize(size) {
 /**
  * Enable console logging into the IDE console field
  */
-(function(){
+(function () {
     var oldLog = console.log;
     console.log = function (message) {
         $("#console-pnl").append(message + '</br>');

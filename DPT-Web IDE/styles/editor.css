@@ -175,7 +175,7 @@ body,html {
     color: #FFF;
 }
 
-#editor-tabs .active {
+#editor-tabs .activetab {
     background-color: #333;
 }
 

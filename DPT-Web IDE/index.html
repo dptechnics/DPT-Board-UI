@@ -96,7 +96,10 @@
                     Project explorer
                     <i class="icon-minus-squared panel-title-btn close-project-explorer"></i>
                 </div>
-                <ol id="project-explorer-tree" class="tree">
+                
+                
+                
+                <ol class="tree" >
                     <li class="treenode">
                         <label for="folder1">Folder 1</label> <input type="checkbox"  id="folder1" /> 
                         <ol>
@@ -112,7 +115,7 @@
                                             <li class="treenode">
                                                 <label for="subsubfolder2">Subfolder 1</label> <input type="checkbox" id="subsubfolder2" /> 
                                                 <ol>
-                                                    <li class="file"><a href="">Subfile 1</a></li>
+                                                    <li class="file">Subfile 1</a></li>
                                                     <li class="file"><a href="">Subfile 2</a></li>
                                                     <li class="file"><a href="">Subfile 3</a></li>
                                                     <li class="file"><a href="">Subfile 4</a></li>
@@ -169,7 +172,7 @@
                 <div id="tabbed-filepane">
                     <div id="editor-tabs">
                         <ul data-bind="foreach: opentabs">
-                            <li data-bind="css: { active: active }"><span data-bind="text: filename"></span><i class="icon-cancel panel-title-btn"></i></li>
+                            <li data-bind="css: { activetab: active }"><span data-bind="text: filename"></span><i class="icon-cancel panel-title-btn"></i></li>
                         </ul>
                     </div>
                     <div id="editor-develop-mode">
@@ -494,7 +497,7 @@
                     <form>
                         Filetype: 
                         <select name="filetype">
-                            <option value="javascrpt" selected>Javascript</option>
+                            <option value="javascript" selected>Javascript</option>
                             <option value="html">HTML</option>
                             <option value="css">CSS</option>
                         </select>
