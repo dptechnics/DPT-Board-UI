@@ -10,15 +10,37 @@
 
 /* ----------------------------------------------- GLOBAL VARIABLES ------------------------------------- */
 
-var viewModel = null;                       /* KnockoutJS viewmodel */
-var menuBarClicked = false;                 /* True if the menu bar is active */
-var editor = null;                          /* The ACE text editor */
-var rootPane;                               /* The root pane */
-var rightPane;                              /* Pane containing project structure */
-var developPane;                            /* Pane containg output and console */
-var currentProject = new IdeProject("");    /* The currently selected project */
-var tasks = [];                             /* Task queue */
+var viewModel = null;                   /* KnockoutJS viewmodel */
+var menuBarClicked = false;             /* True if the menu bar is active */
+var editor = null;                      /* The ACE text editor */
+var rootPane;                           /* The root pane */
+var rightPane;                          /* Pane containing project structure */
+var developPane;                        /* Pane containg output and console */
+var workspace = new IdeWorkspace();     /* All projects currently loaded in the IDE */
+var tasks = [];                         /* Task queue */
 
+/* ---------------------------------------------- STATIC VARIABLES ------------------------------------- */ 
+
+// Maps language names onto default file extensions 
+var EXTENSIONS = {
+    "javascript" : "js",
+    "html" : "html",
+    "css" : "css"
+};
+
+// Maps language names onto ACE code assistance options
+var ACEMODES = {
+    "javascript" : "ace/mode/javascript",
+    "html" : "ace/mode/html",
+    "css" : "ace/mode/css"
+};
+
+// The type of a file in the projects file structure 
+var FILECAT = {
+    "directory" : 0,        /* File directory */
+    "file" : 1,             /* Normal file */
+    "dependency" : 2        /* Dependency directory */
+};
 
 /* --------------------------------------------- INTERNATIONALISATION ----------------------------------- */
 
@@ -46,64 +68,66 @@ function setLang(locale) {
 /* --------------------------------------- PROJECT STRUCTURE AND MANAGEMENT ------------------------------- */
 
 /**
- * Represents a root tabpane content. 
- * @param {string} editorcontent the content of the ace editor
- * @param {xml} blocklycontent
- * @param {string} acemode the ace modus (html/css/js/...)
- * @param {boolean} active if this is the active tab pane
- * @param {string} filename the name of the tab
+ * Represents an IDE project file
  */
-function TabPaneContext(editorcontent, blocklycontent, acemode, active, filename) {
+function IdeFile() {
     return {
-        editor: editorcontent,
-        blockly: blocklycontent,
-        acemode: acemode,
-        active: active,
-        filename: filename
+        filename: filename,         /* The name of the file */
+        filetype: filetype,         /* The type of the file */
+        filecat: filecat,           /* The file category (directory, file, ...) */
+        editor: editorcontent,      /* The file content itself */    
+        blockly: blocklycontent,    /* The blockly content if any */
+        blocklyvisible: true,       /* True if blockly was visible */
+        acemode: acemode,           /* The mode of the ACE editor for this file */
+        active: false,              /* True if this file is in the active tab */
+        display: false,             /* True if this file is in the open tabs */             
+        parent : null               /* The parent of the file */
     };    
 };
 
 /**
- * Represents an IDE project. 
- * @param {string} name the project name 
+ * Represents an IDE project.
  */
-function IdeProject(name) {
+function IdeProject() {
     return {
-        name: name,         /* The project name */
-        tabs: [],           /* The open tabs */
-        filestructure: null /* The filestructure */
+        name: "",           /* The project name */
+        type: "",           /* The project type (robot, iot, html, ...) */         
+        files: []           /* The files in the project */
     };
 };
 
 /**
- * Create a new empty project
- * @param {string} type the type of project
+ * Represensts an IDE workspace
  */
-function createNewProject(type) {
-    currentProject = new IdeProject("New project");
-    var newTab = new TabPaneContext("", "", "ace/mode/javascript", true, "new.js");
-    currentProject.tabs.push(newTab);
-}
+function IdeWorkspace() {
+    return {
+        name: "",           /* The workspace name */
+        opentab: null,      /* The file currently open in editor */
+        projects: []        /* The projects in this workspace */
+    };
+};
 
 /**
- * Save the current tabpane in a TabPaneContext object
- * @returns {TabPaneContext} the tabpane context
+ * Save the current tabpane in an IdeFile object
+ * @returns {IdeFile} the current version of a file in the editor
  */
 function getCurrentTab() {
+    // TODO
     var blockly = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var aceContent = editor.getSession().getValue();
     var acemode = editor.getSession().getMode().$id;
-    return new TabPaneContext(aceContent, blockly, acemode);
+    //return new IdeFile(aceContent, blockly, acemode, "");
 }
 
 /**
- * Restore a saved TabPaneContext and show it
- * @param {TabPaneContext} context the
+ * Display a file in the editor
+ * @param {IdeFile} file the file to display in the editor
  */
-function loadTab(context) {
+function displayFile(file) {
+    //TODO: restore editor pane visibility
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, context.blockly);
-    editor.setValue(context.editor);
-    editor.setMode(context.acemode);
+    editor.setValue(file.editor);
+    editor.setMode(file.acemode);
 }
 
 /* --------------------------------------- VISUALISATION CODE ------------------------------- */
@@ -133,40 +157,38 @@ function ViewModel()
     };
 
     /* -------------------------------- PROJECT STRUCTURE -------------------------------- */
-
-    this.projectTitle = ko.observable(currentProject.name);     /* The title of the current project project */
-    this.opentabs = ko.observableArray(currentProject.tabs);    /* Open file tabs */
+    
+    /* Open file tabs in the ide */
+    this.opentabs = ko.observableArray([]);    
     
     /**
-     * Display a new project in the IDE
-     * @param {IdeProject} project the IDE project to display
-     */
-    this.displayNewProject = function(project) {
-        this.clearForNewProject();
-        
-        project.tabs.forEach(function(tab){
-            this.addTab(tab);
-        });
-    };
-    
-    /**
-     * Update the UI to show changes 
+     * The UI based on the current workspace
      */
     this.updateView = function() {
-        // Update project title
-        this.projectTitle(currentProject.name);
+        // Array containing the new tab configuration
+        var newTabContext = [];
         
-        // Update tabs
-        this.opentabs.removeAll();
-        currentProject.tabs.forEach(function(tab){
-            this.opentabs.push(tab);
+        // Search for all tabs in the workspace
+        workspace.projects.forEach(function(project){
+            project.files.forEach(function(file){
+               //TODO: check if this file is in an open tab, and if it is active
+               if(file.display) {
+                   newTabContext.push(file);
+                   
+                   if(file.active) {
+                       workspace.opentab = file;
+                   }
+               } 
+            });
         });
+        
+        // Replace the values in the observable array
+        this.opentabs(newTabContext);
     };
     
     /* ----------------------------- I18N AND APP SETTINGS ----------------------------- */
     this.lang = ko.observable("en");
-    this.app = ko.computed(function () {i18n.setLocale(this.lang()); return i18n.__("AppName");}, this);
-    this.title = ko.computed(function () {return this.projectTitle() + " - " + this.app();}, this);
+    this.title = ko.computed(function () {i18n.setLocale(this.lang()); return i18n.__("AppName");}, this);
     
     /**
      * Change the UI locale
@@ -211,7 +233,6 @@ $('document').ready(function () {
     editor = ace.edit("language-editor");
     editor.session.setMode("ace/mode/javascript");
     editor.setTheme("ace/theme/twilight");
-    editor.getSession().setMode("ace/mode/javascript");
     
     // Enable autocompletion and snippets
     editor.setOptions({
@@ -365,6 +386,19 @@ $('document').ready(function () {
         $('.console-pnl').removeClass('hidden');
     });
     
+    /* ---------------------------------- DIALOG BUTTON HANDLERS ---------------------------------- */
+    $('#new-file-dlg-create-btn').click(function(){
+        //TODO: create new project first
+        var name = $('#new-file-dlg form').find('input[name="filename"]').val();
+        var lang = $('#new-file-dlg form').find('select[name="filetype"]').val();
+        
+        // Add extension to name 
+        name = name + "." + EXTENSIONS[lang];
+        
+        var filetab = new IdeFile("", "", ACEMODES[lang], name);
+        
+    });
+    
     /* ---------------------------------- ACE EDITOR EVENTS ---------------------------------- */
     $('.changeFontSize').click(function() {
         changeFontSize($('.changeFontSize').val());
@@ -396,12 +430,6 @@ $('document').ready(function () {
     window.onresize = function(event) {
         Blockly.fireUiEvent(window, 'resize');    
     };
-    
-    
-    /* ------------------------------------- PROJECT INITIALIZATION ---------------------------------- */
-    if(currentProject === null) {
-        createNewProject();
-    }
 });
 
 /* --------------------------------------- DPT IDE SPECIFIC FUNCTIONS ------------------------------- */

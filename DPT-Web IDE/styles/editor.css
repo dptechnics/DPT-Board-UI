@@ -277,6 +277,10 @@ body,html {
     cursor: default;
 }
 
+.menu-bar a:hover {
+    cursor: default;
+}
+
 .menu-bar ul {
     padding: 0px;
     margin-top: 0px;
@@ -602,21 +606,18 @@ body,html {
 	margin: 10% auto;
 	padding: 5px 20px 13px 20px;
         background-color: #141414;
-        border-bottom: 4px solid #333;
-        border-left: 4px solid #333;
-        border-right: 4px solid #333;
+        border-bottom: 4px solid #222;
+        border-left: 4px solid #222;
+        border-right: 4px solid #222;
 }
 
-.modal-body > p {
-    color: white;
-    display: inline-block;
-}
-.modal-form > p {
-    color: white;
+.modal-body {
+    margin-top: 40px;
+    color: #FFF;
 }
 
 .close {
-    background: #C75050;
+    background: #C56F6F;
     color: #FFFFFF;
     line-height: 25px;
     position: absolute;
@@ -624,23 +625,28 @@ body,html {
     text-align: center;
     top: 0px;
     width: 24px;
+    height: 24px;
+    margin-top: 6px;
+    margin-right: 2px;
     text-decoration: none;
     font-weight: bold;
-    -moz-box-shadow: 1px 1px 3px #000;
-    -webkit-box-shadow: 1px 1px 3px #000;
-    box-shadow: 1px 1px 3px #000;
 }
 
-.close:hover { background: #E04343; }
+.close:hover {
+    background: #E04343; 
+    cursor: default;
+}
 
 .topstrip {
     position: absolute;
-    background-color: #333;
-    height: 27px;
+    background-color: #222;
+    height: 36px;
     top: 0px;
     left: 0px;
     bottom: 5px;
     width: 100%;
+    line-height: 28px;
+    font-weight: bold;
 }
 
 .topstrip > p {
@@ -649,11 +655,6 @@ body,html {
     margin-top: 4px;
     margin-left: 5px;
     
-}
-.modal-title {
-    margin-top: 30px;
-    text-align: left;
-    color: white;
 }
 
 .modal-radio > label {
@@ -691,48 +692,24 @@ body,html {
     display: none;
 }
 
-.custom-button {
-    /* Structure */
-    display: inline-block;
-    *display: inline; /*IE 6/7*/
-    zoom: 1;
-    line-height: normal;
-    white-space: nowrap;
-    vertical-align: baseline;
+.modal-buttons {
+    margin-top: 20px;
+    height: 30px;
+}
+
+.modal-buttons button {
+    float: right;
+    margin-left: 10px;
     text-align: center;
-    cursor: pointer;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-/* Firefox: Get rid of the inner focus border */
-.custom-button::-moz-focus-inner {
-    padding: 0;
-    border: 0;
-}
-
-/*csslint outline-none:false*/
-.custom-button {
-    font-family: inherit;
-    font-size: 100%;
-    *font-size: 90%; /*IE 6/7 - To reduce IE's oversized button text*/
-    *overflow: visible; /*IE 6/7 - Because of IE's overly large left/right padding on buttons */
     padding: 0.5em 1em;
-    color: #444; /* rgba not supported (IE 8) */
-    color: rgba(0, 0, 0, 0.80); /* rgba supported */
-    *color: #444; /* IE 6 & 7 */
-    border: 1px solid #999;  /*IE 6/7/8*/
-    border: none rgba(0, 0, 0, 0);  /*IE9 + everything else*/
+    color: #444; 
+    border: 1px solid #999;
     background-color: #E6E6E6;
     text-decoration: none;
 }
 
-.custom-button-hover,
-.custom-button:hover,
-.custom-button:focus {
+.modal-buttons button:hover,
+.modal-buttons button:focus {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#1a000000',GradientType=0);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(40%, rgba(0,0,0, 0.05)), to(rgba(0,0,0, 0.10)));
     background-image: -webkit-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
@@ -740,18 +717,19 @@ body,html {
     background-image: -o-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
     background-image: linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
 }
-.custom-button:focus {
-    outline: 0;
+
+.modal-option-entry input {
+    margin-right: 5px;
 }
 
-.custom-button-hidden {
-    display: none;
+.modal-option-entry h4 {
+    margin-bottom: 0px;
 }
 
-/* Firefox: no inner focus */
-.custom-button::-moz-focus-inner{
-    padding: 0;
-    border: 0;
+.modal-option-entry p {
+    margin-left: 20px;
+    margin-top: 5px;
+    color: #DDD;
 }
 
 /* ********************************************************** File Structure *************************************************** */

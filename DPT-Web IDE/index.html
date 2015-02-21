@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title data-bind="text: title">Breakout board</title>
+        <title data-bind="text: title">DPTechnics IDE</title>
         <link rel="stylesheet" type="text/css" href="styles/editor.css">
         <link rel="stylesheet" type="text/css" href="fonts/css/dpt-web-ide.css">
         <link rel="stylesheet" type="text/css" href="styles/jquery.splitter.css">
@@ -15,7 +15,7 @@
                     <span class="menu-title">File</span>
                     <ul class="menu-body">
                         <li class="menu-new-project"><a href="#new-project-dlg"><span class="menu-icon"><i class="icon-box"></i></span><span class="menu-item-title">New project</span><span class="menu-hotkey"></span></a></li>
-                        <li class="menu-new-file"><span class="menu-icon"><i class="icon-doc-inv"></i></span><span class="menu-item-title">New file</span><span class="menu-hotkey">Ctrl + O</span></li>
+                        <li class="menu-new-file"><a href="#new-file-dlg"><span class="menu-icon"><i class="icon-doc-inv"></i></span><span class="menu-item-title">New file</span><span class="menu-hotkey">Ctrl + N</span></a></li>
                         <li class="menu-separator"></li>
                         <li class="menu-open-project"><span class="menu-icon"><i class="icon-folder-open"></i></span><span class="menu-item-title">Open project</span><span class="menu-hotkey"></span></li>
                         <li class="menu-save"><span class="menu-icon"><i class="icon-floppy"></i></span><span class="menu-item-title">Save</span><span class="menu-hotkey"></span></li>
@@ -390,12 +390,12 @@
                 <div id="error-list" class="pane">
                     <div class="panel-title-bar" id="bottompanel-bar">
                         <div id="output-tabs">
-                        <ul>
-                            <li class="active btn-error-list">Code assistance</li>
-                            <li class="btn-console">Console</li>
-                        </ul>
+                            <ul>
+                                <li class="active btn-error-list">Code assistance</li>
+                                <li class="btn-console">Console</li>
+                            </ul>
                         </div>
-                        
+
                         <i class="icon-minus-squared panel-title-btn close-error-list"></i>
                     </div>
                     <div class="panel-body">
@@ -439,30 +439,79 @@
         </div>        
 
         <!-- **************************************************** Dialog Section *********************************************************************** -->
-
+        
+        <!-- New project dialog -->
         <div id="new-project-dlg" class="modalDialog">
             <div>
                 <div class="topstrip">
-                    <p>New Project</p>
+                    <p>Create new project</p>
                     <a href="#close" title="Close" class="close">X</a>
                 </div>
                 <div class="modal-body">
-                    <h2 class="modal-title">Create a new project</h2>
-                    <form action="" class="modal-form">
-                        <div class="modal-radio">
-                            <input id="new-robot" type="radio" name="category" value="robot" checked><label for="new-robot">Robot-Project</label>
-                            <input id="new-iot" type="radio" name="category" value="iot"><label for="new-iot">IOT-Project</label>
-                            <input id="new-web" type="radio" name="category" value="web"><label for="new-web">Web-Project</label>
-                        </div>    
-                        <p>There are 3 types of project available:<br>  - A robot-project is a visual editor with functionalities to move the DPT-Robot. <br>  - The second option is to build an internet of things application. <br>  - A webbased project is meant to create simple web-applications.</p>
-
-                    </form>  
-                    <a href="#close"><button class="custom-button" type="submit" value="create">Ok</button></a>
-                    <a href="#close"><button class="custom-button" type="submit" value="create">Cancel</button></a>                    
+                    <p>
+                        Choose the type of project you want to create:
+                    </p>
+                    <form>
+                        <div class="modal-option-entry">
+                            <h4><input type="radio" name="projecttype" value="robot" checked />DPT-Robot project</h4>
+                            <p>
+                                Write programs to control the DPT-Robot. You have Blockly and Javascript, can ask 
+                                user input, ... but there is no HTML/CSS involved. 
+                            </p>
+                        </div>
+                        <div class="modal-option-entry">
+                            <h4><input type="radio" name="projecttype" value="iot" checked />DPT-Board IoT project</h4>
+                            <p>
+                                Quickly make a user interface with template buttons and controls. Use Javascript and HTML
+                                to make modern IoT apps fast. 
+                            </p>
+                        </div>
+                        <div class="modal-option-entry">
+                            <h4><input type="radio" name="projecttype" value="website" checked />HTML5 application</h4>
+                            <p>
+                                Create an HTML5 website and run it directly from the board or an external server
+                                of your own. 
+                            </p>
+                        </div>
+                    </form>                  
+                </div>
+                <div class="modal-buttons">
+                    <button>Ok</button>
+                    <a href="#close"><button>Cancel</button></a>
                 </div>
             </div>
         </div>
-
+        <!-- End dialog -->
+        
+        <!-- New file dialog -->
+        <div id="new-file-dlg" class="modalDialog">
+            <div>
+                <div class="topstrip">
+                    <p>Create project</p>
+                    <a href="#close" title="Close" class="close">X</a>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        Filetype: 
+                        <select name="filetype">
+                            <option value="javascrpt" selected>Javascript</option>
+                            <option value="html">HTML</option>
+                            <option value="css">CSS</option>
+                        </select>
+                        <p>
+                            Filename: <input type="text" name="filename" />
+                        </p>
+                    </form>                  
+                </div>
+                <div class="modal-buttons">
+                    <button id="new-file-dlg-create-btn">Create</button>
+                    <a href="#close"><button>Cancel</button></a>
+                </div>
+            </div>
+        </div>
+        <!-- End dialog -->
+        
+        <!-- Settings dialog -->
         <div id="settings-dlg" class="modalDialog">
             <div>
                 <div class="topstrip">
@@ -494,13 +543,13 @@
                 </div>
             </div>
         </div>
-
+        <!-- End dialog -->
 
         <script src="scripts/sprintf.min.js"></script>
         <script src="scripts/i18n.js"></script>
         <script src="scripts/jquery-1.11.0.min.js"></script>
         <script src="scripts/knockout-3.1.0.js"></script>
-        
+
         <script src="scripts/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
         <script src="scripts/src-min-noconflict/ext-language_tools.js"></script>
         <script src="scripts/jquery.splitter-0.14.0.js"></script>              
@@ -513,62 +562,57 @@
         <script src="../scripts/dpt-robot.js"></script>
         <script src="scripts/viewmodel.js"></script>
         <script src="scripts/stratified.min.js"></script>
-                <script type="text/sjs" id="preq">
+        <script type="text/sjs" id="preq">
             function moveForward(time) {
-                console.log('Robot moving forward for: ' + (time * 100) + 'ms');
-                dptr_moveForward();
-                hold(100 * time);
-                dptr_stopMotor();
+            console.log('Robot moving forward for: ' + (time * 100) + 'ms');
+            dptr_moveForward();
+            hold(100 * time);
+            dptr_stopMotor();
             }
 
             function moveBackward(time) {
-                console.log('Robot moving backward for: ' + time * 100 + 'ms');
-                dptr_moveBackward();
-                hold(100 * time);
-                dptr_stopMotor();
+            console.log('Robot moving backward for: ' + time * 100 + 'ms');
+            dptr_moveBackward();
+            hold(100 * time);
+            dptr_stopMotor();
             }
 
             function moveLeft(time) {
-                console.log('Robot moving left for: ' + time * 100 + 'ms');
-                dptr_moveLeft();
-                hold(100 * time);
-                dptr_stopMotor();
+            console.log('Robot moving left for: ' + time * 100 + 'ms');
+            dptr_moveLeft();
+            hold(100 * time);
+            dptr_stopMotor();
             }
 
             function moveRight(time) {
-                console.log('Robot moving right for: ' + time * 100 + 'ms');
-                dptr_moveRight();
-                hold(100 * time);
-                dptr_stopMotor();
+            console.log('Robot moving right for: ' + time * 100 + 'ms');
+            dptr_moveRight();
+            hold(100 * time);
+            dptr_stopMotor();
             }
 
             function spinRight() {
-                console.log('Robot spinning right');
-                dptr_spinRight();
-                hold(200);
-                dptr_stopMotor();
+            console.log('Robot spinning right');
+            dptr_spinRight();
+            hold(200);
+            dptr_stopMotor();
             }
 
             function spinLeft() {
-                console.log('Robot spinning left');
-                dptr_spinLeft();
-                hold(200);
-                dptr_stopMotor();
+            console.log('Robot spinning left');
+            dptr_spinLeft();
+            hold(200);
+            dptr_stopMotor();
             }
-            </script>
-            <script type="text/sjs">
-        
-        
-
-            
-            function runCode() {
-                var editorcode = editor.getValue();
-                require('sjs:sys').eval(document.getElementById('preq').innerText + editorcode);
-            }
-            
-            $('.btn-play').click(function () {
-                runCode();
+        </script>
+        <script type="text/sjs">
+            $('document').ready(function(){
+                $('.btn-play').click(function () {
+                    var editorcode = editor.getValue();
+                    require('sjs:sys').eval(document.getElementById('preq').innerText + editorcode);
+                });
             });
+            
         </script>
     </body>
 </html>
