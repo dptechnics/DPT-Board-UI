@@ -172,7 +172,7 @@
                 <div id="tabbed-filepane">
                     <div id="editor-tabs">
                         <ul data-bind="foreach: opentabs">
-                            <li data-bind="css: { activetab: active }"><span data-bind="text: filename"></span><i class="icon-cancel panel-title-btn"></i></li>
+                            <li data-bind="css: { activetab: active }, click: tabswitch" ><span data-bind="text: filename"></span><i class="icon-cancel panel-title-btn"></i></li>
                         </ul>
                     </div>
                     <div id="editor-develop-mode">

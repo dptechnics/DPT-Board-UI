@@ -18,6 +18,8 @@ var rightPane;                          /* Pane containing project structure */
 var developPane;                        /* Pane containg output and console */
 var workspace = new IdeWorkspace();     /* All projects currently loaded in the IDE */
 var tasks = [];                         /* Task queue */
+var saveChanges = true;                 /* True when workspace changes should be saved */  
+var codeGeneration = true;              /* True when blockly must generate code */
 
 /* ---------------------------------------------- STATIC VARIABLES ------------------------------------- */
 
@@ -76,7 +78,7 @@ function IdeFile() {
         filetype: "",           /* The type of the file */
         filecat: "",            /* The file category (directory, file, ...) */
         editor: "",             /* The file content itself */
-        blockly: "<xml></xml>", /* The blockly content if any */
+        blockly: null,          /* The blockly content if any */
         blocklyvisible: true,   /* True if blockly was visible */
         acemode: "",            /* The mode of the ACE editor for this file */
         active: false,          /* True if this file is in the active tab */
@@ -84,43 +86,62 @@ function IdeFile() {
         parent: null            /* The parent of the file */
     };
 }
-;
 
 /**
  * Represents an IDE project.
  */
 function IdeProject() {
     return {
-        name: "", /* The project name */
-        type: "", /* The project type (robot, iot, html, ...) */
-        files: []           /* The files in the project */
+        name: "",               /* The project name */
+        type: "",               /* The project type (robot, iot, html, ...) */
+        files: []               /* The files in the project */
     };
 }
-;
 
 /**
  * Represensts an IDE workspace
  */
 function IdeWorkspace() {
     return {
-        name: "", /* The workspace name */
-        opentab: null, /* The file currently open in editor */
-        projects: [], /* The projects in this workspace */
-        files: []           /* Files in the workspace not belonging to a project */
+        name: "",               /* The workspace name */
+        opentab: null,          /* The file currently open in editor */
+        projects: [],           /* The projects in this workspace */
+        files: []              /* Files in the workspace not belonging to a project */
     };
 }
-;
 
 /**
- * Save the current tabpane in an IdeFile object
+ * Save the complete IDE workspace to local storage. 
+ */
+function saveWorkspaceToLocalStorage()
+{
+    localStorage.setItem("__dpt_ide_workspace", saveCompleteWorkspace());
+}
+
+/**
+ * Restore a workspace previously saved in localStorage.
+ */
+function restoreFromLocalStorage()
+{
+    var saved = localStorage.getItem("__dpt_ide_workspace");
+    restoreCompleteWorkspace(saved);
+}
+
+/**
+ * Save the current active file to the workspace object.
  * @returns {IdeFile} the current version of a file in the editor
  */
-function getCurrentTab() {
-    // TODO
-    var blockly = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    var aceContent = editor.getSession().getValue();
-    var acemode = editor.getSession().getMode().$id;
-    //return new IdeFile(aceContent, blockly, acemode, "");
+function saveWorkingFile() {
+    if(workspace.opentab !== null && saveChanges) {
+        console.log("Saving " + workspace.opentab.filename);
+        workspace.opentab.editor = editor.getSession().getValue();
+        
+        // Blockly is javascript only
+        if(workspace.opentab.filetype === "javascript") {
+            var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+            workspace.opentab.blockly = Blockly.Xml.domToText(xml);
+        }
+    }
 }
 
 /**
@@ -128,11 +149,22 @@ function getCurrentTab() {
  * @param {IdeFile} file the file to display in the editor
  */
 function displayFile(file) {
-    console.log(file);
-    //TODO: restore editor pane visibility
-    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, Blockly.Xml.textToDom(file.blockly));
-    editor.setValue(file.editor);
-    editor.session.setMode(file.acemode);
+    if(file !== null) {
+        console.log("Displaying " + file.filename);
+        //TODO: restore editor pane visibility
+        editor.setValue(file.editor);
+        editor.session.setMode(file.acemode);
+        
+        console.log(file);
+        
+        // Blockly is javascript only
+        if(file.filetype === "javascript" && file.blockly !== null) {
+            var xml = Blockly.Xml.textToDom(file.blockly);
+            Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+        } else {
+            Blockly.mainWorkspace.clear();
+        }   
+    }
 }
 
 /**
@@ -155,10 +187,13 @@ function addFileToWorkspace(file, project) {
  * @param {IdeFile} file the file to set active
  */
 function setFileActive(file) {
+    workspace.opentab = null;
+    
     workspace.projects.forEach(function (project) {
         project.files.forEach(function (a_file) {
-            if(JSON.stringify(file) === JSON.stringify(a_file)) {
+            if(file === a_file) {
                 a_file.active = true;
+                workspace.opentab = a_file;
             } else {
                 a_file.active = false;
             }
@@ -166,15 +201,15 @@ function setFileActive(file) {
     });
 
     workspace.files.forEach(function (a_file) {
-        if(JSON.stringify(file) === JSON.stringify(a_file)) {
+        if(file === a_file) {
             a_file.active = true;
-            console.log("Found active file" + file);
+            workspace.opentab = a_file;
         } else {
             a_file.active = false;
-            console.log("Found unactive file" + file);
         }
-    });
+    });    
     
+    // Update the editor view 
     viewModel.updateView();
 }
 
@@ -414,6 +449,10 @@ $('document').ready(function () {
     });
 
     /* ----------------------------- BUTTON HANDLERS ------------------------------------- */
+    
+    /**
+     * Handler for the fullscreen button
+     */
     $('.btn-fullscreen').click(function () {
         if ((document.fullScreenElement && document.fullScreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
             if (document.documentElement.requestFullScreen) {
@@ -514,6 +553,11 @@ $('document').ready(function () {
                 viewModel.addError(annot[key]);
         }
     });
+    
+    editor.getSession().on("change", function() {
+        // Save code in IDE objects
+        saveWorkingFile();
+    });
 
     /* ---------------------------------- BLOCKLY GUI EDITOR ---------------------------------- */
     Blockly.inject(document.getElementById('blockly-editor'),
@@ -521,8 +565,10 @@ $('document').ready(function () {
 
     // Listen to blockly internal changes
     function blocklyUpdateHandler() {
-        var code = Blockly.JavaScript.workspaceToCode();
-        editor.setValue(code);
+        if(codeGeneration && workspace.opentab != null && workspace.opentab.filetype === "javascript") {
+            var code = Blockly.JavaScript.workspaceToCode();
+            editor.setValue(code);
+        }
     }
     Blockly.addChangeListener(blocklyUpdateHandler);
 
@@ -533,6 +579,23 @@ $('document').ready(function () {
 });
 
 /* --------------------------------------- DPT IDE SPECIFIC FUNCTIONS ------------------------------- */
+
+/**
+ * Handler for the tabswitches above the editor.
+ * @param {IdeFile} file the file to switch to
+ */
+function tabswitch(file) {
+    // Turn of save changes and code generation
+    saveChanges = false;
+    codeGeneration = false;
+    
+    // Set the file active 
+    setFileActive(file);
+    
+    // Start listening to changes again
+    saveChanges = true;
+    codeGeneration = true;
+}
 
 /**
  * Show a specific menu
