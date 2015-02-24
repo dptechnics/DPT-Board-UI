@@ -39,9 +39,9 @@ var ACEMODES = {
 
 // The type of a file in the projects file structure 
 var FILECAT = {
-    "directory": 0, /* File directory */
-    "file": 1, /* Normal file */
-    "dependency": 2        /* Dependency directory */
+    "directory": 0,         /* File directory */
+    "file": 1,              /* Normal file */
+    "dependency": 2         /* Dependency directory */
 };
 
 /* --------------------------------------------- INTERNATIONALISATION ----------------------------------- */
@@ -119,12 +119,33 @@ function saveWorkspaceToLocalStorage()
 }
 
 /**
+ * Checks if there is a workspace present in local storage.
+ * @returns {Boolean} true when a workspace is available in browser local storage.
+ */
+function isLocalStorageWorkspacePresent()
+{
+    return localStorage.getItem("__dpt_ide_workspace") !== null;
+}
+
+/**
  * Restore a workspace previously saved in localStorage.
  */
 function restoreFromLocalStorage()
 {
+    
     var saved = localStorage.getItem("__dpt_ide_workspace");
     restoreCompleteWorkspace(saved);
+}
+
+/**
+ * Create's a download so the user can save the file for use later. 
+ */
+function saveWorkspaceToDownload()
+{
+    var download = document.createElement('a');
+    download.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(saveCompleteWorkspace()));
+    download.setAttribute('download', 'dpt-workspace.json');
+    download.click();
 }
 
 /**
@@ -133,7 +154,6 @@ function restoreFromLocalStorage()
  */
 function saveWorkingFile() {
     if(workspace.opentab !== null && saveChanges) {
-        console.log("Saving " + workspace.opentab.filename);
         workspace.opentab.editor = editor.getSession().getValue();
         
         // Blockly is javascript only
@@ -150,12 +170,9 @@ function saveWorkingFile() {
  */
 function displayFile(file) {
     if(file !== null) {
-        console.log("Displaying " + file.filename);
         //TODO: restore editor pane visibility
         editor.setValue(file.editor);
         editor.session.setMode(file.acemode);
-        
-        console.log(file);
         
         // Blockly is javascript only
         if(file.filetype === "javascript" && file.blockly !== null) {
@@ -228,8 +245,16 @@ function saveCompleteWorkspace() {
 function restoreCompleteWorkspace(saved) {
     workspace = JSON.parse(saved);
 
-    /* Update view */
+    // Turn of change listeners
+    saveChanges = false;
+    codeGeneration = false;
+    
+    // Update view
     viewModel.updateView();
+    
+    // Turn change listeners back on
+    saveChanges = true;
+    codeGeneration = true;
 }
 
 /* --------------------------------------- VISUALISATION CODE ------------------------------- */
@@ -507,14 +532,16 @@ $('document').ready(function () {
     });
 
     /* ---------------------------------- DIALOG BUTTON HANDLERS ---------------------------------- */
-    $('#new-file-dlg-create-btn').click(function () {
+    
+    /**
+     * Handles the creation of a new file.
+     */
+    $('#new-file-dlg-create-btn').click(function() {
         //TODO: ask to add to existing project
         var name = $('#new-file-dlg form').find('input[name="filename"]').val();
         var lang = $('#new-file-dlg form').find('select[name="filetype"]').val();
 
         // Add extension to name 
-        console.log(lang);
-        console.log(EXTENSIONS[lang]);
         name = name + "." + EXTENSIONS[lang];
 
         // Construct the file
@@ -536,6 +563,64 @@ $('document').ready(function () {
         
         // Close dialog
         window.location.hash = "#close";
+    });
+    
+    /**
+     * Handles the storage of workspaces
+     */
+    $('#save-workspace-dlg').click(function() {
+        var savemode = $('#save-workspace-dlg form').find('input:radio[name="storagetype"]:checked').val();
+        
+        switch (savemode) {
+            case "localstorage":
+                saveWorkspaceToLocalStorage();
+                break;
+            case "download":
+                saveWorkspaceToDownload();
+                break;
+            case "onboard":
+                break;
+        }
+        
+        // Close dialog
+        window.location.hash = "#close";
+    });
+    
+    /**
+     * Handles opening of a workspace.
+     */
+    $('#open-workspace-dlg').click(function() {
+        restoreFromLocalStorage();
+        
+        // Close dialog
+        window.location.hash = "#close";
+    });
+    
+    /**
+     * Handles a file upload
+     * @param {JQuery Event} evt the event containing the target upload. 
+     */
+    $('#open-workspace-file-select').change(function(evt){
+        var filelist = evt.target.files;
+        
+        if(filelist.length > 0) {
+            var file = filelist[0];
+            var reader = new FileReader();
+            
+            // Async handler when file is read
+            reader.addEventListener("load", function(evt){
+                var filecontent = evt.target.result;
+                
+                // Restore the workspace
+                restoreCompleteWorkspace(filecontent);
+                
+                // Close dialog
+                window.location.hash = "#close";
+            });
+            
+            // Read the file
+            reader.readAsText(file);
+        }
     });
 
     /* ---------------------------------- ACE EDITOR EVENTS ---------------------------------- */
@@ -565,7 +650,7 @@ $('document').ready(function () {
 
     // Listen to blockly internal changes
     function blocklyUpdateHandler() {
-        if(codeGeneration && workspace.opentab != null && workspace.opentab.filetype === "javascript") {
+        if(codeGeneration && workspace.opentab !== null && workspace.opentab.filetype === "javascript") {
             var code = Blockly.JavaScript.workspaceToCode();
             editor.setValue(code);
         }
@@ -598,7 +683,7 @@ function tabswitch(file) {
 }
 
 /**
- * Show a specific menu
+ * Show a specific menu.
  * @param {DOM element} menu the menu to be displayed.
  */
 function showMenu(menu) {

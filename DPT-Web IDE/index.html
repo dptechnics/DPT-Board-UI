@@ -17,8 +17,8 @@
                         <li class="menu-new-project"><a href="#new-project-dlg"><span class="menu-icon"><i class="icon-box"></i></span><span class="menu-item-title">New project</span><span class="menu-hotkey"></span></a></li>
                         <li class="menu-new-file"><a href="#new-file-dlg"><span class="menu-icon"><i class="icon-doc-inv"></i></span><span class="menu-item-title">New file</span><span class="menu-hotkey">Ctrl + N</span></a></li>
                         <li class="menu-separator"></li>
-                        <li class="menu-open-project"><span class="menu-icon"><i class="icon-folder-open"></i></span><span class="menu-item-title">Open project</span><span class="menu-hotkey"></span></li>
-                        <li class="menu-save"><span class="menu-icon"><i class="icon-floppy"></i></span><span class="menu-item-title">Save</span><span class="menu-hotkey"></span></li>
+                        <li class="menu-open-workspace"><a href="#open-workspace-dlg"><span class="menu-icon"><i class="icon-folder-open"></i></span><span class="menu-item-title">Open workspace</span><span class="menu-hotkey"></span></a></li>
+                        <li class="menu-save"><a href="#save-workspace-dlg"><span class="menu-icon"><i class="icon-floppy"></i></span><span class="menu-item-title">Save</span><span class="menu-hotkey"></span></a></li>
                         <li class="menu-save-as"><span class="menu-icon"></span><span class="menu-item-title">Save as...</span><span class="menu-hotkey"></span></li>
                         <li class="menu-save-all"><span class="menu-icon"></span><span class="menu-item-title">Save all</span><span class="menu-hotkey"></span></li>
                         <li class="menu-separator"></li>
@@ -463,14 +463,14 @@
                             </p>
                         </div>
                         <div class="modal-option-entry">
-                            <h4><input type="radio" name="projecttype" value="iot" checked />DPT-Board IoT project</h4>
+                            <h4><input type="radio" name="projecttype" value="iot" />DPT-Board IoT project</h4>
                             <p>
                                 Quickly make a user interface with template buttons and controls. Use Javascript and HTML
                                 to make modern IoT apps fast. 
                             </p>
                         </div>
                         <div class="modal-option-entry">
-                            <h4><input type="radio" name="projecttype" value="website" checked />HTML5 application</h4>
+                            <h4><input type="radio" name="projecttype" value="website" />HTML5 application</h4>
                             <p>
                                 Create an HTML5 website and run it directly from the board or an external server
                                 of your own. 
@@ -508,6 +508,73 @@
                 </div>
                 <div class="modal-buttons">
                     <button id="new-file-dlg-create-btn">Create</button>
+                    <a href="#close"><button>Cancel</button></a>
+                </div>
+            </div>
+        </div>
+        <!-- End dialog -->
+        
+        <!-- Save workspace project dialog -->
+        <div id="save-workspace-dlg" class="modalDialog">
+            <div>
+                <div class="topstrip">
+                    <p>Save your workspace</p>
+                    <a href="#close" title="Close" class="close">X</a>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        How do you wan't to save your workspace:
+                    </p>
+                    <form>
+                        <div class="modal-option-entry">
+                            <h4><input type="radio" name="storagetype" value="localstorage" checked />Localstorage</h4>
+                            <p>
+                                Save your workspace to your browser. Very convenient if you always use your own 
+                                computer to work in the DPTechnics WEB IDE.
+                            </p>
+                        </div>
+                        <div class="modal-option-entry">
+                            <h4><input type="radio" name="storagetype" value="download" />Download</h4>
+                            <p>
+                                Download the application to your local computer so you can open it later from
+                                any device and/or DPT-Board.
+                            </p>
+                        </div>
+                        <div class="modal-option-entry">
+                            <h4><input type="radio" name="storagetype" value="onboard" disabled/>On the DPT-Board</h4>
+                            <p>
+                                This option is coming in a next release of the DPTechnics WEB IDE. 
+                            </p>
+                        </div>
+                    </form>                  
+                </div>
+                <div class="modal-buttons">
+                    <button>Save workspace</button>
+                    <a href="#close"><button>Cancel</button></a>
+                </div>
+            </div>
+        </div>
+        <!-- End dialog -->
+        
+        <!-- Open workspace project dialog -->
+        <div id="open-workspace-dlg" class="modalDialog">
+            <div>
+                <div class="topstrip">
+                    <p>Open a workspace</p>
+                    <a href="#close" title="Close" class="close">X</a>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Click the 'Open workspace' button if you want to open a workspace
+                        previously saved in local storage.
+                    </p>
+                    <p>
+                        Select a file if you want to import a workspace from your 
+                        computer: <input type="file" name="input-file" id="open-workspace-file-select" />
+                    </p>
+                </div>
+                <div class="modal-buttons">
+                    <button>Open workspace</button>
                     <a href="#close"><button>Cancel</button></a>
                 </div>
             </div>
