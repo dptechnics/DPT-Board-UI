@@ -46,7 +46,7 @@
     "FirmwareDownloaded" : "Download status",
     "FirmwareDownloadedYes" : "Firmware upgrade is gedownload",
     "FirmwareDownloadedNo" : "Klik op de knop 'Download' om de firmware te downloaden",
-    "FirmwareInstallStartInfo" : "De firmware wordt nu geïnstalleerd. Het groene lampje zal binnen enkele minuuten beginnen knipperen. De nieuwe software is pas geïnstalleerd als het lampje niet meer knippert, zet het bordje in tussentijd niet uit.",
+    "FirmwareInstallStartInfo" : "De firmware wordt nu geïnstalleerd. Het groene lampje zal binnen enkele minuuten beginnen knipperen. De nieuwe software is pas geïnstalleerd als het lampje niet meer knippert, zet het bordje in tussentijd niet uit. Indien u via BlueCherry update moet u de homepagina van BlueCherry platform herladen om opnieuw toegang te verkrijgen tot uw board.",
 
     "Settings" : "Instellingen",
     "System" : "Systeemstatus",
