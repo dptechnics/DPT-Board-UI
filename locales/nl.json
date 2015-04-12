@@ -8,6 +8,7 @@
     "KuniocontrolTitle" : "KunIO bedieding",
     "WiFiSettingsTitle" : "WiFi instellingen",
     "FirmwareSettingsTitle" : "Firmware instellingen",
+    "BluecherrySettingsTitle" : "BlueCherry instellingen",
     "CodeEditorTitle" : "Code editor",
 
     "Login" : "Login",
@@ -16,7 +17,6 @@
     "Develop" : "Ontwikkel",
     "CodeEditor" : "Code ontwikkeling",
     "GraphicalEditor" : "Grafische ontwikkeling",
-    
 
     "GraphicControl" : "Graphische bediening",
     "ButtonControl" : "Knopbediening",
@@ -76,5 +76,8 @@
     "KunIONumberModules" : "Aantal verbonden modules",
     
     "ModalWiFiTitle" : "Verbindt met",
-    "ModalWiFiIntroPass" : "Geef het wachtwoord voor het WiFi netwerk en en druk op verbindt om verbinding te maken met het geselecteerde netwerk."
+    "ModalWiFiIntroPass" : "Geef het wachtwoord voor het WiFi netwerk en en druk op verbindt om verbinding te maken met het geselecteerde netwerk.",
+    
+    
+    "BluecherrySettings" : "BlueCherry instellingen"
 }

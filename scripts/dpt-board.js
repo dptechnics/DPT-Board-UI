@@ -7,7 +7,7 @@
  */
  
 /* Ajax prefix, mostly used for development */
-var DPT_AJAX_PREFIX = "http://192.168.0.243/";
+var DPT_AJAX_PREFIX = "/";
 
 /**
  * Get general system information.
@@ -17,7 +17,7 @@ var DPT_AJAX_PREFIX = "http://192.168.0.243/";
  */
 function dpt_getSystemOverview(callback, errorhandler)
 {
-    $.getJSON(DPT_AJAX_PREFIX + 'api/overview', callback).error(errorhandler);
+    $.getJSON(DPT_AJAX_PREFIX + 'api/system/overview', callback).error(errorhandler);
 }
 
 /**
@@ -28,7 +28,7 @@ function dpt_getSystemOverview(callback, errorhandler)
  */
 function dpt_getIOLayout(callback, errorhandler)
 {
-    $.getJSON(DPT_AJAX_PREFIX + 'api/gpiolayout', function(data){
+    $.getJSON(DPT_AJAX_PREFIX + 'api/gpio/layout', function(data){
         // call the function with the number of ports and portlist
         callback(data.ioports.length, data.ioports);
     }).error(errorhandler);
@@ -43,12 +43,12 @@ function dpt_getIOLayout(callback, errorhandler)
 function dpt_toggleIO(name, errorhandler)
 {
     // Get the current pin state 
-    $.getJSON(DPT_AJAX_PREFIX + 'api/gpio/' + name, function(data) {
+    $.getJSON(DPT_AJAX_PREFIX + 'api/gpio/state/' + name, function(data) {
         // Toggle the pin
         $.ajax({
             type: "PUT",
             contentType: "application/json; charset=utf-8",
-            url: DPT_AJAX_PREFIX + 'api/gpio/' + name + '/' + (data.state === 0 ? 1 : 0),
+            url: DPT_AJAX_PREFIX + 'api/gpio/state/' + name + '/' + (data.state === 0 ? 1 : 0),
             dataType: "json",
             error: errorhandler
         });
@@ -67,7 +67,7 @@ function dpt_setIO(name, state, errorhandler)
     $.ajax({
         type: "PUT",
         contentType: "application/json; charset=utf-8",
-        url: DPT_AJAX_PREFIX + 'api/gpio/' + name + '/' + (state ? 1 : 0),
+        url: DPT_AJAX_PREFIX + 'api/gpio/state/' + name + '/' + (state ? 1 : 0),
         dataType: "json",
         error: errorhandler
     });
@@ -81,7 +81,7 @@ function dpt_setIO(name, state, errorhandler)
  */
 function dpt_getWifiScan(callback, errorhandler)
 {
-    $.getJSON(DPT_AJAX_PREFIX + 'api/wifiscan', function(data) {
+    $.getJSON(DPT_AJAX_PREFIX + 'api/wifi/scan', function(data) {
         callback(data);
     }).error(errorhandler);
 }
@@ -143,6 +143,27 @@ function dpt_installFirmware(keepSettings, callback, errorhandler)
         contentType: "application/json; charset=utf-8",
         url: DPT_AJAX_PREFIX + 'api/firmware/install',
         data: JSON.stringify({keep_settings : keepSettings}),
+        dataType: "json",
+        success: callback,
+        error: errorhandler
+    });
+}
+
+/**
+ * Connect this board to the BlueCherry service. 
+ * @param {type} username
+ * @param {type} password
+ * @param {type} callback
+ * @param {type} errorhandler
+ * @returns {undefined}
+ */
+function dpt_blueCherryConnect(username, password, callback, errorhandler)
+{
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: DPT_AJAX_PREFIX + 'api/bluecherry/init',
+        data: JSON.stringify({username : username, password: password}),
         dataType: "json",
         success: callback,
         error: errorhandler

@@ -8,6 +8,7 @@
     "KuniocontrolTitle" : "KunIO control",
     "WiFiSettingsTitle" : "WiFi settings",
     "FirmwareSettingsTitle" : "Firmware settings",
+    "BluecherrySettingsTitle" : "BlueCherry settings",
     "CodeEditorTitle" : "Code editor",
     "WiFiSecurity" : "Security",
 
@@ -75,5 +76,7 @@
     "KunIONumberModules" : "Number of connected modules",
     
     "ModalWiFiTitle" : "Connect to",
-    "ModalWiFiIntroPass" : "Enter the WiFi password for the network and click the connect button to make a connection to the selected wireless network."
+    "ModalWiFiIntroPass" : "Enter the WiFi password for the network and click the connect button to make a connection to the selected wireless network.",
+    
+    "BluecherrySettings" : "BlueCherry settings"
 }

@@ -47,6 +47,7 @@ function GlobalViewModel()
     this.settingsBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("Settings");}, this);
     this.wifiSettingsBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("WiFiSettings");}, this);
     this.firmwareSettingsBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("FirmwareSettings");}, this);
+    this.bluecherrySettingsBtn = ko.computed(function(){i18n.setLocale(this.lang()); return i18n.__("BluecherrySettings");}, this);
 
     /**
      * Change the UI locale
