@@ -35,7 +35,7 @@
     "FirmwareDownloadInfo" : "Download the latest available firmware.",
     "FirmwareInstallBtn" : "Install",
     "FirmwareInstallInfo" : "Upgrade board to latest firmware version.",
-    "FirmwareKeepsettingsInfo" : "Keep settings on firmware install. Non-default apps will be removed on upgrade.",
+    "FirmwareKeepsettingsInfo" : "Keep settings on firmware install. You must keep settings if your device is connected to the BlueCherry platform! Otherways the BlueCherry connection will no longer work.Non-default apps will be removed on upgrade.",
     "FirmwareUpToDate" : "Up-to-date",
     "FirmwareVersion" : "Version",
     "FirmwareRelease" : "Release date",

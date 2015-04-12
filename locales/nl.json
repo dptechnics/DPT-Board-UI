@@ -35,7 +35,7 @@
     "FirmwareDownloadInfo" : "Download de nieuwste firmware.",
     "FirmwareInstallBtn" : "Installeer",
     "FirmwareInstallInfo" : "Upgrade board naar de nieuwste firmware versie.",
-    "FirmwareKeepsettingsInfo" : "Behouw instellingen tijdens upgrade. Niet standaard applicaties zullen worden verwijderd.",
+    "FirmwareKeepsettingsInfo" : "Behouw instellingen tijdens upgrade. Als uw DPT-Board aan BlueCherry gekoppeld is moet u dit aanvinken, anders zal de koppeling niet langer werken! Niet standaard applicaties zullen worden verwijderd.",
     "FirmwareUpToDate" : "Up-to-date",
     "FirmwareVersion" : "Versie",
     "FirmwareRelease" : "Release datum",
