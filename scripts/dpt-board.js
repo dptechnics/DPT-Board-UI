@@ -7,7 +7,7 @@
  */
  
 /* Ajax prefix, mostly used for development */
-var DPT_AJAX_PREFIX = "/";
+var DPT_AJAX_PREFIX = "http://192.168.1.1/";
 
 /**
  * Get general system information.
@@ -31,6 +31,20 @@ function dpt_getIOLayout(callback, errorhandler)
     $.getJSON(DPT_AJAX_PREFIX + 'api/gpio/layout', function(data){
         // call the function with the number of ports and portlist
         callback(data.ioports.length, data.ioports);
+    }).error(errorhandler);
+}
+
+/**
+ * Get the currently available IO ports and their status in the system. 
+ * @param {type} callback function to call when data is ready.
+ * @param {type} errorhandler function to call when an error occurs.
+ * @returns {undefined}
+ */
+function dpt_getIOOverview(callback, errorhandler)
+{
+    $.getJSON(DPT_AJAX_PREFIX + 'api/gpio/overview', function(data){
+        // call the function with the number of ports and portlist
+        callback(data.ports.length, data.ports);
     }).error(errorhandler);
 }
 

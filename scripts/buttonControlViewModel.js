@@ -15,19 +15,19 @@ function pageViewModel(gvm) {
      * @param {integer} btnr - the number of the button to add. 
      * @returns {void}
      */
-    gvm.addIOButton = function(btnr)
+    gvm.addIOButton = function(btn)
     {
         // Fill up the template
         gvm.buttons.push({
-            text: 'IO port ' + btnr,
-            iobutton: false,
-            number: btnr
+            text: 'IO port ' + btn.number,
+            iobutton: btn.state,
+            number: btn.number
         });
 
         // Attach a handler to button
-        $('#iobutton-' + btnr).bind('switch-change', function(event, data){
+        $('#iobutton-' + btn.number).bind('switch-change', function(event, data){
             // Set the IO port on the new state
-            dpt_setIO(btnr, data.value);
+            dpt_setIO(btn.number, data.value);
         });
 
     }
@@ -48,7 +48,7 @@ function setIOBtnState(btnr, state)
  * @returns {void}
  */
 function initPage() {
-    dpt_getIOLayout(function(nrports, ports){
+    dpt_getIOOverview(function(nrports, ports){
         // Add a button for every port 
         for(i = 0; i < nrports; ++i) {
             // Append button to HTML DOM
