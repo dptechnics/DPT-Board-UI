@@ -36,7 +36,6 @@ function pageViewModel(gvm) {
     gvm.dataModelName = ko.observable("");
     gvm.dataConnStateOne = ko.observable(false);
     gvm.dataConnStateTwo = ko.observable(false);
-    gvm.dataSSID = ko.observable("");
     gvm.dataUSBStor = ko.observable("");
     gvm.dataSystemLoad = ko.observable("");
     gvm.totalRAM = ko.observable(0);
@@ -127,13 +126,11 @@ function pageViewModel(gvm) {
      * Set the board connection state
      * @param {boolean} port1 - connection state of port 1
      * @param {boolean} port2 - connection state of port 2
-     * @param {string} ssid - the current WiFi SSID name
      * @returns {void}
      */
-    gvm.setConnectionState = function(port1, port2, ssid) {
+    gvm.setConnectionState = function(port1, port2) {
         gvm.dataConnStateOne(port1);
         gvm.dataConnStateTwo(port2);
-        gvm.dataSSID(ssid);
     }
 
     /**
@@ -171,7 +168,7 @@ function updateInfo(callback) {
     dpt_getSystemOverview(function(data) {
         // Update the view 
         viewModel.setBoardInfo(data.sysname, data.model);
-        viewModel.setConnectionState(data.eth0_connected, data.eth1_connected, data.ssid);
+        viewModel.setConnectionState(data.eth0_connected, data.eth1_connected);
         viewModel.setDiskState(data.usb_state);
         viewModel.setDiskSpace(data.usb_free, data.usb_total);
         viewModel.setSystemInfo(data.system_load, data.ram_total, data.ram_free);
@@ -179,7 +176,6 @@ function updateInfo(callback) {
         // Polling success
         callback(true);
     }, function(error) {
-		callback(false);
-	});
-
+        callback(false);
+    });
 }

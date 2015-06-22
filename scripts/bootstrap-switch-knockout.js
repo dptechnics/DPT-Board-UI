@@ -12,7 +12,8 @@ ko.bindingHandlers.bootstrapSwitchOn = {
         var vStatus = $(element).bootstrapSwitch('state');
         var vmStatus = ko.utils.unwrapObservable(valueAccessor());
         if (vStatus != vmStatus) {
-            $(element).bootstrapSwitch('setState', vmStatus);
+            /* Skip updates from triggering the handler */
+            $(element).bootstrapSwitch('setState', vmStatus, true);
         }
     }
 };

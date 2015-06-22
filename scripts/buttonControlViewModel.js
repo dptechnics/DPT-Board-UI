@@ -19,9 +19,8 @@ function pageViewModel(gvm) {
     {
         // Fill up the template
         gvm.buttons.push({
-            text: 'IO port ' + btn.number,
-            iobutton: btn.state,
-            number: btn.number
+            number: btn.number,
+            state : ko.observable(btn.state)
         });
 
         // Attach a handler to button
@@ -29,8 +28,33 @@ function pageViewModel(gvm) {
             // Set the IO port on the new state
             dpt_setIO(btn.number, data.value);
         });
-
-    }
+    };
+    
+    /**
+     * Update the button state in the viewmodel.
+     * @param {type} btn the btn state to update
+     * @param {integer
+     * @returns {undefined}
+     */
+    gvm.updateIOButton = function(btn, index)
+    {
+        gvm.buttons()[index].state(btn.state);
+    };
+    
+    /**
+     * Pulse an IO port for a given number of seconds read from
+     * the input with id "pulsetime-<btnnumber>".
+     * @param {object} btn the button to pulse. 
+     * @returns {undefined}
+     */
+    gvm.pulseIOHandler = function(btn)
+    {
+        var time = $('#pulsetime-' + btn.number).val();
+        
+        dpt_pulseIO(btn.number, GPIO_ACT_HIGH, time, function() {
+            BootstrapDialog.alert("Could not pulse IO port");
+        });
+    };
 }
 
 /* 
@@ -41,6 +65,26 @@ function pageViewModel(gvm) {
 function setIOBtnState(btnr, state)
 {
     $('#iobutton-' + btnr).bootstrapSwitch('setState', state);
+}
+
+/**
+ * This function is called after system initalisation and will
+ * be called on a regular basis.
+ * @param {function} callback {function} call with true or false, on false polling will stop
+ * @returns {void}
+ */
+function updateInfo(callback) {
+    dpt_getIOOverview(function(nrports, ports){
+        // Add a button for every port 
+        for(i = 0; i < nrports; ++i) {
+            // Update HTML
+            viewModel.updateIOButton(ports[i], i);
+        }
+        callback(true);
+    }, function() {
+        console.log("Could not read IO port state");
+        callback(true);
+    });
 }
 
 /**

@@ -11,16 +11,40 @@ function pageViewModel(gvm) {
 
     // Page i18n 
     gvm.blueCherrySettingsTitle = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BluecherrySettingsTitle");}, gvm);
-
+    gvm.blueCherrySuccess = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherrySuccess");}, gvm);
+    gvm.blueCherryConnectInfo = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryConnectInfo");}, gvm);
+    gvm.blueCherryConnectBtn = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryConnectBtn");}, gvm);
+    gvm.blueCherryForgotPassBtn = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryForgotPassBtn");}, gvm);
+    gvm.blueCherryNoAccountBtn = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryNoAccountBtn");}, gvm);
+    gvm.blueCherryYourEmailAddress = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryYourEmailAddress");}, gvm);
+    gvm.blueCherryYourPassword = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryYourPassword");}, gvm);
+    gvm.blueCherryEmailPlaceholder = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryEmailPlaceholder");}, gvm);
+    gvm.blueCherryPasswordPlaceholder = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryPasswordPlaceholder");}, gvm);
+    gvm.blueCherryConnected = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryConnected");}, gvm);
+    gvm.blueCherryNoInternet = ko.computed(function(){i18n.setLocale(gvm.lang()); return i18n.__("BlueCherryNoInternet");}, gvm);
 }
-
-
 
 /**
  * Called when page is loaded
  */
 function initPage() {
-
+    /* Check the current BlueCherry status */
+    dpt_blueCherryStatus(function(status){
+       switch(status) {
+           case BLUECHERRY_NOT_INITIALISED:
+               $('#bluecherry_connect').show();
+               break;
+           case BLUECHERRY_NO_INTERNET:
+               $('#bluecherry_status_no_inet').show();
+               break;
+           case BLUECHERRY_CONNECTED:
+               $('#bluecherry_status_connected').show();
+               break;
+       } 
+    }, function(error) {
+        BootstrapDialog.alert("Could not load BlueCherry connection status");
+    })
+    
     /* Attach bluecherry connect handler */
     $('#loginbtn').click(function() {
         $('#login_error').html("");

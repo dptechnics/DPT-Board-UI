@@ -22,11 +22,26 @@
 	}
 	
 	.dpt-btn-row {
-		padding-bottom: 10px;
-		padding-top: 10px;
 		border-bottom: 1px solid #EEE;
 		border-top: 1px solid #EEE;
 	}
+        
+        .iolabel {
+            display: inline-block;
+            min-width: 80px;
+        }
+        
+        .pulseinput {
+            display: inline-block;
+            width: initial;
+            max-width: 80px;
+        }
+        
+        .rowpadding {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            line-height: 30px;
+        }
 </style>
 
 </head>
@@ -40,11 +55,20 @@
 			<h3 class="panel-title">Button control</h3>
 		</div>
 		<div class="panel-body" data-bind="foreach: buttons">
-			<div class="dpt-btn-row" id="dpt-btn-row-' + ports[i] + '">
-				<div class="btn-desc" data-bind="text: text"></div>
-				<input type="checkbox" data-size="large" data-on-label="On" data-off-label="Off" data-bind="bootstrapSwitchOn: iobutton, attr:{'id': 'iobutton-' + number}">
-				
-			</div>
+                    <div class="row dpt-btn-row">
+                        <div class="col-sm-3">
+                            <div class="rowpadding">
+                                <div data-bind="text: 'IO Port' + number" class="iolabel"></div>
+                                <input type="checkbox" data-size="large" data-on-label="On" data-off-label="Off" data-bind="bootstrapSwitchOn: state, attr:{'id': 'iobutton-' + number}">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="rowpadding">
+                                <input type="number" class="form-control pulseinput" data-bind="attr:{'id' : 'pulsetime-' + number}" value="500">&nbsp;ms&nbsp;&nbsp;
+                                <button class="btn btn-default" data-bind="click: $parent.pulseIOHandler">Pulse</button>
+                            </div>
+                        </div>
+                    </div>
 		</div>
 	</div>
 	
