@@ -33,6 +33,12 @@ var BLUECHERRY_NOT_INITIALISED          = 1;
 var BLUECHERRY_NO_INTERNET              = 2;
 var BLUECHERRY_CONNECTED                = 3;
 
+/* BlueCherry init status codes */
+var BLUECHERRY_INIT_SUCCESS             = 0;
+var BLUECHERRY_INIT_MAX_REACHED         = 1;
+var BLUECHERRY_INIT_WRONG_CREDS         = 2;
+var BLUECHERRY_INIT_ERR_UNKNOWN         = 3;
+
 /* GPIO modes */ 
 var GPIO_ACT_LOW =  0;               				/* Use GPIO as active low mode */
 var GPIO_ACT_HIGH = 1 ;            				/* Use GPIO as active high mode */   

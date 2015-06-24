@@ -110,6 +110,9 @@
     "BlueCherryPasswordPlaceholder" : "Type in your BlueCherry password here",
     "BlueCherryConnected" : "The device is connected to the BlueCherry platform and can be accessed from all over the world via your account.",
     "BlueCherryNoInternet" : "The device is correctly configured but could not detect an active internet connection. Please check the connection.",
+    "BlueCherryInitWrongCreds" : "The given username and/or password are not correct.",
+    "BlueCherryInitMaxReached" : "Your account does not have enough credits to add another BlueCherry device.",
+    "BlueCherryInitUnknownError" : "There was an error while connecting to BlueCherry, please try again later.",
     
     "BtnConnect" : "Connect",
     "BtnCancel" : "Cancel",

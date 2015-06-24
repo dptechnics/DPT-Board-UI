@@ -110,6 +110,9 @@
     "BlueCherryPasswordPlaceholder" : "Geef hier uw BlueCherry wachtwoord in",
     "BlueCherryConnected" : "Het toestel is verbonden met het BlueCherry netwerk en kan via uw BlueCherry account van over heel de wereld worden bediend.",
     "BlueCherryNoInternet" : "Het toestel is goed ingesteld maar kon geen actieve internetverbinding vinden. Gelieve de internet connectie te controleren.",
+    "BlueCherryInitWrongCreds" : "Deze gebruikersnaam en/of het wachtwoord zijn niet correct.",
+    "BlueCherryInitMaxReached" : "Uw account heeft niet genoeg credits om een toestel toe te voegen.",
+    "BlueCherryInitUnknownError" : "Er is een fout opgetreden tijdens het koppelen met BlueCherry, probeer het later opnieuw",
     
     "BtnConnect" : "Verbind",
     "BtnCancel" : "Annuleer",

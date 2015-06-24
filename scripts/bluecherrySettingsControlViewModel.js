@@ -55,15 +55,26 @@ function initPage() {
         
         dpt_blueCherryConnect(username, password, function(data){
             $('#loadergif').hide();
-            if(data.result == true) {
-                $('#loginform').hide();
-                $('#successholder').show();
-            } else {
-                $('#login_error').html("Something went wrong. Please check your username/password combination and account credit");
+            
+            switch (data.result) {
+                case BLUECHERRY_INIT_SUCCESS:
+                    $('#loginform').hide();
+                    $('#successholder').show();
+                    $('#connectbtns').hide();
+                    break;
+                case BLUECHERRY_INIT_WRONG_CREDS:
+                    $('#login_error').html(i18n.__("BlueCherryInitWrongCreds"));
+                    break;
+                case BLUECHERRY_INIT_MAX_REACHED:
+                    $('#login_error').html(i18n.__("BlueCherryInitMaxReached"));
+                    break;
+                default:
+                    $('#login_error').html(i18n.__("BlueCherryInitUnknownError"));
+                    break;
             }
         }, function(){
             $('#loadergif').hide();
-            $('#login_error').html("Something went wrong, please try again later.");
+            $('#login_error').html(i18n.__("BlueCherryInitUnknownError"));
         });
     });
 }
