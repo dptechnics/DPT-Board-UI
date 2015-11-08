@@ -46,35 +46,16 @@ Blockly.Blocks['robot_spin'] = {
  * Custom Block  3: DPT-Board change pin state
  * https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#PMG7H2
  */
-Blockly.Blocks['gpio_set_state'] = {
+Blockly.Blocks['digitalWrite'] = {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(210);
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["enable", "ENABLE"], ["disable", "DISABLE"]]), "STATUS");
     this.appendDummyInput()
         .appendField("Pin");
     this.appendValueInput("PIN")
         .setCheck("Number");
-    this.setInputsInline(true);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip('');
-  }
-};
-
-/*
- * Custom block 4: DPT-Board: toggle pin state
- * https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#hzsdi6
- */
-Blockly.Blocks['gpio_toggle_pin'] = {
-  init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(210);
     this.appendDummyInput()
-        .appendField("Toggle pin");
-    this.appendValueInput("PIN")
-        .setCheck("Number");
+        .appendField(new Blockly.FieldDropdown([["enable", 1], ["disable", 0]]), "STATE");
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -104,44 +85,7 @@ Blockly.Blocks['controls_settimeout'] = {
     this.setTooltip('');
   }
 };
-/*
- * Custom block : thread
- * https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#5j7jvr
- */
-Blockly.Blocks['function_thread'] = {
-  init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(120);
-    this.appendDummyInput()
-        .appendField("Thread");
-    this.appendStatementInput("THREAD")
-        .setCheck("null");
-    this.setInputsInline(true);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip('');
-  }
-};
-/*
- * Custom block : wait
- * https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#5j7jvr
- */
-Blockly.Blocks['function_wait'] = {
-  init: function() {
-    this.setHelpUrl('http://www.example.com/');
-    this.setColour(120);
-    this.appendDummyInput()
-        .appendField("Wait");
-    this.appendValueInput("TIME")
-        .setCheck("Number");
-    this.appendDummyInput()
-        .appendField("ms");
-    this.setInputsInline(true);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip('');
-  }
-};
+
 
 Blockly.JavaScript['robot_move'] = function(block) {
   var value_move = Blockly.JavaScript.valueToCode(block, 'MOVE', Blockly.JavaScript.ORDER_ATOMIC);
@@ -185,28 +129,22 @@ Blockly.JavaScript['robot_spin'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['gpio_set_state'] = function(block) {
+Blockly.JavaScript['digitalWrite'] = function(block) {
   var value_pin = Blockly.JavaScript.valueToCode(block, 'PIN', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_state = Blockly.JavaScript.valueToCode(block, 'STATE', Blockly.JavaScript.ORDER_ATOMIC);
   var dropdown_status = block.getFieldValue('STATUS');
   var code;
   switch (dropdown_status) {
       case "ENABLE":
-          code = "enablePin(" + value_pin + ");";
+          code = "digitalWrite(" + value_pin + ", " + value_state + " );";
           break;
       case "DISABLE":
-          code = "disablePin(" + value_pin + ");";
+          code = "digitalWrite(" + value_pin + ");";
           break;
       default:
           code = "Waiting for input";
   }
   code += "\n";
-  return code;
-};
-
-Blockly.JavaScript['gpio_toggle_pin'] = function(block) {
-  var value_pin = Blockly.JavaScript.valueToCode(block, 'PIN', Blockly.JavaScript.ORDER_ATOMIC);
-  
-  var code = "togglePin(" + value_pin + "); \n";
   return code;
 };
 

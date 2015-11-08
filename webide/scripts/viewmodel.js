@@ -17,9 +17,9 @@ var rootPane;                           /* The root pane */
 var rightPane;                          /* Pane containing project structure */
 var developPane;                        /* Pane containg output and console */
 var workspace = new IdeWorkspace();     /* All projects currently loaded in the IDE */
-var tasks = [];                         /* Task queue */
 var saveChanges = true;                 /* True when workspace changes should be saved */  
 var codeGeneration = true;              /* True when blockly must generate code */
+var socket = null;                      /* Remote code execution websocket */
 
 /* ---------------------------------------------- STATIC VARIABLES ------------------------------------- */
 
@@ -341,6 +341,73 @@ function ViewModel()
     };
 }
 
+/* --------------------------------------- REMOTE CODE EXECUTION ------------------------------- */
+
+/**
+ * Retreive the correct websocket URL. 
+ * @return {String} the URL to make a websocket connection to. 
+ */
+function rem_code_get_websocket_url()
+{
+    var url = document.URL;
+    
+    // Remove everything after hashtag
+    var ht = url.indexOf('#');
+    if(ht != -1) {
+        url = url.substr(0, ht);
+    }
+    
+    if(url[4] == 's') {
+        return 'wss://' + url.substr(8) + "/ws";
+    } else {
+        return 'ws://' + url.substr(7) + '/ws';
+    }
+}
+
+/**
+ * Execute code on the remote interpreter
+ * @param {String} code the code to execute. 
+ * @returns {void}
+ */
+function rem_code_exec(code)
+{
+    // Stop previous code
+    rem_code_stop();
+    
+    socket = new WebSocket(rem_code_get_websocket_url(), "ide-run");
+    
+    try {
+        socket.onopen = function() {
+            console.log('[INFO] DPT-Web IDE opened socket to remote interpreter');
+            socket.send(code);
+        };
+        
+        socket.onmessage = function(msg) {
+            var csl = $('#console-pnl');
+            $('#console-pnl-out').append(msg.data);
+            var height = csl[0].scrollHeight;
+            csl.scrollTop(height);
+        };
+       
+        socket.onclose = function() {
+            console.log('[INFO] DPT-Web IDE remote interpreter socket closed');
+        };
+    } catch(ex) {
+        return NULL;
+    }
+}
+
+/**
+ * Stop code that is currently executing on the target.
+ * @returns {void}
+ */
+function rem_code_stop()
+{
+    if(socket != null) {
+        socket.close();
+    }
+}
+
 /* --------------------------------------- INITIALISATION AND HANDLERS ------------------------------- */
 
 $('document').ready(function () {
@@ -517,6 +584,29 @@ $('document').ready(function () {
     $('.btn-splitview-mode').click(function () {
         changeDevelopMode(this, 2);
     });
+    
+    
+    
+    
+    /**
+     * Execute the code currently in the editor
+     */
+    $('.btn-play').click(function () {
+        var source = editor.getValue();
+        rem_code_exec(source);
+    });
+    
+    /**
+     * Stop remote code execution
+     */
+    $('.btn-halt').click(function(){
+        rem_code_stop();
+    });
+    
+    /**
+     * TODO make preference 
+     */
+    changeDevelopMode($('.btn-text-mode'), 0);
 
     $('.btn-error-list').click(function () {
         $('.btn-console').removeClass('active');
@@ -722,36 +812,4 @@ function changeDevelopMode(button, mode) {
  */
 function changeFontSize(size) {
     editor.setOptions({fontSize: size + "pt"});
-}
-
-/**
- * Enable console logging into the IDE console field
- */
-(function () {
-    var oldLog = console.log;
-    console.log = function (message) {
-        $("#console-pnl").append(message + '</br>');
-        oldLog.apply(console, arguments);
-    };
-})();
-
-
-/* --------------------------------------- DPT-BOARD LANGUAGE CONSTRUCTS ------------------------------- */
-function enablePin(pin) {
-    console.log("Enabling pin " + pin);
-    dpt_setIO(pin, true);
-}
-
-function disablePin(pin) {
-    console.log("Disabling pin " + pin);
-    dpt_setIO(pin, false);
-}
-
-function togglePin(pin) {
-    console.log("Toggle pin " + pin);
-    dpt_toggleIO(pin);
-}
-
-function newTask(f) {
-    tasks.push(f);
 }

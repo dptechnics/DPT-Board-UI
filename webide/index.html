@@ -425,7 +425,9 @@
                             </table>
                         </div>
                         <div id="console-pnl" class="console-pnl hidden">
-
+                            <pre id="console-pnl-out">
+                                
+                            </pre>
                         </div>
                     </div>
                 </div>
@@ -619,8 +621,7 @@
         <script src="scripts/i18n.js"></script>
         <script src="scripts/jquery-1.11.0.min.js"></script>
         <script src="scripts/knockout-3.1.0.js"></script>
-
-        <script src="scripts/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="scripts/src-min-noconflict/ace.js" charset="utf-8"></script>
         <script src="scripts/src-min-noconflict/ext-language_tools.js"></script>
         <script src="scripts/jquery.splitter-0.14.0.js"></script>              
         <script src="scripts/blockly_compressed.js"></script>
@@ -628,61 +629,6 @@
         <script src="scripts/msg/js/en.js"></script>
         <script src="scripts/javascript_compressed.js"></script>
         <script src="scripts/custom_blocks.js"></script>
-        <script src="../scripts/dpt-board.js"></script>
-        <script src="../scripts/dpt-robot.js"></script>
         <script src="scripts/viewmodel.js"></script>
-        <script src="scripts/stratified.min.js"></script>
-        <script type="text/sjs" id="preq">
-            function moveForward(time) {
-            console.log('Robot moving forward for: ' + (time * 100) + 'ms');
-            dptr_moveForward();
-            hold(100 * time);
-            dptr_stopMotor();
-            }
-
-            function moveBackward(time) {
-            console.log('Robot moving backward for: ' + time * 100 + 'ms');
-            dptr_moveBackward();
-            hold(100 * time);
-            dptr_stopMotor();
-            }
-
-            function moveLeft(time) {
-            console.log('Robot moving left for: ' + time * 100 + 'ms');
-            dptr_moveLeft();
-            hold(100 * time);
-            dptr_stopMotor();
-            }
-
-            function moveRight(time) {
-            console.log('Robot moving right for: ' + time * 100 + 'ms');
-            dptr_moveRight();
-            hold(100 * time);
-            dptr_stopMotor();
-            }
-
-            function spinRight() {
-            console.log('Robot spinning right');
-            dptr_spinRight();
-            hold(200);
-            dptr_stopMotor();
-            }
-
-            function spinLeft() {
-            console.log('Robot spinning left');
-            dptr_spinLeft();
-            hold(200);
-            dptr_stopMotor();
-            }
-        </script>
-        <script type="text/sjs">
-            $('document').ready(function(){
-                $('.btn-play').click(function () {
-                    var editorcode = editor.getValue();
-                    require('sjs:sys').eval(document.getElementById('preq').innerText + editorcode);
-                });
-            });
-            
-        </script>
     </body>
 </html>
